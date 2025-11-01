@@ -1,0 +1,67 @@
+﻿@model IEnumerable<ERP_Models.TopicModel>
+@using ERP_Models
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    a{
+        font-size:small
+    }
+</style>
+<div class="row">
+    
+</div>
+<div class="container-fluid">
+    <h5 style="text-align:center">Interview Questions, Programs, Practice Test</h5>
+
+    <div class="row">
+        <div class="row">
+           @*  @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card shadow-lg bg-white rounded">
+                        <div class="list-group shadow-lg   mb-5 bg-white rounded">
+                            <a href="#" class="list-group-item list-group-item-action active">
+                                <i class="bi-house-fill"></i> @item.topic_name
+                            </a>
+                            <a href="/Learning/TopicWiseQuestions/@item.topic_id" class="list-group-item list-group-item-action">
+                                <i class="bi-camera-fill"></i> Interview Questions
+                                <span class="badge rounded-pill bg-primary float-end">@item.total_interview_question_count</span>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="bi-music-note-beamed"></i> Programs
+                                <span class="badge rounded-pill bg-primary float-end">@item.total_program_count</span>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="bi-film"></i> Videos
+                                <span class="badge rounded-pill bg-primary float-end">8</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            } *@
+        </div>
+         @foreach(var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                    <h5 class="nav-link" style="text-align:center;color:#13749d">@item.topic_name</h5>
+                    <a href="/Learning/TopicWiseQuestions/@item.topic_id" class="list-group-item list-group-item-action">
+                        <i class="bi-camera-fill"></i> Interview Questions
+                        <span class="badge rounded-pill bg-primary float-end">@item.total_interview_question_count</span>
+                    </a>
+                    <a href="/Learning/TopicWisePrograms/@item.topic_id" class="list-group-item list-group-item-action">
+                        <i class="bi-music-note-beamed"></i> Programs
+                        <span class="badge rounded-pill bg-primary float-end">@item.total_program_count</span>
+                    </a>
+                    <a href="/PracticeExam/Index/@item.topic_id" style="text-align:center;color:#e2285a;font-weight:bold" class="list-group-item list-group-item-action btn btn-primary btn-sm">
+                        Practice Test
+                    </a>
+                     
+                </div>
+            </div>
+        } 
+    </div>
+</div>
+

@@ -1,0 +1,422 @@
+﻿@using ERP_Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoreIdentityExample</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CoreIdentityExample.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CoreIdentityExample</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SecureMethod">Secure</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NonSecureMethod">Non Secure</a>
+                        </li>
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Administration/ListRoles">
+                                    Manage Roles
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        @*If the user is signed-in display Logout link*@
+                         
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item"><a href="/Account/Profile" class="nav-link text-dark">Profile</a></li>
+                            <li class="nav-item">
+                                <form method="post" action="/Account/LogOut">
+                                    <button type="submit" style="width:auto"
+                                    class="nav-link btn btn-link py-0">
+                                        Logout @User?.Identity?.Name
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="account" asp-action="register">
+                                    Register
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="account" asp-action="login">
+                                    Login
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator") && User.IsInRole("Student") && User.IsInRole("GroupLeader"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Admin Section</h4>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Master/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Master/Course/Index">Course</a></li>
+                            <li class="list-group-item"><a href="/Master/Topic/Index">Topic</a></li>
+                            <li class="list-group-item"><a href="/Master/Content/Index">Content</a></li>
+                            <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li>
+                        </ul>
+                        <hr/>
+                        <h4>Student Section</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Student/Profile/Index">Profile</a></li>
+                            <li class="list-group-item"><a href="/Student/Exam/Index">Exams</a></li>
+                        </ul>
+                        <hr />
+                        <h4>Group Leader Section</h4>
+                        <ul class="list-group">
+
+
+                            <li class="list-group-item">
+                                <a  href="/BatchManagement/Dashboard/Index"> 
+                                    <span>Dashboard</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+
+
+
+                            <li class="list-group-item">
+                                <a   href="/BatchManagement/Batch/Index">
+                               
+                                    <span>Batch</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a   href="/BatchManagement/Exam/Exams">
+                                    <span>Submitted Exams</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a  href="/BatchManagement/Exam/ScheduleExam">
+                                   
+                                    <span>Schedule Exam</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Admin Section</h4>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Master/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Master/Course/Index">Course</a></li>
+                            <li class="list-group-item"><a href="/Master/Topic/Index">Topic</a></li>
+                            <li class="list-group-item"><a href="/Master/Content/Index">Content</a></li>
+                            <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+                
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Student"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Student Section</h4>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Student/Profile/Index">Profile</a></li>
+                            <li class="list-group-item"><a href="/Student/Exam/Index">Exams</a></li>
+                          @*   <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Developer"))
+        {
+           <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Developer Section</h4>
+
+                        <ul class="list-group">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/Developer/Dashboard/Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Course/Index">
+                                    <i class="bi bi-person"></i>
+                                    <span>Courses</span>
+                                </a>
+                            </li><!-- End Profile Page Nav -->
+
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Topic/Video">
+                                    <i class="bi bi-person"></i>
+                                    <span>Topic Videos</span>
+                                </a>
+                            </li><!-- End Profile Page Nav -->
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Topic/Index">
+                                    <i class="bi bi-person"></i>
+                                    <span>Topic</span>
+                                </a>
+                            </li><!-- End Profile Page Nav -->
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/TopicContent/Index">
+                                    <i class="bi bi-person"></i>
+                                    <span>Topic Content</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/ContentQuestion/Index">
+                                    <i class="bi bi-person"></i>
+                                    <span>Content Questions</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Interview/AddInterviewQuestion">
+                                    <i class="bi bi-person"></i>
+                                    <span>Interview Questions</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Program/AddProgramQuestion">
+                                    <i class="bi bi-person"></i>
+                                    <span>Programs</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Program/ProgramAnswer">
+                                    <i class="bi bi-person"></i>
+                                    <span>Program Answers</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/Developer/Program/AddProgramQuestionWithAnswer">
+                                    <i class="bi bi-person"></i>
+                                    <span>Program Answers</span>
+                                </a>
+                            </li>
+
+                         @*    <li class="list-group-item"><a href="/Student/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Student/Profile/Index">Profile</a></li>
+                            <li class="list-group-item"><a href="/Student/Exam/Index">Exams</a></li>
+ *@                          @*   <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
+                        </ul>
+                    </div>
+            
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("GroupLeader"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Developer Section</h4>
+
+                        <ul class="list-group">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/BatchManagement/Dashboard/Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/BatchManagement/Batch/Index">
+                                    <i class="bi bi-person"></i>
+                                    <span>Batch</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/BatchManagement/Exam/Exams">
+                                    <i class="bi bi-person"></i>
+                                    <span>Submitted Exams</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="/BatchManagement/Exam/ScheduleExam">
+                                    <i class="bi bi-person"></i>
+                                    <span>Schedule Exam</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Trainer"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Trainer Section</h4>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Trainer/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Trainer/Batch/Index">Batches</a></li>
+                            @* <li class="list-group-item"><a href="/Student/Exam/Index">Exams</a></li> *@
+                            @*   <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Accountant"))
+        {
+            <main role="main" class="pb-3">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Accountant Section</h4>
+
+                        <ul class="list-group">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/Accountant/Dashboard/Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Accountant/Student/Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Student</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Accountant/Guest/Index">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Guest</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="/Accountant/Student/PayFees">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Pay Fees</span>
+                                </a>
+                            </li><!-- End Dashboard Nav -->
+                            <li class="nav-item">
+                                <a class="nav-link " href="/Accountant/Student/Invoices">
+                                    <i class="bi bi-grid"></i>
+                                    <span>Invoices</span>
+                                </a>
+                            </li> 
+
+                        </ul>
+                    </div>
+
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+
+            </main>
+        }
+        else
+        {
+            <main role="main" class="pb-3">
+
+               
+                @RenderBody()
+            </main>
+        }
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - CoreIdentityExample - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

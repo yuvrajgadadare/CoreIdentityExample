@@ -1,0 +1,98 @@
+﻿@model ERP_Models.ExamModel
+@{
+    ViewData["Title"] = "Exam Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ <style>
+    .fit-to-page {
+        height: calc(100vh - 20mm);
+    }
+ </style>
+<script>
+    function PrintInvoice() {
+        var printContents = document.getElementById("dv").innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+<table class="table table-bordered">
+    <tr>
+        <td>Topic Name:<br /><b>@Model.topic_name</b></td>
+        <td>Exam Date:<br /><b>@Model.exam_date.ToShortDateString()</b></td>
+        <td>Start Time:<br /><b>@Model.start_time.ToLongTimeString()</b></td>
+        <td>End Time:<br /><b>@Model.end_time.ToLongTimeString()</b></td>
+        <td>Total Questions:<br /><b>@Model.total_questions</b></td>
+        <td>Correct Questions:<br /><b>@Model.total_correct_questions</b></td>
+        <td>Wrong Questions:<br /><b>@Model.total_wrong_questions</b></td>
+        <td>Percentage:<br /><b>@Model.percentage</b></td>
+        <td>Grade:<br /><b>@Model.grade</b></td>
+    </tr>
+</table>
+<hr />
+<div class="">
+    <input type="button" value="Print Invoice" id="btnprint" onclick="PrintInvoice()" />
+</div>
+<div id="dv">
+    <style>
+        .outer-border {
+            width: 800px;
+            height: 650px;
+            padding: 20px;
+            text-align: center;
+            border: 10px solid #673AB7;
+            margin-left: 21%;
+        }
+
+        .inner-dotted-border {
+            width: 750px;
+            height: 600px;
+            padding: 20px;
+            text-align: center;
+            border: 5px solid #673AB7;
+            border-style: dotted;
+        }
+
+        .certification {
+            font-size: 50px;
+            font-weight: bold;
+            color: #663ab7;
+        }
+
+        .certify {
+            font-size: 25px;
+        }
+
+        .name {
+            font-size: 30px;
+            color: green;
+        }
+
+        .fs-30 {
+            font-size: 30px;
+        }
+
+        .fs-20 {
+            font-size: 20px;
+        }
+    </style>
+    <div class="outer-border fit-to-page">
+    <div class="inner-dotted-border">
+        <span class="certification">Certificate of Completion</span>
+        <br><br>
+        <span class="certify"><i>This is to certify that</i></span>
+        <br><br>
+        <span class="name"><b>@Model.student_name</b></span><br /><br />
+        <span class="certify"><i>has successfully completed the Exam on </i></span> <br /><br />
+        <span class="fs-30">@Model.topic_name</span> <br /><br />
+        <span class="fs-20">with grade  <b>@Model.grade</b></span> <br /><br /><br /><br />
+        <span class="certify"><i>dated</i></span><br>
+        <span class="fs-30">@Model.exam_date.ToLongDateString()</span>
+
+    </div>
+</div>
+</div>

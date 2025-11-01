@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewData["Title"] = "AddContent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    var i = 1;
+    $(document).ready(function () {
+        GetContents();
+        $("#btncount").click(function () {
+            AddContentFields();
+        })
+
+        $("#TopicId").change(function () {
+            GetTopicWiseContents();
+        })
+        $("#btnsubmit").click(function () {
+            SubmitContents();
+        })
+
+        $("#btnclear").click(function () {
+            window.location.href = "/Developer/TopicContent/AddContent";
+        })
+    })
+
+    function AddContentFields() {
+        if ($("input[type='text']").last().val() != "") {
+            $("input[type='text']").css({ "border": '0.25rem solid #ced4da' })
+            $("#dvcontents").append("<div class='mb-3'><label>Day " + i + " Content</label><input type='text' class='form-control' placeholder='day " + i + " content' /></div>")
+            i++;
+        }
+        else {
+            $("input[type='text']").last().css({ "border": "1px solid red" })
+        }
+    }
+
+    function GetContents() {
+        $.ajax({
+            url: '/Developer/TopicContent/GetContents',
+            method: 'get',
+            success: function (resp) {
+                $("#tblcontents").empty();
+                $.each(resp, function (i, d) {
+                    $("#tblcontents").append("<tr><td>" + (i + 1) + "</td><td>" + d.topic_name + "</td><td>" + d.content_name + "</td><td><input type='button' value='Remove'  onclick='Remove(" + d.content_id + ")'/></td></tr>")
+
+                })
+            }
+        })
+    }
+    function GetTopicWiseContents() {
+        var topic_id = $("#TopicId").val();
+        $.ajax({
+            url: '/Developer/TopicContent/GetTopicWiseContents?topic_id=' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                $("#tblcontents").empty();
+                $.each(resp, function (i, d) {
+                    $("#tblcontents").append("<tr><td>" + (i + 1) + "</td><td>" + d.topic_name + "</td><td>" + d.content_name + "</td><td><input type='button' value='Remove'  onclick='Remove(" + d.content_id + ")'/></td></tr>")
+                })
+            }
+        })
+    }
+    function SubmitContents() {
+        if ($("input[type='text']").last().val() != "") {
+
+            var sdata = [];
+            $("input[type='text']").each(function () {
+
+                var msg = $(this).val();
+                // var data = msg.split("\n");
+                sdata.push({ "content_name": msg });
+                //   console.log(sdata);
+            })
+            // console.log(sdata);
+            var topic = $("#TopicId").val();
+            var st = { "topic_id": topic, "contents": sdata };
+            $.ajax({
+                url: '/Developer/TopicContent/AddContents',
+                method: 'post',
+                data: st,
+                success: function (resp) {
+                    alert(resp);
+                    GetTopicWiseContents();
+                }
+            })
+        }
+        else {
+            alert("Please enter content in the last textbox");
+        }
+    }
+    function Remove(content_id) {
+
+
+        $.ajax({
+            url: '/Admin/Content/DeleteContent?content_id=' + content_id,
+            method: 'post',
+            success: function (resp) {
+                alert(resp);
+                GetTopicWiseContents();
+            }
+        })
+    }
+</script>
+<div class="row" style="font-size:small">
+    <div class="col-6">
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Content Form</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>
+                                <label>Topic Name</label>
+                                @Html.DropDownList("TopicId", ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                            </td>
+
+
+                            <td>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="mb-3">
+                    <div id="dvcontents"></div>
+                    <input type="button" id="btncount" value="Add Contents" class="btn btn-info" />
+
+                </div>
+            </div>
+            <div class="card-footer" style="text-align:right">
+                <input type="button" value="Submit" id="btnsubmit" class="btn btn-primary">
+                <input type="button" value="Clear Filter" id="btnclear" class="btn btn-danger">
+                <span style="color:green;">@ViewBag.msg</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-6">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Topic Name</th>
+                    <th>Content Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tblcontents">
+            </tbody>
+        </table>
+    </div>
+</div>
+

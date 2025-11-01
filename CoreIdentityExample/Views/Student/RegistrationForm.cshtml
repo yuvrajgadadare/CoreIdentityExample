@@ -1,0 +1,67 @@
+﻿@model ERP_Models.StudentModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CIIT_ERPSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CIIT_ERPSystem.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+<body style="background-color:aliceblue">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="padding:0px;">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand" style="font-family:'Bookman Old Style';font-size:32px;font-weight:bold;">CIIT</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse2">
+                    <div class="navbar-nav ms-auto">
+                        <a href="/Account/Login" class="nav-item nav-link">Employee Login</a>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <div class="container-fluid" style="height:500px;">
+        <div class="row">
+            <div class="col-md-3" style="padding-top:10%;padding-left:20%">
+                <h1 style="font-family:Gigi;font-weight:bold">
+                    You'll never go wrong <br />with  our courses
+                </h1>
+            </div>
+            <div class="col-md-8" style="background-color:#115670;margin-top:5%;padding-left:0px;padding-right:0px;">
+                <div style="height:100px;width:100%;background-color:#e9ecea;text-align:center;padding:1%">
+                    <img src="~/assets/images/mainlogo.png" style="height:100px;" />
+                </div>
+
+    @Html.Partial("~/views/shared/registrationformforguest.cshtml")
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer class="border-top fixed-bottom text-muted">
+        <div class="container">
+            &copy; 2024 - CIIT_ERPSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+
+

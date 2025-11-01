@@ -1,0 +1,118 @@
+﻿@model ERP_Models.TopicModel
+@using ERP_Models
+@{
+    ViewData["Title"] = "Topics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    tr, td, th {
+    height: 10px;
+    padding: 0px
+    }
+
+    .table > :not(caption) > * > * {
+    padding: .3rem .5rem
+    }
+
+    body {
+    font-size: 12px;
+    }
+</style>
+@{
+    List<TopicModel> lst = (List<TopicModel>)ViewData["topics"];
+ }
+<div class="row">
+    <div class="col-4">
+        @using (Html.BeginForm())
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Topic Form</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>Topic Name</label>
+                        @Html.TextBoxFor(e => e.topic_name, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                    <span style="color:green;">@ViewBag.msg</span>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="col-8">
+        @{
+            int i = 1;
+        }
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Topic Name</th>
+                    <th>Folder Id</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lst)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.folder_id</td>
+                        <td><input type="button" value="Add Folder Id" class="btn btn-primary btn-sm" onclick="AddFolderId(@item.topic_id)" /></td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="topicModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Folder Id</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+               <div class="mb-3">
+                   <input type="text" class="form-control" id="txtfolderid" placeholder="enter folder id" />
+               </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SubmitData()">Submit</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var topic_id=0;
+    const AddFolderId=async(tid)=>{
+        topic_id=tid;
+        $("#topicModal").modal("show");
+    }
+
+    const SubmitData=async()=>{
+        var st={
+            "topic_id":topic_id,
+            "folder_id":document.getElementById("txtfolderid").value
+        };
+        const response=await fetch("/Developer/Topic/AddTopicFolder",{
+            method:'post',
+            body:JSON.stringify(st),
+            headers:{
+                'content-type':'application/json'
+            }
+        });
+        const msg=await response.text();
+        alert("Added successfully");
+        window.location.reload();
+    }
+</script>
+

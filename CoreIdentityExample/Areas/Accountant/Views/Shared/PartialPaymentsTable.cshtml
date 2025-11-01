@@ -1,0 +1,36 @@
+﻿<div class="card">
+    <div class="card-header">
+        <h4>Previous Payments</h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Payment Date</th>
+                    <th>Payment Amount</th>
+                    <th>Payment Mode</th>
+                    <th>Description</th>
+                    <th>Invoice</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* @{
+                    int i = 1;
+                }
+                @foreach (var item in ViewBag.details.payments)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.PaymentDate.ToShortDateString()</td>
+                        <td>@item.PaymentAmount</td>
+                        <td>@item.PaymentMode</td>
+                        <td>@item.PaymentDescription</td>
+                        <td><a href="/Admin/Student/Invoice?payment_id=@item.PaymentId">Invoice</a></td>
+                    </tr>
+                    i++;
+                } *@
+            </tbody>
+        </table>
+    </div>
+</div>

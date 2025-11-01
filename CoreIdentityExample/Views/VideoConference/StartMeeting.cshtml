@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "Start Meeting";
+    Layout = null;
+}
+
+<html>
+<head>
+    <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/@Html.Raw("@")zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+<script>
+    function getUrlParams(url = window.location.href) {
+        let urlStr = url.split("?")[1];
+        return new URLSearchParams(urlStr);
+    }
+    
+    const roomID =
+        getUrlParams().get("roomID") ||
+        "room_" + Math.floor(Math.random() * 1000);
+    const userID = Math.floor(Math.rand0om() * 10000) + "";
+    const userName = "@ViewBag.name";
+    const appID = 1569370098;
+    const serverSecret = "ebe02f50eaaee45d71bf1cc42f6fd46a";
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+        appID,
+        serverSecret,
+        roomID,
+        userID,
+        userName
+    );
+
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.joinRoom({
+        container: document.querySelector("#root"),
+        sharedLinks: [
+            {
+                url:
+                    window.location.origin +
+                    window.location.pathname +
+                    "?roomID=" +
+                    roomID,
+            },
+        ],
+        scenario: {
+            mode: ZegoUIKitPrebuilt.GroupCall,
+        },
+    });
+</script>
+</html>

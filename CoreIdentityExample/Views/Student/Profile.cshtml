@@ -1,0 +1,398 @@
+﻿@model ERP_Models.StudentModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<script>
+    function ChangeProfilePhoto(sid) {
+        $("#profilephotomodal").modal("show");
+    }
+    function ChangeAadharPhoto(sid) {
+        $("#aadharphotomodal").modal("show");
+    }
+    
+    function UploadPhoto() {
+        var file = $('#imgphoto')[0].files[0];
+        var form = new FormData();
+        form.append("file", file);
+        $.ajax({
+            url: '/Student/ChangeProfilePhoto',
+            method: 'post',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (resp) {
+                alert(resp);
+                $("#profilephotomodal").modal("hide");
+                window.location.href = window.location.href;
+
+            }
+        })
+        console.log(file);
+    }
+
+    function UploadAadharPhoto() {
+        var file = $('#aadharphoto')[0].files[0];
+        var form = new FormData();
+        form.append("file", file);
+        $.ajax({
+            url: '/Student/ChangeAadharPhoto',
+            method: 'post',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (resp) {
+                alert(resp);
+                $("#aadharphotomodal").modal("hide");
+                window.location.href = window.location.href;
+
+            }
+        })
+        console.log(file);
+    }
+    function ChangePassword() {
+        var current_password = $('#txtcurrent_password').val();
+        var new_password = $('#txtnew_password').val();
+        var re_password = $('#txtconfirm_new_password').val();
+        var st = { "current_password": current_password, "new_password": new_password, "re_password": re_password };
+        $.ajax({
+            url: '/Student/ChangePassword',
+            method: 'post',
+            data: st,
+            success: function (resp) {
+                $("#passmsg").html(resp);
+                //  $("#changepasswordmodal").modal("hide");
+                // window.location.href = window.location.href;
+
+            }
+        })
+
+    }
+
+</script>
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="col-md-12">
+            @using (Html.BeginForm())
+            {
+                @Html.HiddenFor(e => e.student_id)
+                <div class="card mb-4 shadow-lg p-3 mb-5 bg-white rounded">
+                    <div class="card-body">
+                        <div class="row">
+                            @if (ViewBag.msg != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show">
+                                    <strong>Success!</strong> @ViewBag.msg
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <h5 style="text-align:center">Profile Details</h5>
+
+                            <div>
+                                <div class="row  mb-3">
+                                    <div class="col-sm-3">
+                                        First Name
+                                        @Html.TextBoxFor(e => e.student_name, new { @class = "form-control" })
+
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Last Name
+                                        @Html.TextBoxFor(e => e.last_name, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Gender <br />
+                                        @Html.RadioButtonFor(e => e.gender, "Male") <span> Male</span>
+                                        @Html.RadioButtonFor(e => e.gender, "Female") <span> Female</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Qualification
+                                        @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        Email
+                                        @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Birth Date
+                                        @* <input id="birth_date" name="birth_date" width="276" value="@Model.birth_date.ToShortDateString()" /> *@
+                                        @Html.TextBoxFor(e => e.birth_date, new { @class = "form-control" })
+                                        <script>
+                                            $('#birth_date').datepicker({
+                                                uiLibrary: 'bootstrap5'
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Phone
+                                        @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+
+                                    </div>
+
+
+                                    <div class="col-sm-3">
+                                        Whatsapp Number
+                                        @Html.TextBoxFor(e => e.whatsapp_number, new { @class = "form-control" })
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        Parent Name
+                                        @Html.TextBoxFor(e => e.parent_name, new { @class = "form-control" })
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        Parent Number
+                                        @Html.TextBoxFor(e => e.parent_number, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        Aadhar Number
+                                        @Html.TextBoxFor(e => e.aadhar_card_number, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+
+
+                                    <div class="col-sm-6">
+                                        Local Address
+                                        @Html.TextAreaFor(e => e.local_address, new { @class = "form-control" })
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        Permanent Address
+                                        @Html.TextAreaFor(e => e.permanent_address, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-sm-12" style="text-align:right">
+                                        <input type="submit" value="Update" class="btn btn-primary btn-sm" />
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-12">
+
+            <style>
+                div, table, tr, td, th, button, input {
+                    font-size: small
+                }
+            </style>
+            <div class="card mb-4 shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <div class="row">
+                        @if (ViewBag.msg != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <strong>Success!</strong> @ViewBag.msg
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row gutters-sm">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    
+                                    <button type="button" class="btn btn-primary ms-4" data-bs-toggle="collapse" data-bs-target="#myCollapse">
+                                      Add Qualification
+                                    </button>
+                                    <div class="collapse" id="myCollapse">
+                                    @using (Html.BeginForm("Qualification", "Student", FormMethod.Post))
+                                    {
+                                        @* @Html.HiddenFor(e => e.student_id) *@
+                                        <div class="card-body">
+                                             <div class="mb-3">
+                                                        <label>Qualification</label>
+                                                        @Html.TextBox("qualification", "", new { @class = "form-control" })
+                                            </div>
+                                            <div class="mb-3">
+
+                                                <label>University</label>
+                                                        @Html.TextBox("university", "", new { @class = "form-control" })
+                                            </div>
+                                            <div class="mb-3">
+
+                                                <label > Year</label>
+                                                        @Html.TextBox("passing_year", "", new { @class = "form-control" })
+                                            </div>
+                                            <div class="mb-3">
+
+                                                <label >Medium</label>
+                                                        @Html.TextBox("medium", "", new { @class = "form-control" })
+                                            </div>
+                                            <div class="mb-3">
+
+                                                <label >Percentage</label>
+                                                        @Html.TextBox("percentage", "", new { @class = "form-control" })
+                                            </div>
+                                            <div class="mb-3">
+                                                <input type="submit" value="Submit" style="font-size:large;color:white;background-color:#176b91" class="btn btn-info btn-sm" />
+                                            </div>
+                                        </div>
+ 
+                                    }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row gutters-sm">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Qualification</i></h6>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr No</th>
+                                                <th>Qualification</th>
+                                                <th>University</th>
+                                                <th>Medium</th>
+                                                <th>Year</th>
+                                                <th>Percentage</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                int i = 1;
+                                            }
+                                            @if (ViewBag.qualifications != null)
+                                            {
+                                                foreach (var item in ViewBag.qualifications)
+                                                {
+                                                    <tr>
+                                                        <td>@i</td>
+                                                        <td>@item.qualification</td>
+                                                        <td>@item.university</td>
+                                                        <td>@item.medium</td>
+                                                        <td>@item.passing_year</td>
+                                                        <td>@item.percentage</td>
+                                                        <td style="text-align:right">
+                                                            <a href="/Student/DeleteQualification/@item.qualification_id" class="btn btn-danger btn-sm">x</a>
+                                                        </td>
+                                                    </tr>
+                                                    i++;
+                                                }
+                                            }
+                                        </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                </div>
+
+            </div>
+
+
+
+        </div>
+      </div>
+     
+</div>
+  
+              
+            @* <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4 mb-md-0">
+                        <div class="card-body">
+                            <p class="mb-4">
+                                <span class="text-primary font-italic me-1">assigment</span> Project Status
+                            </p>
+                            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                            <div class="progress rounded mb-2" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4 mb-md-0">
+                        <div class="card-body">
+                            <p class="mb-4">
+                                <span class="text-primary font-italic me-1">assigment</span> Project Status
+                            </p>
+                            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                            <div class="progress rounded" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                            <div class="progress rounded mb-2" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> *@
+      

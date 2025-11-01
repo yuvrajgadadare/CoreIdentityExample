@@ -1,0 +1,121 @@
+﻿@model IEnumerable< ERP_Models.BatchScheduleModel>
+@{
+    ViewData["Title"] = "View Batch Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+<style>
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        font-size: 12px
+    }
+
+    span {
+        font-size: 12px
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+<style>
+    table {
+        font-size: 12px;
+    }
+
+
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        font-size: 12px
+    }
+
+    span {
+        font-size: 12px
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h4>Batch Details</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+
+                @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchDetails.cshtml")
+                </div>
+                <div class="col-md-6">
+
+          
+
+                    @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchStudent_Attendance.cshtml")
+
+
+                </div>
+                </div>
+                <div class="row">
+                <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
+                    <div class="card-header">
+
+                        <h5 style="text-align:center">Batch Schedule </h5>
+
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Content Name</th>
+                                    <th>Expected Date</th>
+                                    <th>Expected Day</th>
+                                    <th>Actual Date</th>
+                                    <th>Actual Day</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.content_name</td>
+                                        <td>@item.expected_date.ToShortDateString()</td>
+                                        <td>@item.expected_date.DayOfWeek</td>
+                                    @if(item.actual_date!=null)
+                                    {
+                                            <td>@item.actual_date.Value.ToShortDateString()</td>
+                                            <td>@item.actual_date.Value.DayOfWeek</td>
+                                    }
+                                    else
+                                    {
+                                            <td></td>
+                                            @* <td>@item.actual_date.Value.DayOfWeek</td> *@
+                                    }
+                                        <td>@item.status</td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+              
+            </div>
+        </div>
+ 
+

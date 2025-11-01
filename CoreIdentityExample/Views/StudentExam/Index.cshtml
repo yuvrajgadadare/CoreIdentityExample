@@ -1,0 +1,120 @@
+﻿@model IEnumerable<ERP_Models.ExamModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    a{
+        text-decoration:none;
+    }
+    table{
+        font-size:small;
+    }
+    </style>
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                    <div class="card-body">
+                        <h6 style="text-align:center">@item.topic_name</h6>
+                    <table class="table table-borderless">
+                        <tr>
+                           <td style="text-align:right">Exam Date : </td>
+                            <td>@item.exam_date.ToShortDateString()</td>
+                            </tr>
+                          
+                        <tr>
+                            <td style="text-align:right">Exam Date : </td>
+                            <td>@item.start_time.ToLongTimeString()</td>
+                        </tr>
+                       
+                        <tr>
+                            <td style="text-align:right">Total Questions : </td>
+                            <td>@item.total_questions</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Correct Questions : </td>
+                            <td>@item.total_correct_questions</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Wrong Questions : </td>
+                            <td>@item.total_wrong_questions</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Percentage : </td>
+                            <td>@item.percentage<span>%</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Grade : </td>
+                            <td>@item.grade</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">
+                                <a href="/StudentExam/ViewExamDetails/@item.exam_id">View</a>
+                            </td>
+                            <td>
+                                <a href="/StudentExam/PrintCertificate/@item.exam_id">Certificate</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* <div class="container-fluid">
+    <div class="row">
+        <table class="table table-bordered" style="font-size:small">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Exam Date</th>
+                    <th>Topic Name</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Total Questions</th>
+                    <th>Correct Questions</th>
+                    <th>Wrong Questions</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.exam_date.ToShortDateString()</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.start_time.ToLongTimeString()</td>
+                        <td>@item.end_time.ToLongTimeString()</td>
+                        <td>@item.total_questions</td>
+                        <td>@item.total_correct_questions</td>
+                        <td>@item.total_wrong_questions</td>
+                        <td>@item.percentage</td>
+                        <td>@item.grade</td>
+                        <td>
+                            <a href="/StudentExam/ViewExamDetails/@item.exam_id">View</a>
+                            &nbsp;
+                            <a href="/StudentExam/PrintCertificate/@item.exam_id">Certificate</a>
+                        </td>
+
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+ *@

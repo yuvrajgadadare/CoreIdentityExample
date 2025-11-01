@@ -1,0 +1,189 @@
+﻿@model IEnumerable<ERP_Models.StudentModel>
+@using ERP_Models;
+@{
+    ViewData["Title"] = "Student Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<style>
+    table{
+    font-size:12px;
+    }
+
+
+    .form-control {
+    font-size: 12px
+    }
+
+    label {
+    /* font-size: 12px */
+    }
+
+    span {
+    /* font-size: 12px */
+    }
+
+    input[type=text] {
+    font-size: 12px
+    }
+
+</style>
+ <style>
+    table th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        border-top: 0;
+        background: #ededed;
+    }
+ </style>
+
+@* @model ERPSystem_Models.StudentModel *@
+    @* @{
+        ViewData["Title"] = "RegistrationForm";
+        Layout = "~/Areas/Accountant/Views/Shared/AccountantLayout.cshtml";
+    } *@
+<style>
+    table {
+        font-size: 12px;
+    }
+
+
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        /* font-size: 12px */
+    }
+
+    span {
+        /* font-size: 12px */
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+ <script>
+     $(document).ready(function () {
+         $("#btnadd").click(function () {
+             $("#studentmodal").modal("show");
+         })
+     })
+
+     function AddPaymentInstalllments(sid) {
+         $.ajax({
+            url: '/Accountant/Student/AddPaymentSchedule/'+sid,
+            method:'post',
+             success: function (resp) {
+                 alert(resp);
+             }
+         })
+     }
+ </script>
+  
+ 
+ 
+
+         <div class="row">
+            <div class="col-md-3">
+                @* <input type="button" value="Add Student" class="btn btn-primary" id="btnadd" /> *@
+        <a href="/Accountant/Student/StudentRegistrationForm" class="btn btn-primary">New Registration</a>
+            </div>
+            <div class="col-md-3">
+               <form method="post">
+                    <div class="row">
+                      <div class="col-md-8">
+                            <select class="form-control" name="year">
+                                <option selected disabled>Select Year</option>
+                                @foreach(var d in ViewBag.years){
+                                    <option value="@d">@d</option>
+                                }
+                            </select>
+                    </div>
+                      <div class="col-md-4">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-12">
+                     @if(ViewBag.result!=null)
+                     {
+                    <span> Admissions for year <b>@ViewBag.result</b></span>
+                     }
+            </div>
+            </div>
+
+               </form>
+          
+            </div>
+            </div>
+
+
+    
+ 
+        <div class="row">
+            <input type="text" class="form-control" id="txtfilter" onclick="filter" placeholder="search student by name,mobile,qualification,course,email address,etc" />
+        </div>
+        <div class="row">
+            <table  class="table datatable" style="font-size:small">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Registration Date</th>
+                        <th>Student Name</th>
+                        <th>Gender</th>
+                      <th data-type="date" data-format="DD-MM-YYYY">Birth Date</th>
+                        <th>Mobile Number</th>
+                        <th>Email Address</th>
+                        <th>Qualification</th>
+                        <th>Student Code</th>
+                        <th>Photo</th>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                      //  List<StudentModel> lst = (List<StudentModel>)ViewData["students"];
+                    }
+                    @foreach (var item in Model)
+                    {
+
+
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.registration_date.ToShortDateString()</td>
+                            <td>@item.student_name</td>
+                            <td>@item.gender</td>
+                            <td>@item.birth_date.ToShortDateString()</td>
+                            <td>@item.mobile_number</td>
+                            <td>@item.email_address</td>
+                            <td>@item.qualification</td>
+
+                            @if (item.registrations.Count() > 0)
+                            {
+                                RegistrationModel r = item.registrations.First();
+                                <td>@r.course_name</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td><img src="~/Students/Profiles/@item.profile_photo" height="30" width="30" /></td>
+                            <td>
+                                <a href="/Accountant/Student/GetStudentWisedetails/@item.student_id" class="btn btn-info btn-sm">View Details</a>
+                                <input type="button" value="Change Course" class="btn btn-warning btn-sm" onclick="ChangeCourse(@item.student_id)" />
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    
+     
+</div>
+ 

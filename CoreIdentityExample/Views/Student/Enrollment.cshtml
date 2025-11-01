@@ -1,0 +1,34 @@
+﻿@model ERP_Models.StudentModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var item in Model.registrations)
+{
+
+    <table class="table table-bordered">
+        <tr>
+            <td>Course Name:</td>
+            <td><a href="/Student/CourseSyllabus/@item.course_id" style="text-decoration:none">@item.course_name</a></td>
+        </tr>
+        <tr>
+            <td>Fees Amount:</td>
+            <td>@item.fees_amount</td>
+        </tr>
+        <tr>
+            <td>GST:</td>
+            <td>@item.gst</td>
+        </tr>
+        <tr>
+            <td>Discount:</td>
+            <td>@item.discount</td>
+        </tr>
+        <tr>
+            <td>Total Fees:</td>
+            <td>@item.final_fees_amount</td>
+        </tr>
+
+    </table>
+
+}

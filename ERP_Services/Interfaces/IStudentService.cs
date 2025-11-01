@@ -1,0 +1,47 @@
+﻿using ERP_Models;
+namespace ERP_Services.Interfaces
+{
+    public interface IStudentService
+    {
+        Task<string> NextPINNumber();
+        Task ChangeStudentCourse(RegistrationModel r);
+
+        Task AddStudentRegistration(StudentModel sm);
+        Task AddStudentPaymentSchedule(int registration_id, float registration_amount);
+        Task UpdateStudentDetails(StudentModel sm);
+        Task<bool> IsEmailExist(string email_address);
+        Task<bool> IsMobileExist(string mobile_number);
+        Task<List<StudentModel>>  GetStudents();
+        Task<List<StudentModel>> GetYearWiseStudents(int year);
+        Task<List<StudentModel>>  GetAllStudents();
+        Task<List<StudentModel>>  GetGuestStudents();
+        Task<StudentModel>  GetStudent(int id);
+        Task<List<RegistrationModel>> GetStudentWiseRegistrations(int student_id);
+        Task<List<RegistrationModel>> GetAllRegistrations();
+        Task<List<RegistrationModel>> GetAllGuestRegistrations();
+        Task<RegistrationModel> GetGuestRegistration(int id);
+        Task<RegistrationModel> GetRegistration(int id);
+        Task<List<StudentPaymentModel>> GetStudentPayments();
+        Task<StudentPaymentModel> GetStudentPayment(int payment_id);
+        Task<List<StudentPaymentModel>> GetStudentsWiseRemainingPayments(int registration_id);
+        Task<StudentPaymentModel> GetStudentsNextPaymentDetails(int registration_id);
+        Task<List<StudentPaymentModel>> GetStudentWisePreviousPayments(int registration_id, int payment_id);
+        Task<List<StudentPaymentModel>> GetStudentWisePayments(int student_id);
+        Task<List<StudentPaymentModel>> GetRegistrationWisePayments(int registration_id);
+
+        Task AddPayment(StudentPaymentModel p);
+        Task UpdatePayment(StudentPaymentModel p);
+        Task AddQualification(StudentQualificationModel p);
+        Task UpdateQualification(StudentQualificationModel p);
+        Task DeleteQualification(int qualification_id);
+        Task RestoreQualification(int qualification_id);
+        Task<List<StudentQualificationModel>> GetStudentWiseQualifications(int student_id);
+        Task ChangeStudentProfilePhoto(int student_id, string imgname);
+        Task ChangeStudentAadharPhoto(int student_id, string imgname);
+        Task ChangeStudentPassword(int student_id, string password);
+        Task<StudentModel> GetStudentByEmailAddress(string email_address);
+        //Task<List<StudentPaymentModel>> GetStudentsWiseRemainingPayments(int registration_id);
+     Task<RegistrationCourseScheduleModel> GetStudentRegistrationWiseCourseSchedule(int registration_id);
+
+    }
+}

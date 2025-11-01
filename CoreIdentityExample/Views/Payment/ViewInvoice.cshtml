@@ -1,0 +1,182 @@
+﻿@model ERP_Models.StudentPaymentModel
+@using ERP_Models
+
+@{
+    ViewData["Title"] = "View Invoices";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    table{
+   
+        font-size: small
+    }
+</style>
+<script>
+    function PrintInvoice() {
+        var printContents = document.getElementById("dv").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+@{
+    StudentModel sm = (StudentModel)ViewData["student"];
+    List<StudentPaymentModel> payments = (List<StudentPaymentModel>)ViewData["payments"];
+    RegistrationModel reg = (RegistrationModel)ViewData["registration"];
+    float paid_amount = @payments.Sum(e => e.payment_amount);
+    float remaining_amount = reg.final_fees_amount - (Model.payment_amount + paid_amount);
+}
+<div class="container-fluid" style="font-size:small">
+    <div class="">
+        <input type="button" value="Print Invoice" id="btnprint" onclick="PrintInvoice()" />
+    </div>
+    <div class="" id="dv" style="font-size:small">
+
+        <div class="container" style="padding:1%">
+
+            <div class="row">
+
+                <table>
+                    <tr>
+                        <td style="text-align:center">
+                            <img height="70px" src="~/assets/images/mainlogo.png" />
+
+                         
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                                 
+                                <tr>
+                                    <td style="text-align:center">
+                                        Branch: CIIT Training Institute Hadapsar
+                                        Address : Office #2, 1st floor, manisha blitz , hadapsar, near shankar math, pune-28
+                                        <div>GST Number : <b>27AAICC6817A1ZV</b></div>
+                                        <div>Email : <b>ciitpune@gmail.com</b></div>
+                                        <div>Mobile : <b>7028565830</b> </div>
+                                    </td>
+                                </tr>
+                               
+                            </table>
+               
+            </div>
+        
+            <div class="row">
+                <hr />
+            </div>
+            <div class="row">
+                <h3 style="text-align:center">!! Invoice !!</h3>
+            </div>
+            <div class="row">
+                <table>
+                    <tr>
+                        <td style="width:70%">
+
+                            <div>Student Name : <b> @sm.student_name</b></div>
+                            <div>Email Address : <b> @sm.email_address</b></div>
+                            <div>Mobile Number : <b> @sm.mobile_number</b></div>
+
+                            <div>Course Name:<b> @reg.course_name</b></div>
+                        </td>
+                        <td style="width:30%">
+                            <div>Invoice No : <b> @Model.payment_id</b></div>
+                            <div>Invoice Date : <b> @Model.payment_date.ToShortDateString()</b></div>
+                            <div>Total Fees : <b> @reg.final_fees_amount</b></div>
+                            <div>Registration Date : <b> @reg.registration_date.ToShortDateString()</b></div>
+                    </tr>
+                </table>
+                        </div>
+            <div class="row" style="text-align:center">
+                <hr/>
+                <h4 style="text-align:center">Payment Details</h4>
+            </div>
+
+                <div class="row" style="padding-top:2%">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Payment Date</th>
+                            <th>Payment Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="height:100px;">
+                            <td style="text-align:right">@Model.payment_date.ToShortDateString()</td>
+                            <td>@Model.payment_amount</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Total Fees:</td>
+                            <td>@reg.final_fees_amount</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Todays Paid:</td>
+                            <td>@Model.payment_amount</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Previous Payment:</td>
+                            <td>@paid_amount</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Remaining Payment:</td>
+                            <td>@remaining_amount</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Payment Mode:<b>@Model.payment_mode</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Payment Description:<b>@Model.payment_description</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Payment Details:<b>@reg.final_fees_amount</b><span>(Fees-<b>@reg.fees_amount</b>, Gst-<b>@reg.gst</b>, Discount-<b>@reg.discount</b>)</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h4 style="text-align:center">Previous Payments</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No</th>
+                                            <th>Payment Date</th>
+                                            <th>Payment Amount</th>
+                                            <th>Payment Mode</th>
+                                            <th>Description</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int index = 1;
+                                        }
+                                        @foreach (StudentPaymentModel p in payments)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@p.payment_date.ToShortDateString()</td>
+                                                <td>@p.payment_amount</td>
+                                                <td>@p.payment_mode</td>
+                                                <td>@p.payment_description</td>
+
+                                            </tr>
+                                            index++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p><b>Note:</b>  This invoice is valid for every one.This is computerised invoice which is autometically generated by system</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+       
+    </div>
+</div>
+</div>
+

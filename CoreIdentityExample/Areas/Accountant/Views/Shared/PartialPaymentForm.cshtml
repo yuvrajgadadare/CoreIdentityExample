@@ -1,0 +1,61 @@
+﻿@* @model studentpay
+
+
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+        <h5>Pay Fees</h5>
+        <form action="/Admin/Student/PayFees">
+
+            <table class="table">
+                <tr>
+                    <td>Select Student</td>
+                    <td>@Html.DropDownList("registration_id",ViewBag.students as List<SelectListItem>,"Select Student",new{@class="form-control"} )</td>
+                    <td><input type="submit" value="Submit" class="btn btn-primary" /></td>
+                </tr>
+            </table>
+
+        </form>
+        @using (Html.BeginForm())
+        {
+            <table class="table table-borderless">
+                <tr>
+                    <td>Registration Id:@Html.TextBoxFor(e=>e.RegistrationId,new{@class="form-control",@readonly="readonly"})</td>
+                
+                    <td>Course Name:<input type="text" id="coursename" class="form-control" value="@ViewBag.details.CourseName" disabled /></td>
+                </tr>
+
+                <tr>
+                    <td>Fees Amount:<input type="text" id="feeamount" class="form-control" value="@ViewBag.details.total_fees_amount" disabled /></td>
+                
+                    <td>Paid Amount:<input type="text" id="paidamount" class="form-control" value="@ViewBag.details.paid_amount" disabled /></td>
+                
+                    <td>Remaining Amount:<input type="text" id="remainingamount" class="form-control" value="@ViewBag.details.remaining_amount" disabled /></td>
+                </tr>
+                <tr>
+                    <td>Payment Date</td>
+                    <td>@Html.TextBoxFor(e=>e.PaymentDate,new{@type="date", @class="form-control"})</td>
+                </tr>
+                <tr>
+                    <td>Payment Amount</td>
+                    <td>@Html.TextBoxFor(e=>e.PaymentAmount,new{@class="form-control"})</td>
+                </tr>
+                <tr>
+                    <td>Payment Mode</td>
+                    <td>@Html.DropDownListFor(e=>e.PaymentMode,ViewBag.modes as List<SelectListItem>,"Payment Mode",new{@class="form-control"})</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>@Html.TextBoxFor(e=>e.PaymentDescription,new{@class="form-control"})</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+ *@

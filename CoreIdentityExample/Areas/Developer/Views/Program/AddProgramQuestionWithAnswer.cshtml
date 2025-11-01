@@ -1,0 +1,200 @@
+﻿@model ERP_Models.ProgramAnswerModel
+@{
+    ViewData["Title"] = "Interview Question";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    var questions = [];
+    $(document).ready(function () {
+        GetAllQuestions();
+        $("#topic_id").change(function () {
+            GetTopicWiseContents();
+        })
+        $("#content_id").change(function () {
+            GetContentWiseQuestions();
+        })
+    })
+    function GetTopicWiseContents() {
+        var topic_id = $("#topic_id").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetTopicWiseContents/' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                $("#content_id").empty();
+                $("#content_id").append("<option selected disabled>Select Content</option>");
+
+                $.each(resp, function (i, d) {
+                    $("#content_id").append("<option value=" + d.content_id + ">" + d.content_name + "</option>")
+                })
+            }
+        })
+     //   GetTopicWiseQuestions();
+    }
+
+    // function AddQuestion() {
+    //     var content_id = $("#ddcontent").val();
+    //     var questionTitle = $("#questionTitle").val();
+    //     var description = $("#description").val();
+
+    //     var st = { "content_id": content_id, "question_title": questionTitle, "question_description": description };
+    //     questions.push(st);
+    //     $("#msg").html("Total Questions=" + questions.length);
+    //     ClearData();
+    //     DisplayQuestions();
+    // }
+    // function DisplayQuestions() {
+    //     $("#questionlist").empty();
+    //     $.each(questions, function (i, d) {
+    //         $("#questionlist").append("<li>" + d.question_title + "</li>");
+
+    //     })
+    // }
+    // function SubmitQuestions() {
+    //     var content_id = $("#ddcontent").val();
+    //     var st = { "content_id": content_id, "questions": questions }
+    //     $.ajax({
+    //         url: '/Developer/Program/AddProgramQuestions',
+    //         method: 'post',
+    //         data: st,
+    //         success: function (resp) {
+    //             alert(resp);
+    //             $("#status").html(resp);
+    //         }
+    //     })
+    // }
+
+    function GetAllQuestions() {
+        $.ajax({
+            url: '/Developer/Program/GetQuestions',
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                // $("#allquestions").empty();
+                // // $("#allquestions").append("<option selected disabled>Select Content</option>");
+
+                // $.each(resp, function (i, d) {
+                //     $("#allquestions").append("<li class='list-group-item'>" + (i+1) + "." + d.question + "</option>")
+                // })
+                FillData(resp);
+
+            }
+        })
+    }
+    function GetTopicWiseQuestions() {
+
+        $.ajax({
+            url: '/Developer/Program/GetTopicWiseQuestions/' + $("#ddtopic").val(),
+            method: 'get',
+            success: function (resp) {
+                FillData(resp);
+
+            }
+        })
+    }
+    function GetContentWiseQuestions() {
+
+        $.ajax({
+            url: '/Developer/Program/GetContentWiseQuestions/' + $("#ddcontent").val(),
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                FillData(resp);
+            }
+        })
+    }
+    function FillData(records) {
+        $("#msg").html("Total Questions=" + records.length);
+
+        $("#myAccordion").empty();
+        $.each(records, function (i, d) {
+            $("#myAccordion").append("<div class='accordion-item'><h2 class='accordion-header' id='heading" + i + "'><button type='button' class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse" + i + "'><pre>" + (i + 1) + "." + d.question_title + "</button></pre></h2><div id='collapse" + i + "' class='accordion-collapse collapse' data-bs-parent='#myAccordion'><div class='card-body'><p>Topic-" + d.topic_name + "</p><p>Content-" + d.content_name + "</p><p>" + d.question_description + "</p></div></div></div>")
+        })
+    }
+    function ClearData() {
+        // $("#ddcontent").val("");
+        $("#question").val("");
+        $("#answer").val("");
+    }
+    function ClearForm() {
+        questions = [];
+        $("#questionlist").empty();
+    }
+</script>
+<div class="container-fluid">
+    <h4 id="msg"></h4>
+    <div class="row">
+        <div class="col-md-5">
+            @using(Html.BeginForm())
+            {
+            <div class="card" style="padding:2%">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Select Topic</label>
+                            @Html.DropDownListFor(e=>e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Select Content</label>
+                            @Html.DropDownListFor(e=>e.content_id, ViewBag.contents as SelectList, "Select Content", new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label>Question Title</label>
+                              @Html.TextAreaFor(e=>e.question_title,new{@class="form-control"})
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Description</label>
+                            @Html.TextAreaFor(e => e.question_description, new { @class = "form-control" })
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Answer</label>
+                            @Html.TextAreaFor(e => e.program_answer, new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Program Description</label>
+                            @Html.TextAreaFor(e => e.program_description, new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <input type="submit" value="Submit" class="btn btn-primary"  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+
+
+       
+        <div class="col-md-7">
+            @* <ul id="allquestions" class="list-group"></ul> *@
+            <h5>Programs</h5>
+            <div class="accordion" id="myAccordion">
+            </div>
+        </div>
+    </div>
+
+</div>
+

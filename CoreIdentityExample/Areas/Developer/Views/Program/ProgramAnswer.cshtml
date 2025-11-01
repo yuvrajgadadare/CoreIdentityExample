@@ -1,0 +1,66 @@
+﻿@model ERP_Models.ProgramAnswerModel
+@using ERP_Models
+@{
+    ViewData["Title"] = "ProgramAnswer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+
+<div class="row">
+    @if (ViewBag.msg != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> @ViewBag.msg
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    <div class="col-md-5">
+        @using(Html.BeginForm())
+        {
+        <div class="card">
+            <div class="card-header">
+                <h4>Program Answer</h4>
+            </div>
+            <div class="card-body"> 
+                <div class="mb-3">
+                    <label>Question</label>
+                    @Html.DropDownListFor(e => e.program_question_id, ViewBag.programs as SelectList,"Select Program",new{@class="form-control"})
+                </div>
+                <div class="mb-3">
+                    <label>Program</label>
+                     @Html.TextAreaFor(e=>e.program_answer,new{@class="form-control"})
+                </div>
+                <div class="mb-3">
+                    <label>Program Description</label>
+                    @Html.TextAreaFor(e => e.program_description, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="card-footer">
+                <input  type="submit" value="Submit" class="btn btn-primary"/>
+            </div>
+        </div>
+        }
+    </div>
+    <div class="col-md-7">
+        <h1>Program Answer</h1>
+        @{
+            List<ProgramAnswerModel> lst = (List<ProgramAnswerModel>)ViewData["programsanswers"];
+        }
+        <ul class="list-group">
+            @foreach(var item in lst)
+            {
+                <li class="list-group-item">
+                    <b>@item.question_title</b>
+                    <div>
+<pre>
+@item.program_answer
+</pre>
+<div>
+    <b>Description:</b>
+    <span>@item.program_description</span>
+</div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

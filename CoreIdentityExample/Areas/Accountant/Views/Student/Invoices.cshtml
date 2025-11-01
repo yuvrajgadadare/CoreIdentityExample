@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ERP_Models.StudentPaymentModel>
+@{
+    ViewData["Title"] = "Invoices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <div class="container-fluid" style="font-size:small">
+     <div class="row">
+         <table class="table table-bordered">
+             <thead>
+                 <tr>
+                     <th>#</th>
+                    <th>Expected Invoice Date</th>
+                    <th>Actual Invoice Date</th>
+                    <th>Student Name</th>
+                    <th>Payment Amount</th>
+                    <th>Payment Mode</th>
+                    <th>Action</th>
+                 </tr>
+             </thead>
+             <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        @* <td>@item.expected_payment_date.ToShortDateString()</td> *@
+                        <td>@item.payment_date.ToShortDateString()</td>
+                        <td>@item.student_name</td>
+                        <td>@item.payment_amount</td>
+                        <td>@item.payment_mode</td>
+                        <td><a href="/Accountant/Student/ViewInvoice?registration_id=@item.registration_id&payment_id=@item.payment_id">View Invoice</a></td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+         </table>
+     </div>
+ </div>
+

@@ -1,0 +1,74 @@
+﻿@model ERP_Models.TopicVideoModel
+@{
+    ViewData["Title"] = "Topic Videos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-4">
+        @using (Html.BeginForm("Video", "Topic", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h4>Topic Video</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>Topic</label>
+                        @Html.DropDownListFor(e => e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                    </div>
+                    <div class="mb-3">
+                        <label>Video Title</label>
+                        @Html.TextBoxFor(e => e.video_title, new { @class = "form-control" })
+                    </div>
+                    <div class="mb-3">
+                        <label>Video Url</label>
+                        <input type="file" name="video" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Video Title</label>
+                        @Html.TextAreaFor(e => e.video_description, new { @class = "form-control" })
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Submit" />
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="col-8">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Topic Name</th>
+                    <th>Topic Title</th>
+                    <th>Video</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in ViewBag.videos)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.video_title</td>
+                        <td>
+
+                            <a href="~/Videos/@item.topic_id/@item.video_url" target="_blank">@item.video_url</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

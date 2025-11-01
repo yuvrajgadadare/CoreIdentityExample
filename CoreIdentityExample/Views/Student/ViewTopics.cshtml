@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "ViewTopics";
+    Layout = "~/Views/Shared/ExamLayout.cshtml";
+}
+
+ <div class="row">
+    <div class="col-md-4">
+        @* <a href="/Student/Exams" class="btn btn-primary">View Exams</a> *@
+    </div>
+    <div class="col-md-4">
+        @using (Html.BeginForm("InitiateExam","Student",FormMethod.Post))
+        {
+        <div class="card">
+            <div class="card-header">
+                    <h4>Select Topic</h4>
+
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    @Html.DropDownList("topic_id",ViewBag.topics as SelectList,"Select Topic",new{@class="form-control"})
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+        }
+    </div>
+    <div class="col-md-4"></div>
+ </div>

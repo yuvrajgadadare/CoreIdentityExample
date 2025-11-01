@@ -1,0 +1,423 @@
+﻿@using ERP_Models
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    .bg-color{
+        background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+    }
+     
+</style>
+
+<script>
+    function ViewAttendance(bid, rid) {
+        var apiurl = "/dashboard/GetBatchWiseStudentAtendance?batch_id=" + bid + "&registration_id=" + rid;
+        var totalleactures = 0, totalpresent = 0, totalabsent = 0;
+        $.ajax({
+            url: apiurl,
+            method: 'get',
+            success: function (resp) {
+                $("#tblattendacedata").empty();
+                totalleactures = resp.length;
+
+                $.each(resp, function (i, d) {
+                    var color = "";
+                    var classname="";
+                    if (d.is_present == 1) {
+                        color = "green";
+                        classname="table-success";
+                        totalpresent = Number(totalpresent) + 1;
+                    }
+                    else {
+                        color = "red";
+                        classname="table-danger";
+
+                        totalabsent = Number(totalabsent) + 1;
+                    }
+                    $("#tblattendacedata").append("<tr class="+classname+"><td>" + (i + 1) + "</td><td>" + d.content_name + "</td><td>" + d.expected_date + "</td><td>" + d.actual_date + "</td><td  style='color:" + color + "'>" + d.attendance + "</td></tr>");
+                })
+                var per = totalpresent * 100 / totalleactures;
+                $("#tblattendance").html("<tr><td style='text-align:right'>Attendance:</td><td>" + per.toFixed(2) + "%</td></tr><tr><td style='text-align:right'>Total Leactures :</td><td> <b>" + totalleactures + "</b></td></tr><tr class='table-success'><td style='text-align:right'>Present Days : </td><td><b>" + totalpresent + "</b></td></tr><tr  class='table-danger'><td  style='text-align:right'>Absent Days :</td><td> <b>" + totalabsent + "</b></td></tr>");
+            }
+        })
+        $("#attendancemodel").modal("show");
+    }
+</script>
+@{
+    RegistrationModel reg = (RegistrationModel)ViewData["registration"];
+    List<BatchStudentModel> batches = (List<BatchStudentModel>)ViewData["batches"];
+    List<StudentPaymentModel> payments = (List<StudentPaymentModel>)ViewData["payments"];
+    List<TopicModel> topics = (List<TopicModel>)ViewData["topics"];
+    RegistrationCourseScheduleModel rsmodel = (RegistrationCourseScheduleModel)ViewData["schedule"];
+    List<BatchExamModel> scheduledexams = (List<BatchExamModel>)ViewData["scheduledexams"];
+}
+<div class="container-fluid">
+        <div class="row bg-white">
+
+            <div class="col-md-6" style="border-radius:20px;">
+            <h6>Course Details</h6>
+                <div class="card shadow-lg mb-3 rounded  bg-color" style="height:250px;overflow-y:scroll;overflow-x:hidden;scrollbar-width:thin;">
+                     
+                    <div class="">
+                        <table class="table table-bordered" style="font-size:small">
+                           <tr>
+                            <td><b>Course</b> :   @reg.course_name</td>
+
+                            <td><b>Registration Date</b> :   @reg.registration_date.ToShortDateString()</td>
+                            </tr>
+                            <tr>
+                            <td><b>Final Fees </b>  @reg.final_fees_amount</td>
+
+                            <td><b>Student Status</b> :   @reg.current_status</td>
+                            </tr>
+                           
+                              <tr>
+                            <td><b>Fees Paid</b> :   @reg.paid_amount</td>
+
+                            <td><b>Fees Remaining :</b>   @reg.remaining_amount</td>
+                            </tr>
+                        <tr>
+                            <td><b>Fees Status</b> :  @reg.fees_status</td>
+                        </tr>
+                       </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+            <h6>Payment History</h6>
+
+                <div class="card mb-3 shadow-lg mb-5 bg-color rounded" style="height:250px;overflow-y:scroll;overflow-x:hidden;scrollbar-width:thin;">
+                    <div class="">
+                        <table class="table table-bordered" style="font-size:small">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Payment Date</th>
+                                    <th>Payment Amount</th>
+                                    <th>Payment Mode</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 1;
+                                    float amount = 0;
+                                }
+                                @foreach (var item in payments)
+                                {
+                                    amount += item.payment_amount;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.payment_date.ToShortDateString()</td>
+                                        <td>@item.payment_amount</td>
+                                        <td>@item.payment_mode</td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" style="text-align:right">Total Paid Till Date : </td>
+                                    <td>@amount</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+ 
+        <div class="row bg-white">
+        <div class="col-md-6">
+            <h6>Batches</h6>
+
+            <div class="row">
+           
+           @foreach(var item in batches)
+        {
+
+            float per = item.attended_leactures * 100 / item.total_leactures;
+           
+                        <div class="col-md-6">
+                            <div class="card mb-3 shadow-lg bg-color p-3 mb-5  rounded ">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="row" style="font-size:small">
+                                            <div class="col-md-6 mb-3">
+                                                <span>@item.topic_name <span> (@item.batch_name)</span></span>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <span> @item.employee_name </span>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <span>@item.start_date.ToShortDateString()</span>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <span>@item.batch_time</span>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>@item.attended_leactures / @item.total_leactures</label>
+                                        <div class="progress" style="background-color:white">
+                                            <div class="progress-bar progress-bar-striped" style="width: @per%;">
+                                                @per%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align:right">
+                                            <button onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-warning btn-sm">View Attendance</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+         
+        }
+
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h6>Scheduled Exams</h6>
+
+            <div class="card shadow-lg bg-color rounded" style="height:250px;overflow-y:scroll;overflow-x:hidden;scrollbar-width:thin;">
+
+
+                <div class="card-body">
+                    <table class="table table-hover  bg-color " style="font-size:small">
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Topic Name</th>
+                                <th>Exam Date</th>
+                                <th>Exam Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                i = 1;
+                            }
+                            @foreach (var item in scheduledexams)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.exam_date.ToShortDateString()</td>
+                                    <td>@item.start_time.ToLongTimeString()</td>
+                                    <td>@item.topic_name</td>
+
+                                    @if (item.is_attended == 1)
+                                    {
+                                        <td>
+                                            <span>Attended</span>
+                                        </td>
+                                        <td><a href="/BatchExam/ViewBatchExam/@item.exam_id" class="btn btn-dark btn-sm">View Exam</a></td>
+
+
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span>Not Attended</span>
+                                        </td>
+                                        <td><a href="/BatchExam/Index/@item.exam_id" class="btn btn-warning btn-sm">Start Exam</a></td>
+
+                                    }
+
+
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+     @*    <div class="card shadow-lg p-3 mb-3  bg-color  rounded" style="height:350px;overflow-y:scroll;overflow-x:hidden;scrollbar-width:thin;">
+
+            <h6 style="text-align:center">Batches</h6>
+
+            <div class="card-body">
+                <table class="table table-bordered bg-color" style="font-size:small">
+                   <thead>
+                       <tr>
+                           <th>Sr No</th>
+                           <th>Batch Name</th>
+                            <th>Topic Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Batch Time</th>
+                            <th>Trainer Name</th>
+                            <th>Total Days</th>
+                            <th>Attended Days</th>
+                            <th>Remaining Days</th>
+                            <td>Attendance</td>
+                       </tr>
+                   </thead>
+                   <tbody>
+                        @{
+                              i = 1;
+                        }
+                       @foreach(var item in batches)
+                        {
+                           <tr>
+                               <td>@i</td>
+                                <td>@item.batch_name</td>
+                                <td>@item.topic_name</td>
+                                <td>@item.start_date.ToShortDateString()</td>
+                                <td>@item.schedule.Max(e=>e.expected_date).ToShortDateString()</td>
+                                <td>@item.batch_time</td>
+                                <td>@item.employee_name</td>
+                                <td>@item.total_leactures</td>
+                                <td>@item.attended_leactures</td>
+                                <td>@item.remaining_leactures</td>
+                                <td><button onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-warning btn-sm">View Attendance</button></td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ *@
+
+  
+        <div class="modal fade" id="attendancemodel" tabindex="-1" data-bs-backdrop="false">
+            <div class="modal-dialog  modal-xl">
+                <div class="modal-content">
+                  @*   <div class="modal-header">
+                        <h5 class="modal-title">Attendance</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> *@
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card  mb-3 shadow-lg p-3 mb-5 bg-white rounded">
+
+                                    <table class="table  table-bordered  table-light table-hover" style="font-size:small">
+                                    <tbody id="tblattendance"></tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card  mb-3 shadow-lg p-3 mb-5 bg-white rounded">
+
+                                <h6>Attendance</h6>
+                                <table class="table table-bordered table-responsive table-light" style="font-size:small">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No</th>
+                                            <th>Contend Name</th>
+                                            <th>Expected Date</th>
+                                            <th>Actual Date</th>
+                                            <th>Attendance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblattendacedata">
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            </div>
+                       
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    
+    
+ 
+
+<div class="row">
+    <h5>Course Name : @reg.course_name</h5>
+    <div>
+        @{
+            i = 1;
+        }
+        @foreach (var topic in rsmodel.Topics)
+    {
+            
+                <div class="card shadow-lg p-3 bg-white rounded mb-3">
+
+                @if(topic.batch.batch_id!=0)
+                {
+                        <table class="table table-borderless" style="background-color:007CC3">
+                        <tr style="color:white;">
+                            <td>@topic.topic_name <span> - @topic.batch.batch_name </span></td>
+                            <td> @topic.batch.completed_percentage<span>%</span> completed </td>
+                            <td> @topic.batch.total_leactures Leactures </td>
+                            <td> @topic.batch.attended_leatures Attended </td>
+                            <td>@topic.batch.remaining_leatures Remaining </td>
+                        </tr>
+                    </table>
+                }
+                else
+                {
+                    <h6>@topic.topic_name -<span style="color:orange"> No Batch Allocated </span></h6>
+
+                }
+                <table class="table table-bordered" style="font-size:small">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">Sr No</th>
+                            <th style="width:55%">Content</th>
+                            <th style="width:15%">Expected Date</th>
+                            <th style="width:15%">Actual Date</th>
+                            <th style="width:10%">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var content in topic.contents)
+                        {
+                            string color = "";
+                            if (content.attendance != null && content.attendance.ToLower() == "present")
+                            {
+                                color = "green";
+                            }
+                            else if (content.attendance != null && content.attendance.ToLower() == "absent")
+                            {
+                                color = "red";
+                            }
+
+                            <tr style="background-color:@color">
+                                <td>@i</td>
+                                <td>@content.content_name</td>
+                                <td>@content.expected_date.DayOfWeek, @content.expected_date.ToShortDateString()</td>
+
+                                <td>
+                                    @if (content.actual_date != null)
+                                    {
+                                        <span>@content.actual_date.Value.ToShortDateString()</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Not Yet Conducted</span>
+                                    }
+                                </td>
+                                <td>@content.attendance</td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+                </div>
+
+       
+    }
+    </div>
+
+    </div>
+</div>

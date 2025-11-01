@@ -1,0 +1,83 @@
+﻿@model ERP_Models.CourseModel
+@{
+    ViewData["Title"] = "Course Syllabus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body {
+        font-family: 'Bookman Old Style';
+        font-size:small
+    }
+</style>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    function PrintInvoice() {
+        // var divName = document.getElementById("dvprint");
+        var printContents = document.getElementById("dvprint").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+<div class="row">
+
+<input type="button" value="Print Invoice" class="btn" onclick="PrintInvoice()" />
+<div id="dvprint"  class="container">
+<div class="card" >
+            <div class="card-body" style="padding:1%">
+
+                <div style="text-align:center">
+            <h4 style="color:blue">CIIT Training Institute Pvt Ltd</h4>
+            <div>
+                Office #2, 1st floor, manisha blitz , hadapsar, near shankar math, pune-28
+            </div>
+            <div>Web site:<b>www.ciitinstitute.com</b></div>
+        </div>
+        <hr />
+        <table class="table table-borderless">
+            <tr>
+                <td>Course Name - <b>@Model.course_name</b></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>&nbsp;Course Fees - </td>
+                @foreach (var item in Model.courseFees)
+                {
+                        float amount = item.fees_amount + (item.fees_amount * item.gst / 100);
+                        <td> <b>@amount</b>  <b>(@item.fee_mode)</b></td>
+                }
+            </tr>
+        </table>
+        <hr />
+        <h4>Syllabus</h4>
+        <ul class="">
+            @foreach (var item in Model.topics)
+            {
+                <li>
+                    <b> @item.topic_name<span>(Days=@item.contents.Count())</span></b>
+                            <br />
+                            <br />
+                    <ul>
+                        @foreach (var c in item.contents)
+                        {
+                            <li class="mb-1">@c.content_name
+                                        <br />
+
+
+                            </li>
+                        }
+                    </ul>
+                    <hr />
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+    </div>
+</div>
+

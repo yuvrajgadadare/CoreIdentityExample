@@ -1,0 +1,178 @@
+﻿@model ERP_Models.BatchExamModel
+@using ERP_Models
+@{
+    ViewData["Title"] = "View Batch Exam";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    td {
+        text-align: center;
+    }
+
+    .my-pre {
+        margin-top: 1%;
+        line-height: 1.2em;
+        /* background: linear-gradient(180deg,#ccc 0,#ccc 1.2em,#eee 0); */
+        background-size: 2.4em 2.4em;
+        /* border: 1px solid gray; */
+        background-color: #eff5fa;
+        background-origin: content-box;
+        /* some extra styles*/
+        padding: 1%;
+        text-align: justify;
+        font-family: 'Bookman Old Style';
+        font-size: 14px;
+    }
+</style>
+@{
+    List<ExamModel> exams = (List<ExamModel>)ViewData["exams"];
+}
+<div class="">
+    <div class="row">
+        <div class="col-md-2">
+
+        @*     <ul class="list-group">
+                <li class="list-group-item">
+                    <h6 style="text-align:center">Given Exams</h6>
+                </li>
+                @foreach (var item in exams)
+                {
+                    <li class="list-group-item"><a href="/PracticeExam/ViewPracticeExam/@item.exam_id" style="text-decoration:none;text-align:center;">@item.topic_name <br />( <span style="color:deeppink">@item.exam_date.ToShortDateString() </span> ) </a></li>
+                }
+            </ul> *@
+        </div>
+        <div class="">
+            <div class="row mb-3">
+                <h5 style="text-align:center">
+                    Exam Details
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+
+                <div class="col-md-6">
+                    <div class="card  mb-3 shadow-lg p-3 mb-5 bg-color rounded text-white">
+                    <table class="table table-bordered" style="font-size:small">
+                        <tr>
+                            <td>Topic Name : <b>@Model.topic_name</b></td>
+                            <td>Exam Date : <b>@Model.exam_date.ToShortDateString()</b></td>
+                            </tr>
+                            <tr>
+                            <td>Start Date & Time : <b>@Model.start_time.ToString()</b></td>
+                                <td colspan="2">End Date & Time : <b>@Model.end_time.ToString()</b></td>
+                        </tr>
+                        <tr>
+                            <td>Total Questions : <b>@Model.total_questions</b></td>
+                            <td>Correct Questions : <b>@Model.total_correct_questions</b></td>
+                            </tr>
+                            <tr>
+                            <td>Wrong Questions  <b>@Model.total_wrong_questions</b></td>
+                            <td>Percentage : <b>@Model.percentage</b></td>
+                        </tr>
+                        <tr>
+                            <td>Grade : <b>@Model.grade</b></td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <h5 style="text-align:center">
+                    Questions
+                </h5>
+            </div>
+
+            <div class="row">
+                @{
+                    int i = 1;
+                }
+                @foreach (var q in Model.examQuestions)
+                {
+
+                    <div class="card mb-3 shadow-lg  rounded">
+                        <div class="card-body">
+
+                            <pre class="my-pre">
+                            <span>@i.</span> @q.question
+        </pre>
+                            <ul class="list-group">
+                                @if (q.submitted_option_number == 1)
+                                {
+                                    if (q.submitted_option_number == q.correct_option_number)
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">1.<span style="color:green"> @q.option1</span></p></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">1.<span style="color:red"> @q.option1</span></p></li>
+
+                                    }
+
+                                    <li class="list-group-item"> <p style="font-size:small">2. @q.option2</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">3. @q.option3</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">4. @q.option4</p></li>
+
+                                }
+                                else if (q.submitted_option_number == 2)
+                                {
+                                    <li class="list-group-item"> <p style="font-size:small"> 1.  @q.option1</p></li>
+
+                                    if (q.submitted_option_number == q.correct_option_number)
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small"> 2.<span style="color:green"> @q.option2</span></p></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">2.<span style="color:red"> @q.option2</span></p></li>
+
+                                    }
+                                    <li class="list-group-item"> <p style="font-size:small">3. @q.option3</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">4. @q.option4</p></li>
+
+                                }
+                                else if (q.submitted_option_number == 3)
+                                {
+                                    <li class="list-group-item"> <p style="font-size:small"> 1.  @q.option1</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">2. @q.option2</p></li>
+                                    if (q.submitted_option_number == q.correct_option_number)
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">3. <span style="color:green"> @q.option3</span></p></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">3. <span style="color:red"> @q.option3</span></p></li>
+
+                                    }
+
+                                    <li class="list-group-item"> <p style="font-size:small">4. @q.option4</p></li>
+
+                                }
+                                else if (q.submitted_option_number == 4)
+                                {
+                                    <li class="list-group-item"> <p style="font-size:small"> 1.  @q.option1</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">2. @q.option2</p></li>
+                                    <li class="list-group-item"> <p style="font-size:small">3. @q.option3</p></li>
+                                    if (q.submitted_option_number == q.correct_option_number)
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">4. <span style="color:green"> @q.option4 </span> </p></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item"> <p style="font-size:small">4. <span style="color:red">  @q.option4 </span>  </p></li>
+                                    }
+                                }
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

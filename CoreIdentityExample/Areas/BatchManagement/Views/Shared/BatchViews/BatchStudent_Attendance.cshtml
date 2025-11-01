@@ -1,0 +1,116 @@
+﻿@using ERP_Models
+
+
+<script>
+    function ViewAttendance(bid, rid) {
+        var apiurl = "/Trainer/Batch/GetBatchWiseStudentAtendance?batch_id=" + bid + "&registration_id=" + rid;
+        var totalleactures = 0, totalpresent = 0, totalabsent = 0;
+        $.ajax({
+            url: apiurl,
+            method: 'get',
+            success: function (resp) {
+                $("#tblattendacedata").empty();
+                totalleactures = resp.length;
+
+                $.each(resp, function (i, d) {
+                    var color = "";
+                    if (d.is_present == 1) {
+                        color = "green";
+                        totalpresent = Number(totalpresent) + 1;
+                    }
+                    else {
+                        color = "red";
+                        totalabsent = Number(totalabsent) + 1;
+                    }
+                    $("#tblattendacedata").append("<tr><td>" + (i + 1) + "</td><td>" + d.content_name + "</td><td>" + d.expected_date + "</td><td>" + d.actual_date + "</td><td  style='color:" + color + "'>" + d.attendance + "</td></tr>");
+                })
+                var per = totalpresent * 100 / totalleactures;
+                $("#tblattendance").html("<tr><td>Attendance:" + per + "%</td><td>Total Leactures:<b>" + totalleactures + "</b></td><td>Present Days:<b>" + totalpresent + "</b></td><td>Absent Days:<b>" + totalabsent + "</b></td>");
+            }
+        })
+        $("#attendancemodel").modal("show");
+    }
+</script>
+@{
+    List<BatchStudentModel> studentlist = (List<BatchStudentModel>)ViewData["students"];
+}
+<div class="col-md-12">
+ 
+    <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="card-header">
+
+            <h5 style="text-align:center">Students</h5>
+
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless">
+    
+        <thead>
+            <tr>
+                <th>Sr No</th>
+                <th>Student Name</th>
+                <th>Course Name</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int j = 1;
+            }
+            @foreach (var item in studentlist)
+            {
+                <tr>
+                    <td>@j</td>
+                    <td>@item.student_name</td>
+                    <td>@item.course_name</td>
+ 
+                    <td><button onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-info btn-sm">View Attendance</button></td>
+                </tr>
+                j++;
+            }
+        </tbody>
+    </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="attendancemodel" tabindex="-1" data-bs-backdrop="false">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Attendance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table table-borderless">
+                        <tbody id="tblattendance"></tbody>
+                    </table>
+                </div>
+                <div class="row">
+
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Contend Name</th>
+                                <th>Expected Date</th>
+                                <th>Actual Date</th>
+                                <th>Attendance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblattendacedata">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @* <button type="button" class="btn btn-primary" onclick="SubmitAttendance()">Mark Attendance</button> *@
+            </div>
+        </div>
+    </div>
+</div>

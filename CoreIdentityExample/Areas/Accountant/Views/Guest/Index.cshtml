@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ERP_Models.StudentModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+   <br />
+
+        <a href="/Accountant/Student/RegistrationForm" class="btn btn-primary">Add Old Student</a>
+
+
+       
+       
+        <div class="row">
+            <input type="text" class="form-control" id="txtfilter" onclick="filter" placeholder="search student by name,mobile,qualification,course,email address,etc" />
+        </div>
+<table class="table datatable" style="font-size:small">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Student Name</th>
+                        <th>Gender</th>
+                        <th>Birth Date</th>
+                        <th>Mobile Number</th>
+                        <th>Email Address</th>
+                        <th>Qualification</th>
+                        <th>Student Code</th>
+                        <th>Photo</th>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                     @{
+                        int k = 1;
+                    //    List<StudentModel> lsts = (List<StudentModel>)ViewData["guest"];
+                    }
+                @foreach (var item in Model)
+                    {
+                          <tr>
+                            <td>@k</td>
+                            <td>@item.student_name</td>
+                            <td>@item.gender</td>
+                            <td>@item.birth_date.ToShortDateString()</td>
+                            <td>@item.mobile_number</td>
+                            <td>@item.email_address</td>
+                            <td>@item.qualification</td>
+                           @*  @if (item.registrations.Count() > 0)
+                            {
+                                RegistrationModel r = item.registrations.First();
+                                <td>@r.course_name</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            } *@
+
+                            <td><img src="~/Students/Profiles/@item.profile_photo" height="30" width="30" /></td>
+                            <td>
+                                <a href="/Accountant/Student/GetStudentWisedetails/@item.student_id">View Details</a>
+                                
+                                             </td>
+
+                        </tr>
+                        k++;
+                    }
+                </tbody>
+            </table>

@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewData["Title"] = "Add Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var questions = [];
+    $(document).ready(function () {
+        $("#ddtopic").change(function () {
+            GetTopicWiseContents();
+        })
+    })
+    function GetTopicWiseContents() {
+        var topic_id = $("#ddtopic").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetTopicWiseContents/' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                $("#ddcontent").empty();
+                $("#ddcontent").append("<option selected disabled>Select Content</option>");
+
+                $.each(resp, function (i, d) {
+                    $("#ddcontent").append("<option value=" + d.content_id + ">" + d.content_name + "</option>")
+                })
+            }
+        })
+    }
+
+    function AddQuestion() {
+        var content_id=$("#ddcontent").val();
+        var question = $("#question").val();
+        var option1 = $("#option1").val();
+        var option2 = $("#option2").val();
+        var option3 = $("#option3").val();
+        var option4 = $("#option4").val();
+        var correct_option_number = $("#correct_option_number").val();
+        var st = { "content_id": content_id, "question": question, "option1": option1, "option2": option2, "option3": option3, "option4": option4, "correct_option_number": correct_option_number };
+        questions.push(st);
+        $("#msg").html("Total Questions=" + question.length);
+        ClearData();
+        DisplayQuestions();
+    }
+    function DisplayQuestions() {
+        $("#questionlist").empty();
+        $.each(questions, function (i, d) {
+            $("#questionlist").append("<li>"+d.question+"</li>");
+
+        })
+    }
+    function SubmitQuestions() {
+        var content_id=$("#ddcontent").val();
+        var st = { "content_id": content_id, "contentQuestions":questions}
+        $.ajax({
+            url: '/Developer/ContentQuestion/AddContentQuestions',
+            method:'post',
+            data:st,
+            success: function (resp) {
+                alert(resp);
+                $("#status").html(resp);
+            }
+        })
+    }
+    function ClearData() {
+         // $("#ddcontent").val("");
+        $("#question").val("");
+        $("#option1").val("");
+        $("#option2").val("");
+        $("#option3").val("");
+        $("#option4").val("");
+    }
+    function ClearForm() {
+        questions = [];
+        $("#questionlist").empty();
+    }
+</script>
+<div class="container-fluid">
+    <h4 id="msg"></h4>
+    <div class="row">
+       <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Select Topic</label>
+                                @Html.DropDownList("ddtopic", ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label>Select Content</label>
+                                <select id="ddcontent" class="form-control">
+                                    <option selected disabled>Select Content</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label>Enter Question</label>
+                                <textarea id="question" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Option 1</label>
+                                <textarea id="option1" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Option 2</label>
+                                <textarea id="option2" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Option 3</label>
+                                <textarea id="option3" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Option 4</label>
+                                <textarea id="option4" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label>Correct Option Number</label>
+                            <input id="correct_option_number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <input type="button" value="Add" class="btn btn-primary" onclick="AddQuestion()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <ul id="questionlist"></ul>
+                    <input type="button" value="Submit" onclick="SubmitQuestions()" />
+            </div>
+            <div class="card-footer">
+                <h4 id="status"></h4>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+   

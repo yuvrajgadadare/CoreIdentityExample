@@ -1,0 +1,121 @@
+﻿@model ERP_Models.ExamModel
+@{
+    ViewData["Title"] = "Assessment";
+    Layout = "~/Views/Shared/ExamLayout.cshtml";
+}
+
+@if (ViewBag.msg!=null)
+{
+    <h2 style="color:red;text-align:center">@ViewBag.msg</h2>
+}
+else{
+<script>
+    $(document).ready(function () {
+        $("#btnstatus").attr("hidden", "hidden");
+    
+        $.ajax({
+            url: '/Assessment/GetCurrentExam',
+            method:'get',
+            contentType:'application/json',
+            success: function (resp) {
+                console.log(resp);
+                var sd1 = resp.exam_date.split("T");
+                console.log(sd1);
+                var sd2 = resp.start_time.split("T");
+                console.log(sd2);
+                console.log(sd1[0])
+
+                var time = sd1[0] + " " + sd2[1];
+                console.log(time)
+                var dt = new Date(time);
+                // $("#msg").html(dt);
+
+                // var countDownDate = new Date("Oct 15, 2024 16:36:25").getTime();
+                var countDownDate = dt.getTime();
+
+                // Update the count down every 1 second
+                var x = setInterval(function () {
+
+                    // Get today's date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and the count down date
+                    var distance = countDownDate - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Output the result in an element with id="demo"
+                    document.getElementById("msg").innerHTML = days + " " + hours + " : "
+                        + minutes + " : " + seconds;
+                    document.getElementById("msg").style.color = "red";
+                    // If the count down is over, write some text
+                    if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("msg").innerHTML = "Best of Luck";
+                        document.getElementById("msg").style.color = "green";
+
+                        $("#btnstatus").removeAttr("hidden");
+                    }
+                }, 1000);
+            }
+        })
+    })
+</script>
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            
+            <h4> Assessment For @ViewBag.topic</h4>
+            <div class="">
+                <h4>General Instructions:</h4>
+                <ul>
+                    <li>Attempt all the questions</li>
+                    <li>Total duration of <b>@ViewBag.topic </b> exam is 30 Minutes.</li>
+                    <li>Total number of Marks(per Question) = 2 Marks.</li>
+                    <li>Negative Marking of 0 Mark.</li>
+                    <li>The clock will be set at the server. The countdown timer in the top right corner of screen will display the remaining time available for you to complete the examination.</li>
+                    <li>The Questions Palette displayed on the left side of screen will show the status of each question.</li>
+                </ul>
+                <h4>To Answer a question, do the following:</h4>
+                <ul>
+                    <li>Click on the question number in the Question Palette at the left of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
+                    <li>Click on Save & Next to save your answer for the current question and then go to the next question.</li>
+                    <li>Click on Reset Answer to reset your answer for the current question, and then go to the next question.</li>
+                </ul>
+                <h4>Answering a Question:</h4>
+                <ul>
+                    <li>
+                        Procedure for answering a question:
+                        <ul>
+                            <li>Question Answered will show Green colored.</li>
+                            <li>Question Not Answered will show Red colored.</li>
+                            <li>To deselect your chosen answer, click on the button of the Reset Answer.</li>
+                            <li>To change your chosen answer, click on the button of another option.</li>
+                            <li>To save your answer, you MUST click on the Save & Next button.</li>
+                        </ul>
+                    </li>
+                    <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
+                </ul>
+
+                <div class="col-md-4">
+                    @using (Html.BeginForm("StartExam", "Assessment", FormMethod.Get))
+                    {
+                        <h4 id="msg"></h4>
+                        <input type="submit"  value="Start Exam" id="btnstatus" class="btn btn-primary" />
+                       
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+
+    </div>
+</div>
+}

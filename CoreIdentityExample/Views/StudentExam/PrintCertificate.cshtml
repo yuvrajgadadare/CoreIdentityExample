@@ -1,0 +1,275 @@
+﻿
+@{
+    ViewData["Title"] = "Print Certificate";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+@using ERP_Models;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Responsive Certificate</title>
+   
+
+    <script>
+        function PrintPage() {
+            var printContents = document.getElementById("dv").innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+</head>
+
+<body>
+    <input type="button" value="Print" onclick="PrintPage()" />
+    <div id="dv">
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .certificate {
+            border: 40px solid blue;
+            margin: 0px auto;
+            background-color: #f7f7f7;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .inner-border {
+            border: 10px solid #e74c3c;
+            padding: 20px;
+            border-radius: 50px;
+        }
+
+        .inner-border-3 {
+            border: 5px solid black;
+            padding: 10px;
+            border-radius: 40px;
+        }
+
+        .certificate h1
+        {
+            
+            text-align: center;
+            font-family: "Bookman Old Style"
+        
+        }
+        @Html.Raw("@")page {
+            size: 21cm 29.7cm;
+            margin: 30mm 45mm 30mm 45mm;
+              /* change the margins as you want them to be. */
+            }
+        .certificate h2 {
+            text-align: center;
+            font-weight:normal;
+            font-family:  'Bookman Old Style'
+        }
+
+        .recipient {
+            font-size: 1.5rem;
+            font-style: italic;
+        }
+
+        .logo {
+            width: 150px;
+            display: block;
+            /* margin-left: auto;
+                margin-right: auto;*/
+        }
+
+        .border-logo {
+            position: absolute;
+            top: 50px; /* Adjust this value to control vertical position */
+            left: 50%;
+            transform: translateX(-50%);
+            
+        }
+
+            .border-logo img {
+                max-width: 150px;
+                height: auto;
+                border-radius: 20px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+
+.footer {
+  
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  
+  color: white;
+  text-align: center;
+}
+
+        .para {
+            text-align: center;
+            font-family: 'Bookman Old Style';
+            font-style: italic;
+        }
+
+        .para2 {
+            border-top: 3px solid black;
+            border-bottom: 3px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .signature {
+            /*text-align: center;*/
+            margin-top: 20px;
+        }
+
+        .marks-interpretation {
+          
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        @Html.Raw("@")media (max-width: 768px) {
+            .marks-interpretation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+                .marks-interpretation div {
+                    margin-bottom: 10px;
+                    text-align: center;
+                }
+
+            .border-logo {
+                top: -30px; /* Adjust for smaller screens */
+            }
+        }
+
+       /* .marks-interpretation div {
+            font-size: 1.2rem;
+            margin-left: 300px;
+        }
+
+        .marks-interpretation2 div {
+            font-size: 1.2rem;
+            margin-left: 300px;
+        }*/
+
+        .director {
+            margin-left: 80px;
+            font-size: 20px;
+            font-weight: 400;
+        }
+    </style>
+        @{
+            StudentModel sm = (StudentModel)ViewData["student"];
+        }
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="certificate">
+                        <div class="border-logo">
+                            <img src="logoimage.jpeg" alt="---" />
+                        </div>
+                        <div class="inner-border">
+                            <div class="inner-border-3">
+                                <!-- Logo -->
+                                <img src="~/assets/images/mainlogo.png" alt="CIIT Logo" class="logo" />
+
+                                <!-- Certificate Title and Details -->
+                                <h1>Certificate</h1> 
+                                 <div class="signature" style="height:50px;">
+                                    
+                                </div>
+                                <p><h2>The Academic Council of CIIT</h2></p>
+                                <p><h2>Certifies that</h2></p>
+                                 <div class="signature" style="height:50px;">
+                                    
+                                </div>
+                                <!-- Recipient Name -->
+                                <h1 >@sm.student_name @sm.parent_name @sm.last_name</h1>
+                                <p class="para">has completed a exam on</p>
+                                <h1>@Model.topic_name</h1>
+                                 <div class="details">
+                                    <p class="para">with grade</p>
+                                    <h1>@Model.grade</h1>
+                                 </div>
+                                  <div class="signature" style="height:50px;">
+                                    
+                                </div>
+                                <!-- Course Details -->
+                               @*  <div class="details">
+                                    <p class="para">of 6 Months duration</p>
+                                    <p class="para">and found the candidate's performance to be</p>
+                                    <h1>@Model.grade</h1>
+                                    <p class="para">Given under our hand and seal on 20th Jan 2022</p>
+                                    <p class="para">at Pune, India</p>
+                                    <p class="para">Candidate has also completed a Live Project on</p>
+                                    <p class="para">.Net Technology under the guidance of the Project Manager</p>
+                                </div> *@
+                                 
+                                <!-- Signature Section -->
+                                <div class="signature">
+                                    <h3 class="director">Director</h3>
+                                    <p>CIIT Training Institute Pvt Ltd</p>
+                                </div>
+                                 
+                                <!-- Registration and Certificate Numbers -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="para2">
+                                            PIN: @sm.permanent_identification_number
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            Certificate No:CT111117013
+                                        </p>
+                                    </div>
+                                </div>
+                                <!--<p style="text-align:center">LEGEND</p>-->
+                                <!-- Marks and Interpretation-->
+                                <div class="marks-interpretation">
+                                 <div class="row ">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6" style="text-align: center;">
+                                        <table  class="table table-borderless">
+                                            <tr>
+                                                <td>
+                                                % Marks <br />
+                                                50-59.9 <br />
+                                                60-69.9 <br />
+                                                70-79.9 <br />
+                                                80-Above
+                                            </td>
+                                            <td>
+                                                Interpretation <br />
+                                                Satisfactory <br />
+                                                Fair <br />
+                                                Good <br />
+                                                Excellent
+                                            </td>
+                                            </tr>
+                                            </table>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                 </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+
+

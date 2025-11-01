@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ERP_Models.ExamModel>
+@{
+    ViewData["Title"] = "Exams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .header {
+        position: sticky;
+        top: 0;
+    }
+</style>
+
+<div class="container-fluid" style="margin-top:-10px">
+    <div class="row">
+     <div class="">
+            <table class="table table-sm table-responsive">
+                <thead class="bg-light header">
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Exam Date</th>
+                        <th>Student Name</th>
+                        <th>Topic Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Total Questions</th>
+                        <th>Correct Questions</th>
+                        <th>Wrong Questions</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int p = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@p</td>
+                            <td>@item.exam_date.ToShortDateString()</td>
+                            <td>@item.student_name</td>
+                            <td>@item.topic_name</td>
+                            <td>@item.start_time.ToLongTimeString()</td>
+                            <td>@item.end_time.ToLongTimeString()</td>
+                            <td>@item.total_questions</td>
+                            <td>@item.total_correct_questions</td>
+                            <td>@item.total_wrong_questions</td>
+                            <td>@item.percentage</td>
+                            <td>@item.grade</td>
+                            <td>
+                                <a href="/BatchManagement/Exam/ViewExamDetails/@item.exam_id" class="btn btn-warning btn-sm">View</a>
+
+                                <a href="/BatchManagement/Exam/PrintCertificate/@item.exam_id" class="btn btn-info btn-sm">Certificate</a>
+                            </td>
+
+                        </tr>
+                        p++;
+                    }
+                </tbody>
+            </table>
+
+            @if (ViewBag.dbCount != null)
+            {
+
+
+                <ul class="pagination">
+                    @if (ViewBag.currentpage > 1)
+                    {
+                        <li class="page-item"><a href="/Enquiry/Index?page=-1" class="page-link">Prev</a></li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item"><a href="/Enquiry/Index?page=-1" class="page-link disabled">Prev</a></li>
+
+                    }
+                    @for (int i = 1; i <= ViewBag.dbCount; i++)
+                    {
+
+
+                        if (ViewBag.currentpage == i)
+                        {
+                            <li class="page-item active"><a href="/Enquiry/Index?page=@i" class="page-link">@i.ToString()</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a href="/Enquiry/Index?page=@i" class="page-link">@i.ToString()</a></li>
+
+                        }
+                    }
+
+                    @if (ViewBag.currentpage < ViewBag.dbCount)
+                    {
+                        <li class="page-item "><a href="/Enquiry/Index?page=-2" class="page-link">Next</a></li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item"><a href="/Enquiry/Index?page=-2" class="page-link disabled">Next</a></li>
+
+                    }
+
+                </ul>
+
+            }
+
+        </div>
+
+    </div>
+</div>
+

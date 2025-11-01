@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ERP_Models.InterviewQuestionModel>
+@using ERP_Models
+@{
+    ViewData["Title"] = "TopicWiseQuestions";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+@{
+    List<TopicModel> topics = (List<TopicModel>)ViewData["topics"];
+ }
+<style>
+    a{
+        text-decoration:none;
+    }
+
+    pre {
+        white-space: pre-wrap; /* Allows for wrapping while preserving whitespace */
+        font-family:'Bookman Old Style';
+        font-size:small;
+    }
+</style>
+<div class="">
+    @*
+<div class="row">
+   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">Topics</a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+               <div class="table-responsive">
+                        <div class="navbar-nav" style="overflow:scroll">
+                            @foreach (var item in topics)
+                            {
+                                <a class="nav-item nav-link" style="color:blue" href="/Learning/TopicWiseQuestions/@item.topic_id">@item.topic_name</a>
+                            }
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </nav>
+
+
+        </div> *@
+    <div class="row">
+    <div class="col-md-2">
+        
+
+        <ul class="list-group" >
+                <li class="list-group-item list-group-item-primary"><a href="#myCollapse" data-bs-toggle="collapse"><h6>Topics</h6></a></li>
+            @if (topics.Count > 0)
+            {
+                <div class="collapse show" id="myCollapse">
+                @foreach (var item in topics)
+                {
+                    <li class="list-group-item">
+                        <a href="/Learning/TopicWiseQuestions/@item.topic_id">@item.topic_name<span></span></a>
+                    </li>
+                }
+                </div>
+
+            }
+        </ul>
+    </div>
+        <div class="col-md-7">
+            <h5 style="text-align:center">@ViewBag.topic.topic_name Interview Questions</h5>
+            @{
+                int i = 1;
+            }
+            <div>
+            @foreach(var item in Model)
+            {
+
+                    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                      <div >
+<b>Question @i</b><br />
+                            <pre><b>@item.question</b>
+    </pre>
+                            <b>Answer</b>
+                            <br />
+<pre>@item.answer</pre>
+                        </div>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            @{
+                List<ContentModel> contents = (List<ContentModel>)ViewData["contents"];
+            }
+
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-primary"><h6>Contents</h6></li>
+
+                @if (contents.Count > 0)
+                {
+                    @foreach (var item in contents)
+                    {
+                        <li class="list-group-item">
+                            <a style="word-wrap:break-word" href="/Learning/ContentWiseInterviewQuestions/@item.content_id">@item.content_name<span> (@item.total_interview_questions)</span></a>
+                         
+                        </li>
+                    }
+
+                }
+            </ul>
+        </div>
+    </div>
+</div>

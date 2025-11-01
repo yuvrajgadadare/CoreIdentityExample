@@ -1,0 +1,602 @@
+﻿@model ERP_Models.StudentModel
+
+@{
+    ViewData["Title"] = "NewRegistration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<script>
+    // $(document).ready(function(){
+    //     $("#mobile_number").change(function(){
+    //         CheckMobileExistance(function(resp){
+    //             if(resp){
+
+    //             }
+    //         });
+    //     })
+    // })
+
+    //    function CheckMobileExistance(callback){
+    //     var mobile=$("#mobile_number").val();
+    //     $.ajax({
+    //         url:'/Accountant/Student/IsMobileExist?mobile_number='+mobile,
+    //         method:'get',
+    //         success:function(resp){
+    //             callback(resp)
+    //         }
+    //     })
+    
+    // }
+    // function CheckEmailExistance(callback){
+    //     var email=$("#email_address").val();
+    // $.ajax({
+    //     url:'/Accountant/Student/IsEmailExist?email_address='+email,
+    //     method:'get',
+    //     success:function(resp){
+    //          callback(resp)
+    //     }
+    // })
+    // alert("hi")
+    // }
+    function Validate() {
+        var status = true;
+
+        // validation for student name
+
+        var student_name = $("#student_name").val();
+        if (student_name == "") {
+            $("#sp_student_name").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^[a-zA-Z ]+$/;
+            if (!student_name.match(pattern)) {
+                $("#sp_student_name").html("only characters are alllowed");
+                status = false;
+            }
+            else {
+                $("#sp_student_name").html("");
+
+            }
+        }
+
+        // validation for gender
+
+        var gender = $("#gender").val();
+      if ($('input[name="gender"]:checked').length == 0)  {
+            $("#sp_gender").html("*");
+            status = false;
+        }
+        else {
+            $("#sp_gender").html("");
+        }
+
+        // validation for qualification
+     
+        var qualification = $("#qualification").val();
+        if (qualification == "") {
+            $("#sp_qualification").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^[a-zA-Z ]+$/;
+            if (!qualification.match(pattern)) {
+                $("#sp_qualification").html("only characters are alllowed");
+                status = false;
+            }
+            else {
+                $("#sp_qualification").html("");
+
+            }
+        }
+
+
+
+        // validation for qualification
+
+        var birth_date = $("#birth_date").val();
+        if (birth_date == "") {
+            $("#sp_birth_date").html("*");
+            status = false;
+        }
+        else {
+
+            $("#sp_birth_date").html("");
+
+             
+        }
+
+
+        // validation for mobile number
+
+        var mobile_number = $("#mobile_number").val();
+        if (mobile_number == "") {
+            $("#sp_mobile_number").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^[0-9]{10}$/;
+            if (!mobile_number.match(pattern)) {
+                $("#sp_mobile_number").html("invalid mobile number");
+                status = false;
+            }
+            else {
+                $("#sp_mobile_number").html("");
+
+            }
+        }
+
+        // validation for email address
+
+        var email_address = $("#email_address").val();
+        if (email_address == "") {
+            $("#sp_email_address").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^\S+@Html.Raw("@")\S+\.\S+$/;
+            if (!email_address.match(pattern)) {
+                $("#sp_email_address").html("invalid email address");
+                status = false;
+            }
+            else{
+                alert("")
+                CheckEmailExistance(function(status){
+                    alert(status)
+                    if(status){
+                         $("#sp_email_address").html("email address already exist");
+                         status = false;
+                    }
+                    else {
+                $("#sp_email_address").html("");
+
+            }
+
+                })
+            }
+            
+        }
+        // validation for parent name
+
+        var parent_name = $("#parent_name").val();
+        if (parent_name == "") {
+            $("#sp_parent_name").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^[a-zA-Z ]+$/;
+            if (!parent_name.match(pattern)) {
+                $("#sp_parent_name").html("only characters are alllowed");
+                status = false;
+            }
+            else {
+                $("#sp_parent_name").html("");
+
+            }
+        }
+
+        // validation for parent number
+
+        var parent_number = $("#parent_number").val();
+        if (parent_number == "") {
+            $("#sp_parent_number").html("*");
+            status = false;
+        }
+        else {
+            var pattern = /^[0-9]{10}$/;
+            if (!parent_number.match(pattern)) {
+                $("#sp_parent_number").html("invalid parent mobile number");
+                status = false;
+            }
+            else {
+                $("#sp_parent_number").html("");
+
+            }
+        }
+
+        // validation for qualification
+
+        var feeid = $("#feeid").val();
+        if (feeid == "") {
+            $("#sp_feeid").html("*");
+            status = false;
+        }
+        else {
+
+            $("#sp_feeid").html("");
+
+
+        }
+
+        // validation for photo
+
+        var photo = $("#photo").val();
+        if (photo == "") {
+            $("#sp_photo").html("*");
+            status = false;
+        }
+        else {
+
+            $("#sp_photo").html("");
+
+
+        }
+        return status;
+    }
+
+
+ 
+
+</script>
+
+<script>
+    var form = document.getElementById("studentForm");
+    form.reset();
+    </script>
+
+<div class="container" style="background-color:white;padding:1%">
+    <h3 style="text-align:center;color:rgb(23 107 145) !important">Registration Form</h3>
+    <div class="row">
+        @if (ViewBag.msg != null)
+        {
+            <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+                    <i class="bi-check-circle-fill"></i>
+                    <strong class="mx-2">Success!</strong> Student Registration Details has been submitted successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+            <form name="studentForm" class="needs-validation" method="post" novalidate enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Registration Date</label>
+                        @Html.TextBox("registration_date",null, new {@type="date", @class = "form-control", @required = "required"})
+                        <div class="invalid-feedback">Please select registration date</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Course Name</label>
+                        @* @Html.DropDownList("feeid", ViewBag.courses as List<SelectListItem>, "Select Course", new { @class = "form-control",@required="required" }) *@
+                        @Html.DropDownList("feeid", new SelectList((System.Collections.IEnumerable)ViewData["courses"], "course_id", "course_name"),"Select Course",new{@class="form-control"})
+                        @* @Html..DropDownList("feeid" , new SelectList((System.Collections.IEnumerable)ViewData["courses"], "course_id", "course_name"), "Select Qualification") *@
+
+                        <div class="invalid-feedback">Please select the course</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Permanent Identification Number</label>
+                        @Html.TextBoxFor(e => e.permanent_identification_number, new { @class = "form-control", @required = "required", @readonly = "readonly" })
+                        <div class="invalid-feedback">Please enter permanent identification number</div>
+                    </div>
+                </div>
+            </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="inputEmail">First Name</label>
+                        @Html.TextBoxFor(e => e.student_name, new { @class = "form-control", @required = "required", @placeholder = "first name", @autocomplete = "off" })
+                                <div class="invalid-feedback">Please enter first name.</div>
+                            </div>
+                    </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Last Name</label>
+                        @Html.TextBoxFor(e => e.last_name, new { @class = "form-control", @required = "required", @placeholder = "last name", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter last name.</div>
+                      
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Gender</label>
+                        <br />
+
+                        @Html.RadioButtonFor(e => e.gender, "Male", new { @required = "required" }) <span> Male</span>
+                        @Html.RadioButtonFor(e => e.gender, "Female", new { @required = "required" }) <span> Female</span>
+                        <div class="invalid-feedback">Please select the gender</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputEmail">Birth Date</label>
+                        @Html.TextBoxFor(e => e.birth_date, new { @type = "date", @class = "form-control", @required = "required", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please select birth date</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                    <label class="form-label" for="inputPassword">Email Address</label>
+                     @if(ViewBag.msgemail!=null)
+                        {
+                        <span style='color:red'>@ViewBag.msgemail</span>
+
+                        }
+                        @Html.TextBoxFor(e => e.email_address, new { @type = "email", @class = "form-control", @required = "required", @autocomplete = "off" })
+
+                    <div class="invalid-feedback">Please enter email address</div>
+                     
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Mobile Number</label>
+                            @if(ViewBag.msgmobile!=null)
+                        {
+                        <span style='color:red'>@ViewBag.msgmobile</span>
+
+                        }
+                        @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control", @required = "required", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter mobile number</div>
+                          
+                        </div>
+                    </div>
+            </div>
+
+ 
+
+    <div class="row">
+        <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Whatsapp  Number</label>
+                        @Html.TextBoxFor(e => e.whatsapp_number, new { @class = "form-control", @required = "required", @placeholder = "whatsapp number", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter parent name</div>
+                    </div>
+                </div>
+            <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label" for="inputPassword">Parent Name</label>
+                        @Html.TextBoxFor(e => e.parent_name, new { @class = "form-control", @required = "required", @placeholder = "parent name", @autocomplete = "off" })
+                <div class="invalid-feedback">Please enter parent name</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label" for="inputPassword">Parent Mobile Number</label>
+                        @Html.TextBoxFor(e => e.parent_number, new { @class = "form-control", @required = "required", @placeholder = "parent mobile number", @autocomplete = "off" })
+                <div class="invalid-feedback">Please enter parent name</div>
+            </div>
+        </div>
+      
+    </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Qualification</label>
+                        @Html.TextBoxFor(e => e.qualification, new { @class = "form-control", @required = "required", @placeholder = "qualification", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter qualification</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Local/Current Address</label>
+                        @Html.TextAreaFor(e => e.local_address, new { @class = "form-control", @required = "required", @placeholder = "local/current address", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter current address</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Parent Address</label>
+                        @Html.TextAreaFor(e => e.permanent_address, new { @class = "form-control", @required = "required", @placeholder = "permanent address", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter permanent address</div>
+                    </div>
+                </div>
+                
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Profile Photo</label>
+                        <input type="file" id="photo" name="photo" class="form-control" required>
+
+                        <div class="invalid-feedback">Please upload your photo</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Aadhar Card Number</label>
+                        @Html.TextBoxFor(e => e.aadhar_card_number, new { @class = "form-control", @required = "required", @placeholder = "aadhar card number", @autocomplete = "off" })
+                        <div class="invalid-feedback">Please enter parent name</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputPassword">Aadhar Card Photo</label>
+                        <input type="file" id="aadharcard" name="aadharcard" class="form-control" required>
+
+                        <div class="invalid-feedback">Please upload aadhar card photo</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a href="/" class="btn btn-danger">Cancel</a>
+            </form>
+
+            <!-- JavaScript for disabling form submissions if there are invalid fields -->
+           
+        </div>
+</div>
+
+
+
+
+
+<script>
+            // Self-executing function
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* <style>
+    .error{
+        color:red;
+    }
+</style>
+<div class="row" style="">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data" onsubmit="return Validate()">
+            <div class="card" style="border-radius:10%">
+                <div class="card-header" style="text-align:center">
+                    <h4 style="text-align:center">Student Registration Form</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Student Name</label>
+                                <div class="error" id="sp_student_name"></div>
+                                @Html.TextBoxFor(e => e.student_name, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>Gender</label><br />
+                                <div class="error" id="sp_gender"></div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        @Html.RadioButtonFor(e => e.gender, "Male") <span>Male</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButtonFor(e => e.gender, "Female") <span>Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="error" id="sp_qualification"></div>
+
+                                <label>Qualification</label>
+                                @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label>Birth Date</label>
+                                <div class="error" id="sp_birth_date"></div>
+
+                                @Html.TextBoxFor(e => e.birth_date, new { @type = "date", @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label>Mobile Number</label>
+                                <div class="error" id="sp_mobile_number"></div>
+
+                                @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label>Email Address</label>
+                                <div class="error" id="sp_email_address"></div>
+
+                                @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label>Parent Name</label>
+                                <div class="error" id="sp_parent_name"></div>
+
+                                @Html.TextBoxFor(e => e.parent_name, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label>Parent Number</label>
+                                <div class="error" id="sp_parent_number"></div>
+
+                                @Html.TextBoxFor(e => e.parent_number, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Course</label>
+                        <div class="error" id="sp_feeid"></div>
+
+                        @Html.DropDownList("feeid", ViewBag.courses as List<SelectListItem>, "Select Course", new { @class = "form-control" })
+
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label>Profile Photo</label>
+                        <div class="error" id="sp_photo"></div>
+
+                        <input type="file" id="photo" name="photo" class="form-control">
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="card-footer" style="text-align:center">
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                    <b style="color:green;">@ViewBag.msg</b>
+                    <br />
+                    <span>Already Registered? <a href="/Student/Login" style="text-decoration:none;font-weight:bold">Click Here</a> to Login</span>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+ *@

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<ERP_Models.TopicModel>
+@using ERP_Models
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h4 style="text-align:center">Programs</h4>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                    <a href="/Program/TopicWisePrograms/@item.topic_id" class="nav-link">@item.topic_name</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

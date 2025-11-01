@@ -1,0 +1,203 @@
+﻿@model ERP_Models.EmployeeModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<script>
+    function OpenPasswordModal() {
+        $("#passwordModal").modal("show");
+    }
+    function ChangePassword() {
+        var current_password = $("#txtcurrent_password").val();
+        var new_password = $("#txtnew_password").val();
+        var confirm_password = $("#txtconfirm_password").val();
+        var st = { "current_password": current_password, "new_password": new_password, "re_password": confirm_password };
+        $.ajax({
+            url: '/Counsellor/Profile/ChangePassword',
+            method: 'post',
+            data: st,
+            success: function (resp) {
+                alert(resp);
+                //  $("#passwordModal").modal("hide");
+                if (resp == "1") {
+                    alert("Password changed successfully");
+                    window.location.href = "/Counsellor/Profile/Index";
+                }
+            }
+        })
+    }
+
+    function ChangeProfilePhoto(sid) {
+        $("#profilephotomodal").modal("show");
+    }
+    function UploadPhoto() {
+        var file = $('#imgphoto')[0].files[0];
+        var form = new FormData();
+        form.append("file", file);
+        $.ajax({
+            url: '/Counsellor/Profile/ChangeProfilePhoto',
+            method: 'post',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (resp) {
+                alert(resp);
+                $("#profilephotomodal").modal("hide");
+                window.location.href = window.location.href;
+
+            }
+        })
+        console.log(file);
+    }
+</script>
+<div class="container-fluid" style="font-size:smaller">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2" style="text-align:center">
+                    <img src="~/Employees/@Model.profile_photo" class="rounded-circle" width="150" height="150" alt="Sample Image">
+
+                    @*                     <input type="button" class="btn btn-info btn-sm" value="Change Password" onclick="OpenPasswordModal()" />
+                    *@                    <br />
+                    <h6 style="font-weight:bold">@Model.employee_name <small class="text-muted"><i>(@Model.employee_code )</i></small></h6>
+                    <h6 style="font-weight:bold">@Model.role_name <small class="text-muted"><i></i></small></h6>
+                    <a href="#profilephotomodal" class="link" data-bs-toggle="modal">Change Profile Photo</a>
+                    <br />
+                    <a href="#passwordModal" class="link" data-bs-toggle="modal">Change Password</a>
+
+                    <div id="passwordModal" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Change Password</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label>Current Password</label>
+                                        <input type="password" class="form-control" id="txtcurrent_password" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>New Password</label>
+                                        <input type="password" class="form-control" id="txtnew_password" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Confirm Password</label>
+                                        <input type="password" class="form-control" id="txtconfirm_password" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" onclick="ChangePassword()">Change Password</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal fade" id="profilephotomodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <h4>Upload Photo</h4>
+                                        <input type="file" id="imgphoto" class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="button" value="Submit" id="btnsubmit" class="btn btn-primary" onclick="UploadPhoto()" />
+                                        <input type="button" value="Cancel" class="btn btn-danger" data-bs-dismiss="modal" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-10">
+                    @if (ViewBag.msg != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show">
+                            <strong>Success!</strong> @ViewBag.msg.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        @Html.HiddenFor(e => e.employee_id)
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row" style="padding:2%">
+                                    <div class="mb-3">
+                                        <label>Employee Name:</label>
+                                        @Html.TextBoxFor(e => e.employee_name, new { @class = "form-control" })
+
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Qualification:</label>
+                                        @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Gender:</label>
+                                        @Html.RadioButtonFor(e => e.gender, "Male") <span>Male</span>
+                                        &nbsp;
+                                        @Html.RadioButtonFor(e => e.gender, "Female") <span>Female</span>
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Birth Date:</label>
+                                        <input id="birth_date" name="birth_date" width="276" value="@Model.birth_date.ToShortDateString()" />
+                                        <script>
+                                            $('#birth_date').datepicker({
+                                                uiLibrary: 'bootstrap5'
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Mobile Number:</label>
+                                        @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Email Address:</label>
+                                        @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Joining Date:</label>
+                                        @*  @Html.TextBoxFor(e => e.joining_date, new { @class = "form-control" }) *@
+
+                                        <input id="joining_date" name="joining_date" width="276" value="@Model.joining_date.ToShortDateString()" />
+                                        <script>
+                                            $('#joining_date').datepicker({
+                                                uiLibrary: 'bootstrap5'
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Salary:</label>
+                                        @Html.TextBoxFor(e => e.salary, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <input type="submit" value="Modify" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr />
+
+        </div>
+        <div class="col-md-4">
+        </div>
+
+    </div>
+</div>
+

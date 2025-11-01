@@ -1,0 +1,191 @@
+﻿@model ERP_Models.InterviewQuestionModel
+@{
+    ViewData["Title"] = "Interview Question";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    var questions = [];
+    $(document).ready(function () {
+        GetAllQuestions();
+        $("#ddtopic").change(function () {
+            GetTopicWiseContents();
+        })
+        $("#ddcontent").change(function () {
+            GetContentWiseQuestions();
+        })
+    })
+    function GetTopicWiseContents() {
+        var topic_id = $("#ddtopic").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetTopicWiseContents/' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                $("#ddcontent").empty();
+                $("#ddcontent").append("<option selected disabled>Select Content</option>");
+
+                $.each(resp, function (i, d) {
+                    $("#ddcontent").append("<option value=" + d.content_id + ">" + d.content_name + "</option>")
+                })
+            }
+        })
+        GetTopicWiseQuestions();
+    }
+
+    function AddQuestion() {
+        var content_id = $("#ddcontent").val();
+        var question = $("#question").val();
+        var answer = $("#answer").val();
+      
+        var st = { "content_id": content_id, "question": question, "answer": answer};
+        questions.push(st);
+        $("#msg").html("Total Questions=" + question.length);
+        ClearData();
+        DisplayQuestions();
+    }
+    function DisplayQuestions() {
+        $("#questionlist").empty();
+        $.each(questions, function (i, d) {
+            $("#questionlist").append("<li>" + d.question + "</li>");
+
+        })
+    }
+    function SubmitQuestions() {
+        var content_id = $("#ddcontent").val();
+        var st = { "content_id": content_id, "questions": questions }
+        $.ajax({
+            url: '/Developer/Interview/AddQuestions',
+            method: 'post',
+            data:st,
+            success: function (resp) {
+                alert(resp);
+                $("#status").html(resp);
+            }
+        })
+    }
+
+    function GetAllQuestions() {
+        $.ajax({
+            url: '/Developer/Interview/GetQuestions',
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                // $("#allquestions").empty();
+                // // $("#allquestions").append("<option selected disabled>Select Content</option>");
+
+                // $.each(resp, function (i, d) {
+                //     $("#allquestions").append("<li class='list-group-item'>" + (i+1) + "." + d.question + "</option>")
+                // })
+                FillData(resp);
+
+            }
+        })
+    }
+    function GetTopicWiseQuestions() {
+
+        $.ajax({
+            url: '/Developer/Interview/GetTopicWiseQuestions/'+$("#ddtopic").val(),
+            method: 'get',
+            success: function (resp) {
+                FillData(resp);
+
+            }
+        })
+    }
+    function GetContentWiseQuestions() {
+
+        $.ajax({
+            url: '/Developer/Interview/GetContentWiseQuestions/' + $("#ddcontent").val(),
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                FillData(resp);
+            }
+        })
+    }
+    function FillData(records) {
+        $("#msg").html("Total Questions=" + records.length);
+
+        $("#myAccordion").empty();
+        $.each(records, function (i, d) {
+            $("#myAccordion").append("<div class='accordion-item'><h2 class='accordion-header' id='heading" + i + "'><button type='button' class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse" + i + "'><pre>" + (i + 1) + "." + d.question + "</button></pre></h2><div id='collapse" + i + "' class='accordion-collapse collapse' data-bs-parent='#myAccordion'><div class='card-body'><p>" + d.answer + "</p></div></div></div>")
+        })
+    }
+    function ClearData() {
+        // $("#ddcontent").val("");
+        $("#question").val("");
+        $("#answer").val("");
+    }
+    function ClearForm() {
+        questions = [];
+        $("#questionlist").empty();
+    }
+</script>
+<div class="container-fluid">
+    <h4 id="msg"></h4>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card" style="padding:2%">
+                <div class="card-body">
+                    <div class="row">
+                            <div class="mb-3">
+                                <label>Select Topic</label>
+                                @Html.DropDownList("ddtopic", ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                        </div>
+                    </div>
+                  
+                        <div class="row">
+                            <div class="mb-3">
+                                <label>Select Content</label>
+                                <select id="ddcontent" class="form-control">
+                                    <option selected disabled>Select Content</option>
+                                </select>
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label>Enter Question</label>
+                                <textarea id="question" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="mb-3">
+                                <label>Enter Answer</label>
+                                <textarea id="answer" class="form-control"></textarea>
+                            </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <input type="button" value="Add" class="btn btn-primary" onclick="AddQuestion()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+            <div class="card">
+                <div class="card-body">
+                    <ul id="questionlist"></ul>
+                    <input type="button" value="Submit" onclick="SubmitQuestions()" />
+                </div>
+                <div class="card-footer">
+                    <h4 id="status"></h4>
+                </div>
+           
+        </div>
+    </div>
+    <div class="col-md-7">
+        @* <ul id="allquestions" class="list-group"></ul> *@
+        <h5>Interview Questions</h5>
+            <div class="accordion" id="myAccordion">
+            </div>
+    </div>
+</div>
+
+</div>
+

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ERP_Models.ExamModel>
+@{
+    ViewData["Title"] = "Exams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <table class="table table-bordered">
+          <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Exam Date</th>
+                    <th>Topic Name</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Total Questions</th>
+                    <th>Correct Questions</th>
+                    <th>Wrong Questions</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                    <th>Action</th>
+                </tr>
+          </thead>
+          <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.exam_date.ToShortDateString()</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.start_time.ToLongTimeString()</td>
+                        <td>@item.end_time.ToLongTimeString()</td>
+                        <td>@item.total_questions</td>
+                        <td>@item.total_correct_questions</td>
+                        <td>@item.total_wrong_questions</td>
+                        <td>@item.percentage</td>
+                        <td>@item.grade</td>
+                        <td> 
+                            <a href="/Student/ViewExamDetails/@item.exam_id" class="btn">View</a>
+                        </td>
+
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</div>

@@ -1,0 +1,464 @@
+﻿@model IEnumerable<ERP_Models.CourseModel>
+@{
+    ViewData["Title"] = "Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    
+    tr, td, th {
+        height: 12px;
+        padding: 0px
+    }
+
+    .table > :not(caption) > * > * {
+        padding: .3rem .5rem
+    }
+
+    .form-control {
+        font-size: 12px;
+    }
+
+    body, input, select {
+        font-size: 12px;
+    }
+</style>
+<script>
+    var fees=[];
+    var topics = [];
+    var topicData = [];
+    var courseId=0;
+    $(document).ready(function() {
+      //  GetCourses();
+        GetTopics();
+        $("#btnsubmittopics").click(function () {
+            AddTopicData();
+        })
+        $("#btnadd").click(function(){
+            AddFees();
+        })
+        $("#btnsubmit").click(function () {
+            AddCourseDetails();
+        })
+
+    })
+    function GetTopics() {
+        $.ajax({
+            url: '/Developer/Topic/GetTopics',
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                topicData = resp;
+                $.each(resp,function(i,d){
+                    $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value="+d.topic_id+"  onchange='AddTopic("+d.topic_id+")'/> "+d.topic_name+"</div>")
+                })
+            }
+        })
+    }
+
+    function FilterTopics() {
+        var tp = $("#txtfilter").val();
+        console.log(topics);
+        if (tp != null) {
+            $("#dvtopics").empty();
+            $.each(topicData, function (i, d) {
+                if (d.topic_name.toLowerCase().includes(tp.toLowerCase())) {
+                    if (topics.indexOf(d.topic_name) != -1) {
+                        $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + " checked  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+                    }
+                     else{
+                        $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+                    }
+                }
+            })
+        }
+        else {
+            $.each(topicData, function (i, d) {
+                    $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+            })
+        }
+    }
+    function GetCourseWiseTopics(cid) {
+
+        $.ajax({
+            url: '/Developer/Course/GetCourseTopics/' + cid,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+
+                $.each(resp, function (i, d) {
+                    $("#dvcoursewisetopic").append("<div class='col-md-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>")
+                })
+            }
+        })
+    }
+    function GetCourses() {
+        $.ajax({
+            url: '/Developer/Course/GetCourses',
+            method: 'get',
+            success: function (resp) {
+                $.each(resp,function(i,d){
+                    var totalfees = (Number(d.fees_amount) + (Number(d.fees_amount) * d.gst) / 100)
+
+                    $("#dvcourses").append("<div class='card'><div class='card-body'><h5 class='card-title'>" + d.course_name + "</h5><p class='card-text'>Course Fees-" + d.fees_amount + "<span>(" + d.fee_mode + ")</span></p><p class='card-text'>GST-" + d.gst + "</p><p class='card-text'>Total Course Fees-" + totalfees + "</p><button  class='btn btn-primary' onclick='AddCourseTopic(" + d.courseId + ")'>Add Topic</button></div></div>")
+                })
+                console.log(resp);
+
+            }
+        })
+    }
+
+    function AddTopic(tid){
+        if (topics.indexOf(tid) == -1) {
+            topics.push(tid);
+        }
+        else {
+            topics.splice(topics.indexOf(tid), 1);
+        }
+    }
+    function AddCourseTopic(cid) {
+        $("#txtcourseid").val(cid)
+
+        $("#myModal").modal("show");
+    }
+
+    function AddTopicData() {
+        var cid = $("#txtcourseid").val();
+        var data=[];
+        $.each(topics, function (i, d) {
+            data.push({ "topic_id": d });
+        })
+        var st = { "course_id": cid, "topics": data };
+        $.ajax({
+            url: '/Developer/Course/AddCourseTopics',
+            method:'post',
+            data:(st),
+            // contentType:'application/json',
+            success: function (resp) {
+                console.log(resp);
+                alert(resp);
+                window.location.href = "/Developer/Course/Index";
+            }
+        })
+    }
+    function AddFees() {
+        var feemode = $("#FeeMode").val();
+        var feeamount = $("#FeesAmount").val();
+        var gst = $("#Gst").val();
+        var installments = $("#fees_change_date").val();
+        var st = { "fee_mode": feemode, "fees_amount": feeamount, "gst": gst, "fees_change_date":installments };
+        console.log(st)
+        fees.push(st);
+        ClearData();
+        Display();
+    }
+
+    function AddCourseDetails() {
+        var cname = $("#CourseName").val();
+        var st = { "course_name": cname, "courseFees": fees };
+        $.ajax({
+            url: '/Developer/Course/AddCourseDetails',
+            method:'post',
+            data:(st),
+            // contentType:'application/json',
+            success:function(resp){
+                console.log(resp);
+                alert(resp);
+                window.location.href = "/Developer/Course/Index";
+
+            }
+        })
+    }
+    function Display() {
+        $("#tbldata").empty();
+        $.each(fees, function (i, d) {
+            $("#tbldata").append("<tr><td>" + (i + 1) + "</td><td>" + d.fee_mode + "</td><td>" + d.fees_amount + "</td><td>" + d.gst + "</td><td>" + d.fees_change_date + "</td></tr>");
+        })
+    }
+    function AddCourseFees(cid){
+        courseId=cid;
+        $("#updatedcourseid").val(cid);
+        $("#feeModal").modal("show");
+
+
+    }
+
+    function SubmitFees(){
+          var feemode = $("#updatedFeeMode").val();
+        var feeamount = $("#updatedFeesAmount").val();
+        var gst = $("#updatedGst").val();
+        var installments = $("#updatedfees_change_date").val();
+        var st = {"course_id":courseId, "fee_mode": feemode, "fees_amount": feeamount, "gst": gst, "fees_change_date":installments };
+         $.ajax({
+            url: '/Developer/Course/AddLatestFees',
+            method:'post',
+            data:(st),
+            // contentType:'application/json',
+            success:function(resp){
+                console.log(resp);
+                alert(resp);
+                $("#updatedFeesAmount").val("");
+                $("#updatedGst").val("");
+                $("#updatedfees_change_date").val("");
+             $("#feeModal").modal("hide");
+
+                
+
+            }
+        })
+    }
+
+    function RemoveCourse(cid){
+        $.ajax({
+            url: '/Developer/Course/DeleteCourse/'+cid,
+            method:'post',
+            success:function(resp){
+                console.log(resp);
+                alert(resp);
+                window.location.reload();
+
+
+
+            }
+        })
+    }
+    function ClearData() {
+        $("#FeeMode").val("");
+        $("#FeesAmount").val("");
+        $("#Gst").val("");
+    }
+</script>
+<div class="row">
+
+
+    <div class="col-md-6">
+        <div class="card">
+
+            <div class="card-header">
+                <h5 class="card-title">Training Course Form</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label>Course Name</label>
+                                @Html.TextBox("CourseName", "", new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label>Fees Mode</label>
+                                <select id="FeeMode" class="form-control">
+                                    <option selected disabled>Select Fee Mode</option>
+                                    <option value="Lumsum">Lumsum</option>
+                                    <option value="Installment">Installment</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label>Fees Amount</label>
+                                @Html.TextBox("FeesAmount", "", new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label>GST</label>
+                                @Html.TextBox("Gst", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label>Installments</label>
+                                @Html.TextBox("fees_change_date", "", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <br />
+                            <input type="button" value="+" id="btnadd" class="btn btn-primary" />
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Fee Mode</th>
+                                    <th>Fee Amount</th>
+                                    <th>GST</th>
+                                    <th>Total Installments</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="tbldata"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Submit" id="btnsubmit" class="btn btn-primary">
+                <span style="color:green;">@ViewBag.msg</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="accordion" id="myAccordion" style="font-size:12px">
+            @foreach (var item in Model)
+            {
+
+                <div class="accordion-item mb-1">
+                    <div class="accordion-header" id="heading_@item.course_id">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse_@item.course_id">@item.course_name </button>
+
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger btn-sm" style="margin-top:10%" onclick="RemoveCourse(@item.course_id)">Remove </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_@item.course_id" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+                        <div class="card-body">
+                            <div class="row">
+                                <div>
+                                    <h6>Course Fees-</h6>
+
+                                    @foreach (var fee in item.courseFees)
+                                    {
+                                        float totalfees = (float)(fee.fees_amount + (fee.fees_amount * fee.gst / 100));
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td>Fees - @fee.fees_amount<span> (@fee.fee_mode) </td>
+                                                <td>GST - @fee.gst </td>
+                                                <td>Total - @totalfees </td>
+                                                <td>Change Date - @fee.fees_change_date.ToShortDateString() </td>
+                                            </tr>
+                                        </table>
+
+                                    }
+                                    <div>
+                                        <h6>Course Topics</h6>
+                                        <div class="row">
+                                            @foreach (var topic in item.topics)
+                                            {
+                                                <div class="col-md-4">@topic.topic_name</div>
+                                            }
+
+                                        </div>
+                                        <button class='btn btn-primary' onclick="AddCourseTopic(@item.course_id)">Add Topic</button>
+                                        <a class='btn btn-primary' href="/Developer/Course/CourseSyllabus?course_id=@item.course_id">View Syllabus</a>
+                                        <button class='btn btn-primary' onclick="AddCourseFees(@item.course_id)">Add Course Fee</button>
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog" style="width:70%">
+        <div class="modal-content" style="width:700px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Course Topic</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Course Id</label>
+                    <input type="text" id="txtcourseid" class="form-control" />
+                </div>
+                <div class="mb-3">
+                 <input type="text" id="txtfilter" placeholder="filter topic by name" onkeyup="FilterTopics()" />
+
+                </div>
+                <div class="mb-3">
+                    <label>Topic Id</label>
+                    <div id="dvtopics" class="row"></div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnsubmittopics">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="feeModal" class="modal fade">
+    <div class="modal-dialog" style="width:70%">
+        <div class="modal-content" style="width:700px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Course Fees</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Course Id</label>
+                    <input type="text" id="updatedcourseid" class="form-control" />
+                </div>
+
+                 
+                    <div class="mb-3">
+                        <label>Fees Mode</label>
+                    <select id="updatedFeeMode" class="form-control">
+                            <option selected disabled>Select Fee Mode</option>
+                            <option value="Lumsum">Lumsum</option>
+                            <option value="Installment">Installment</option>
+                        </select>
+                    </div>
+ 
+                
+                    <div class="mb-3">
+                        <label>Fees Amount</label>
+                    @Html.TextBox("updatedFeesAmount", "", new { @class = "form-control" })
+                    </div>
+ 
+                    <div class="mb-3">
+                        <label>GST</label>
+                    @Html.TextBox("updatedGst", "", new { @class = "form-control" })
+                    </div>
+                
+                    <div class="mb-3">
+                        <label>Installments</label>
+                    @Html.TextBox("updatedfees_change_date", "", new { @class = "form-control",@type="date" })
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnsubmitfees" onclick="SubmitFees()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

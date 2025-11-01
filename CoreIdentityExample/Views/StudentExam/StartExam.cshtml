@@ -1,0 +1,99 @@
+﻿@model ERP_Models.ContentQuestionModel
+@{
+    ViewData["Title"] = "Start Exam";
+    Layout = "~/Views/Shared/ExamLayout.cshtml";
+}
+<script>
+    // window.open("mypage.html", "mywindowname", "toolbar=no,menubar=no");
+    function ShowQuestion(qid) {
+        window.location.href = "/Assessment/StartExam?question_id=" + qid;
+    }
+</script>
+<style>
+    pre{
+         
+        font-size:16px;
+        text-align:left;
+        margin-left:0px;
+    }
+    span{
+        font-size: 16px;
+        text-align: left;
+    }
+
+    .list-group-item{
+        border:none;
+    }
+</style>
+<div class="row">
+ 
+    <div class="col-md-10">
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(e => e.question_id)
+            @Html.HiddenFor(e => e.question)
+            @Html.HiddenFor(e => e.correct_option_number)
+            @Html.HiddenFor(e => e.serial_number)
+
+            <div class="card">
+                <div class="card-header">
+<pre>
+<span>@Model.serial_number)</span>  @Model.question
+</pre>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            @Html.RadioButtonFor(e => e.submitted_option_number, "1") <span >@Model.option1</span>
+                        </li>
+                        <li class="list-group-item">
+                            @Html.RadioButtonFor(e => e.submitted_option_number, "2") <span>@Model.option2</span>
+                        </li>
+                        <li class="list-group-item">
+                            @Html.RadioButtonFor(e => e.submitted_option_number, "3") <span>@Model.option3</span>
+                        </li>
+                        <li class="list-group-item">
+                            @Html.RadioButtonFor(e => e.submitted_option_number, "4") <span>@Model.option4</span>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Prev" name="command" id="btnprev" disabled="@ViewBag.prev" />
+                    <input type="submit" value="Submit" name="command" id="btnsubmit" />
+                    <input type="submit" value="Next" name="command" id="btnnext" disabled="@ViewBag.next" />
+                </div>
+            </div>
+        }
+    </div>
+       <div class="col-md-2">
+        <div class="card" style="padding:2%;">
+            <div class="row">
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in ViewBag.questions)
+                {
+                    <div class="col-2">
+                        <div class="mb-3">
+                            @if (item.submitted_option_number != 0)
+                            {
+                                <input type="button" value="@i" onclick="ShowQuestion(@item.question_id)" class="btn btn-success btn-sm" />
+                                @* <a href="/Student/NextQuestion/@item.question_id" class="btn btn-success btn-sm">@i</a> *@
+                            }
+                            else
+                            {
+                                <input type="button" value="@i" onclick="ShowQuestion(@item.question_id)" class="btn btn-primary btn-sm" />
+
+                                @* <a href="/Student/NextQuestion/@item.question_id" class="btn btn-primary btn-sm">@i</a> *@
+
+                            }
+                        </div>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

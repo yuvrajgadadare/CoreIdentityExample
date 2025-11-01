@@ -1,0 +1,434 @@
+﻿@model ERP_Models.StudentModel
+@using ERP_Models
+@{
+    ViewData["Title"] = "Student Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var registration_id=0;
+    function ViewChangeCourseModal(rid){
+        registration_id=rid;
+        $("#changecoursemodal").modal("show");
+    }
+
+    function ChangeCourse(){
+        var st={
+            "registration_id":registration_id,
+            "discount":Number($("#txtdiscount").val()),
+            "fee_id":$("#ddcourse").val()
+        };
+        $.ajax({
+            url:'/Accountant/Student/ChangeStudentCourse',
+            method:'post',
+            data:st,
+            success:function(resp){
+            alert(resp);
+            window.location.reload();
+            }
+        })
+    }
+</script>
+@{
+    List<BatchStudentModel> batches = (List<BatchStudentModel>)(ViewData["batches"]);
+    List<StudentPaymentModel> payments = (List<StudentPaymentModel>)(ViewData["payments"]);
+    List<StudentPaymentModel> pendingpayments = (List<StudentPaymentModel>)(ViewData["pendingpayments"]);
+ 
+
+}
+
+@* <div class="toast-container">
+
+    <!--Blue variant -->
+    <div class="toast bg-primary text-white fade show">
+         <div class="toast fade show">
+            <div class="toast-header">
+                <strong class="me-auto"><i class="bi-globe"></i> Hello, world!</strong>
+                <small>just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                This is a basic toast message.
+            </div>
+        </div>
+    
+    </div> 
+</div>*@
+<div class="card" id="dvshow">
+    <div class="card-body" style="font-size:smaller">
+        <div class="row">
+            <div class="col-md-6" style="padding:2%">
+               <div class="card">
+                   <div class="card-header">
+                       <h5 style="text-align:center">Profile Details</h5>
+                   </div>
+                   <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="text-align:right">Student Name:</td>
+                                <td>@Model.student_name</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Gender:</td>
+                                <td>@Model.gender</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Email Address:</td>
+                                <td>@Model.email_address</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Mobile Number:</td>
+                                <td>@Model.mobile_number</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Birth Date:</td>
+                                <td> @Model.birth_date.ToShortDateString() </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Qualification:</td>
+                                <td>@Model.qualification </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Parent Name:</td>
+                                <td>@Model.parent_name</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Parent Number:</td>
+                                <td>@Model.parent_number</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">Student Code:</td>
+                                <td><b>@Model.student_code</b></td>
+                            </tr>
+
+                        </table>
+                   </div>
+               </div>
+            </div>
+            <div class="col-md-6" style="padding:2%">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="text-align:center">Course Details</h5>
+                    </div>
+                    <div class="card-body">
+                @foreach (var item in Model.registrations)
+                {
+
+                    <table class="table table-bordered">
+                       <tr>
+                            <td>Registration Date:</td>
+                            <td>@item.registration_date.ToShortDateString() </td>
+                        </tr>
+                        <tr>
+                            <td>Course Name:</td>
+                            <td>@item.course_name <input type="button" value="Change Course" id="btnchangecourse" onclick="ViewChangeCourseModal(@item.registration_id)" class="btn btn-primary btn-sm" /></td>
+                        </tr>
+                        <tr>
+                            <td>Fees Amount:</td>
+                            <td>@item.fees_amount</td>
+                        </tr>
+                        <tr>
+                            <td>GST:</td>
+                            <td>@item.gst</td>
+                        </tr>
+                        <tr>
+                            <td>Discount:</td>
+                            <td>@item.discount</td>
+                        </tr>
+                        <tr>
+                            <td>Total Fees:</td>
+                            <td>@item.final_fees_amount</td>
+                        </tr>
+                        <tr>
+                            <td>Paid Till Date:</td>
+                            <td>@item.paid_amount</td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Till Date:</td>
+                            <td>@item.remaining_amount</td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>@item.fees_status</td>
+                        </tr>
+
+                    </table>
+
+
+                 
+                }
+                        <div class="modal fade" id="changecoursemodal">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="width:900px;">
+
+                                    <div class="modal-body">
+                                     <div class="mb-3">
+                                         <label>Course Name</label>
+                                            @* @Html.DropDownList("ddcourse",ViewBag.courses as List<SelectListItem>,"Select Course",new{@class="form-control"}) *@
+                                            @* @Html.DropDownList("ddcourse", new SelectList((System.Collections.IEnumerable)ViewData["courses"], "fee_id", "course_name"), "Select Course", new { @class = "form-control" }) *@
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Discount</label>
+                                           <input type="text" id="txtdiscount" class="form-control" />
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" value="Change Course" onclick="ChangeCourse()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+                </div>
+            </div>
+
+        </div>
+      
+        <div class="row">
+            <div class="col-md-6" style="padding:2%">
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="text-align:center">Payments Details</h5>
+                </div>
+                <div class="card-body">
+         
+            @if (payments.Count>0)
+            {
+                int index = 1;
+                            <div class="table-responsive">
+                <table class="table table-bordered" style="font-size:small">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Payment Date</th>
+                                <th>Payment Amount</th>
+                                <th>Payment Mode</th>
+                                <th>Payment Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach(var p in payments)
+                        {
+                          <tr>
+                              <td>@index</td>
+                              @if(p.is_paid==0)
+                                {
+                                    @* <td>@p.expected_payment_date.ToShortDateString()</td> *@
+                                    <td>@p.payment_date.ToShortDateString()</td>
+
+                                }
+                                else
+                                {
+                                    @* <td>@p.expected_payment_date.ToShortDateString()</td> *@
+
+                                    <td>@p.payment_date.ToShortDateString()</td>
+
+                                }
+                                <td>@p.payment_amount</td>
+                                <td>@p.payment_mode</td>
+                                <td>@p.payment_description</td>
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                       
+                            
+                         
+                </table>
+                </div>
+            }
+            else
+            {
+                <h4>No Payment Done Yet!!</h4>
+            }
+        </div>
+            </div>
+        </div>
+            <div class="col-md-6" style="padding:2%">
+                <div class="card">
+                    <div class="card-header">
+                        @* <h5 style="text-align:center">Pending Payments Details</h5> *@
+                    </div>
+                    <div class="card-body">
+
+                        @* @if(pendingpayments.Count > 0) *@
+                        @* { *@
+                            @* int index = 1; *@
+                            @*      float paidamount=0,remaining_amount=0, *@
+@*                          <div class="table-responsive">
+                            <table class="table table-bordered" style="font-size:small">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Installment </th>
+                                        <th>Expected  Date</th>
+                                        <th>Payment Amount</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+ *@
+   @*                                  @foreach (var p in pendingpayments)
+                                    {
+    *@@*                                      <tr>
+                                          <td>@index</td>
+                                            <td>Installment @index</td>
+                                            @* <td>@p.expected_payment_date.ToShortDateString()</td> *@
+                                            @* <td>@p.payment_amount</td> *@
+@*                                         </tr>
+                                        index++;
+                                    }
+                                </tbody>
+
+
+
+                            </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <h4>No Payment Done Yet!!</h4>
+                        }
+                    </div>
+ *@                </div>
+            </div>
+ </div>
+
+        <div class="row">
+         
+        </div>
+
+        <div class="row">
+            <h5>Batch Details</h5>
+
+            @{
+                int i = 1;
+            }
+            @foreach (var item in batches)
+            {
+                <div class="card" style="padding:2%;font-size:small">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Batch Name:</label>
+                                    <b>@item.batch_name</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Topic Name:</label>
+                                    <b>@item.topic_name</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Trainer Name:</label>
+                                    <b>@item.employee_name</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Start Date:</label>
+                                    <b>@item.start_date.ToShortDateString()</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Batch Time:</label>
+                                    <b>@item.batch_time</b>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <table class="table table-bordered" style="font-size:small">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Content Name</th>
+                                <th>Expected Date</th>
+                                <th>Actual Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int j = 1;
+                                int totalleactures = 0;
+                                int totalpresent = 0;
+                                int totalabsent = 0;
+                                if (item.attendance.Count() > 0)
+                                {
+                                    foreach (var s in item.attendance)
+                                    {
+                                        totalleactures++;
+                                        string color = "";
+                                        if (s.is_present == 1)
+                                        {
+                                            color = "green";
+                                            totalpresent = totalpresent + 1;
+                                        }
+                                        else
+                                        {
+                                            color = "red";
+                                            totalabsent = totalabsent + 1;
+                                        }
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@s.content_name</td>
+                                            <td>@s.expected_date</td>
+                                            <td>@s.actual_date</td>
+                                            <td style="color:@color">@s.attendance</td>
+
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:aquamarine">
+                                <td colspan="5">
+                                    @if (totalleactures > 0)
+                                    {
+
+                                        float per = totalpresent * 100 / totalleactures;
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                Attendance : <b>@per</b>
+                                            </div>
+                                            <div class="col-md-3">
+                                                Total Leactures : <b>@totalleactures</b>
+                                            </div>
+                                            <div class="col-md-3">
+                                                Present Days : <b>@totalpresent</b>
+                                            </div>
+                                            <div class="col-md-3">
+                                                Absent Days : <b>@totalabsent</b>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+                i++;
+                <hr />
+            }
+        </div>
+    </div>
+</div>
+</div>

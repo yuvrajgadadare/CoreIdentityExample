@@ -1,0 +1,416 @@
+﻿@model ERP_Models.ExamModel
+@using ERP_Models
+    ViewData["Title"] = "Schedule Exam";
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  <style>
+#button{
+  display:block;
+  margin:20px auto;
+  padding:10px 30px;
+  background-color:#eee;
+  border:solid #ccc 1px;
+  cursor: pointer;
+}
+#overlay{	
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height:100%;
+  display: none;
+  background: rgba(0,0,0,0.6);
+}
+.cv-spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px #ddd solid;
+  border-top: 4px #2e93e6 solid;
+  border-radius: 50%;
+  animation: sp-anime 0.8s infinite linear;
+}
+@Html.Raw("@")keyframes sp-anime {
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+.is-hide{
+  display:none;
+}
+    </style>
+<script>
+    $(document).ready(function () {
+     
+        $("#overlay").fadeOut();
+            
+        $("#ddbatch").change(function () {
+            FetchBatchWiseStudents();
+        })
+    })
+    function FetchBatchWiseStudents() {
+       
+        var id = $("#ddbatch").val();
+        console.log('/batchManagement/batch/GetBatchWiseStudents/' + id);
+          $.ajax({
+            url: '/batchManagement/batch/GetBatchWiseStudents/'+id,
+            method:'get',
+            success: function (resp) {
+               
+                 $("#overlay").fadeOut();
+                 $("#tbldata").empty();
+                $.each(resp, function (i, d) {
+                    $("#tbldata").append("<tr><td><input type='checkbox' name='chkstudent' value="+d.student_id+" /></td><td>" + (i + 1) + "</td><td>" + d.student_name + "</td></tr>")
+                });
+            },
+            beforeSend: function (e) {
+               $("#overlay").fadeIn();
+
+            },
+            error:function(err){
+                alert("Error! Please try again");
+                 $("#overlay").fadeOut();
+
+            }
+        })
+    }
+    function ScheduleExamForStudent() {
+        var st = {
+            "student_id":$("#student_id").val(),
+            "topic_id":$("#topic_id").val(),
+            "total_questions":$("#total_questions").val(),
+            "exam_date":$("#exam_date").val(),
+            "start_time":$("#start_time").val(),
+            "end_time":$("#end_time").val()
+    
+    }
+          $.ajax({
+            url: '/BatchManagement/Exam/ScheduleExam',
+            method:'post',
+            data:st,
+            success: function (resp) {
+                alert(resp);
+                 $("#overlay").fadeOut();
+                window.location.href = "/BatchManagement/Exam/ScheduleExam";
+            },
+            beforeSend: function (e) {
+               $("#overlay").fadeIn();
+            },
+            error:function(err){
+                alert("Error! Please try again");
+                 $("#overlay").fadeOut();
+            }
+        })
+    }
+    function SendExamLink(exam_id,student_id) {
+        $.ajax({
+            url: '/BatchManagement/Exam/ShareExamLink?exam_id='+exam_id+"&student_id="+student_id,
+            method:'post',
+            success: function (resp) {
+                alert(resp);
+                 $("#overlay").fadeOut();
+                window.location.href = "/BatchManagement/Exam/ScheduleExam";
+            },
+            beforeSend: function (e) {
+               $("#overlay").fadeIn();
+
+            },
+            error:function(err){
+                alert("Error! Please try again");
+                 $("#overlay").fadeOut();
+
+            }
+        })
+
+    }
+</script>
+@{
+
+    List<ExamModel> exams = (List<ExamModel>)ViewData["scheduledExams"];
+    List<ExamModel> rejectedexams = (List<ExamModel>)ViewData["rejectedExams"];
+    List<ExamModel> submittedexams = (List<ExamModel>)ViewData["submittedExams"];
+}
+<div class="container-fluid">
+ <div class="row">   
+ <div class="col-md-3">
+     @if(ViewBag.msg!=null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>Success!</strong>@ViewBag.msg
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+         
+             
+
+            @* <a href="#myModal" role="button" class="btn btn-lg btn-primary" data-bs-toggle="modal">Launch Demo Modal</a> *@
+
+    <!-- Modal HTML -->
+    @* <div id="myModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:700px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Schedule Exam For Batch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                         <div class="row">
+                   <div class="card-header">
+                       <div class="mb-3">
+                        <label>Batch Name</label>
+                        @Html.DropDownList("ddbatch", ViewBag.batches as SelectList, "Select Batch", new { @class = "form-control" })
+                    </div>
+                    <div class="mb-3">
+                        <label>Topic Name</label>
+                        @Html.DropDownListFor(e=>e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                    </div>
+                     <div class="mb-3">
+                        <label>Total Questions</label>
+                        @Html.TextBoxFor(e=>e.total_questions,new{@class="form-control"})
+
+                    </div>
+                    <div class="mb-3">
+                        <label>Exam Date</label>
+                        @Html.TextBoxFor(e=>e.exam_date,new{@class="form-control",@type="date"})
+                    </div>
+                    <div class="mb-3">
+                        <label>Exam Time</label>
+                        @Html.TextBoxFor(e=>e.start_time, new { @class = "form-control", @type = "time" })
+                    </div>
+                       <div class="mb-3">
+                        <label>End Time</label>
+                        @Html.TextBoxFor(e=>e.end_time, new { @class = "form-control", @type = "time" })
+                    </div>
+                </div>
+            </div>
+                    </div>
+                    <div class="col-md-5">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Student Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbldata">
+
+                            </tbody>
+                            <tfoot>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" onclick="ScheduleExamForStudent()" value="Schedule" class="btn btn-primary" />
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div> *@
+
+      @using(Html.BeginForm())
+        { 
+        <div class="card">
+            <div class="card-header">
+                <h4>Schedule Exam For Student</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mb-3">
+                        <label>Student Name</label>
+                        @Html.DropDownListFor(e=>e.student_id,ViewBag.students as SelectList,"Select Student",new{@class="form-control"})
+                                @* @Html.DropDownListFor(e => e.student_id, new SelectList((System.Collections.IEnumerable)ViewData["students"], "student_id", "student_name"), "Select Student", new { @class = "form-control" }) *@
+
+                        </div>
+                    <div class="mb-3">
+                        <label>Topic Name</label>
+                        @Html.DropDownListFor(e=>e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                    </div>
+                     <div class="mb-3">
+                        <label>Total Questions</label>
+                        @Html.TextBoxFor(e=>e.total_questions,new{@class="form-control"})
+
+                    </div>
+                    <div class="mb-3">
+                        <label>Exam Date</label>
+                        @Html.TextBoxFor(e=>e.exam_date,new{@class="form-control",@type="date"})
+                    </div>
+                    <div class="mb-3">
+                        <label>Exam Time</label>
+                        @Html.TextBoxFor(e=>e.start_time, new { @class = "form-control", @type = "time" })
+                    </div>
+                       <div class="mb-3">
+                        <label>End Time</label>
+                        @Html.TextBoxFor(e=>e.end_time, new { @class = "form-control", @type = "time" })
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit"  value="Schedule" class="btn btn-primary" />
+                <a href="/">Cancel</a>
+            </div>
+        </div>
+        }
+       
+ 
+     </div> 
+ <div class="col-md-9">
+     <ul class="nav nav-tabs" id="myTab">
+        <li class="nav-item">
+            <a href="#home" class="nav-link active" data-bs-toggle="tab">Scheduled Exams</a>
+        </li>
+        <li class="nav-item">
+            <a href="#profile" class="nav-link" data-bs-toggle="tab">Submitted Exams</a>
+        </li>
+        <li class="nav-item">
+            <a href="#messages" class="nav-link" data-bs-toggle="tab">Rejected Exams</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="home">
+            <h4 class="mt-2">Scheduled Exams</h4>
+         
+                    @{
+                        int i = 1;
+                    }
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Student </th>
+                                <th>Topic</th>
+                                <th>Exam Date</th>
+                                <th>Exam Time</th>
+                                <th>Questions</th>
+                                <th>Exam Link</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (exams != null)
+                            {
+
+                                foreach (var item in exams)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.student_name</td>
+                                        <td>@item.topic_name</td>
+                                        <td>@item.exam_date.ToShortDateString()</td>
+                                        <td>@item.start_time.ToLongTimeString()</td>
+                                        <td>@item.total_questions</td>
+                                        <td>
+                                            <input type="button" value="Send Link" onclick="SendExamLink(@item.exam_id,@item.student_id)" />
+                                        </td>
+                                        <td>@item.status</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+
+     </table>
+        </div>
+        <div class="tab-pane fade" id="profile">
+            <h4 class="mt-2">Submitted Exams</h4>
+          
+            
+                    @{
+                        i = 1;
+                    }
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Student </th>
+                                <th>Topic</th>
+                                <th>Exam Date</th>
+                                <th>Exam Time</th>
+                                
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (submittedexams != null)
+                            {
+                                foreach (var item in submittedexams)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.student_name</td>
+                                        <td>@item.topic_name</td>
+                                        <td>@item.exam_date.ToShortDateString()</td>
+                                        <td>@item.start_time.ToLongTimeString()</td>
+                                        
+                                        <td>@item.status</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+
+     </table>
+
+        </div>
+        <div class="tab-pane fade" id="messages">
+            <h4 class="mt-2">Rejected Exams</h4>
+    
+        @{
+          i = 1;
+        }
+         
+     <table class="table">
+         <thead>
+             <tr>
+                 <th>Sr No</th>
+                 <th>Student </th>
+                 <th>Topic</th>
+                    <th>Exam Date</th>
+                    <th>Exam Time</th>
+                   
+                    <th>Status</th>
+             </tr>
+         </thead>
+         <tbody>
+              @if (rejectedexams != null)
+                            {
+             foreach(var item in rejectedexams)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.student_name</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.exam_date.ToShortDateString()</td>
+                        <td>@item.start_time.ToLongTimeString()</td>
+                        <td>@item.status</td>
+                        </tr>
+                        i++;
+                    }
+                    }
+            </tbody>
+
+     </table>
+ 
+        </div>
+    </div>
+
+ </div>
+    </div>
+</div>
+<div id="overlay">
+  <div class="cv-spinner">
+    <span class="spinner"></span>
+  </div>
+</div>

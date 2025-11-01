@@ -1,0 +1,27 @@
+﻿@model ERP_Models.CourseModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+     <div class="card"> 
+         <div class="card-body">
+             <h5>@Model.course_name</h5>
+             <ul>
+                 @foreach(var item in Model.topics)
+                {
+                    <li>
+                        <h6>@item.topic_name<span>(Days=@item.contents.Count())</span></h6>
+                        <ul>
+                            @foreach(var content in item.contents)
+                            {
+                                <li style="font-size:small">@content.content_name</li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+         </div>
+     </div>
+ 
+

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<ERP_Models.TopicModel>
+@using ERP_Models
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    List<TopicModel> topics = (List<TopicModel>)ViewData["topics"];
+}
+
+<div class="container-fluid" style="background-color:white;">
+    <div class="row" style="padding:1%">
+            <div class="col-md-2">
+                <ul class="list-group">
+            @foreach (var item in topics)
+            {
+                if(item.folder_id!=null && item.folder_id!="")
+                {
+              <li class="list-group-item">
+                  <a href="/VideoTest/TopicWiseVideos/@item.topic_id" style="text-decoration:none;">@item.topic_name</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">
+                            <a>@item.topic_name</a>
+                        </li>
+                    }
+            }
+            </ul>
+        </div>
+            <div class="col-md-7">
+            <div style="border:5px solid #1aa7ee;border-radius:10px;">
+                <video style="border:1px solid gray;background-color:gray;height:480px;width:100%"></video>
+
+            </div>
+        </div>
+            <div class="col-md-3">
+                @foreach (var item in Model)
+                {
+                    <div class="row mb-3">
+                        <h6>@item.topic_name</h6>
+                    <ul class="list-group">
+
+                        @foreach (var v in item.videos)
+                        {
+                            <li class="list-group-item mb-3">
+                          
+                                @Html.Hidden("topic_id",v.topic_id)
+                                @* <iframe src="@ViewBag.folder/@v.video_file_id/preview" width="640" height="480" allow="autoplay"></iframe> *@
+                              @*   <a href="/VideoTest/Play/@v.video_file_id" style="text-decoration:none">@v.video_title</a> *@
+                            <a href="/VideoTest/Play?id=@v.video_file_id&topic_id=@v.topic_id&title=@v.video_title" style="text-decoration:none">@v.video_title</a>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+ 

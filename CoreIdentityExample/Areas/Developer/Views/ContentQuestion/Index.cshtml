@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "Content Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    var questions = [];
+    $(document).ready(function () {
+        $("#ddtopic").change(function () {
+            GetTopicWiseContents();
+            GetTopicWiseQuestions();
+        })
+        // $("#ddcontent").change(function () {
+        //     GetContentWiseQuestions();
+        // })
+    })
+    function GetTopicWiseContents() {
+        var topic_id = $("#ddtopic").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetTopicWiseContents/' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                //  $("#ddcontent").empty();
+                // $("#ddcontent").append("<option selected disabled>Select Content</option>");
+                 $("#contentlist").empty();
+                $.each(resp, function (i, d) {
+                 //     $("#ddcontent").append("<option value=" + d.content_id + ">" + d.content_name + "</option>")
+                $("#contentlist").append("<li class='list-group-item'><a href='#' onclick='GetContentWiseQuestions("+d.content_id+")'>"+d.content_name+"</a></li>");
+
+                })
+
+            }
+        })
+    }
+    function GetTopicWiseQuestions() {
+        var topic_id = $("#ddtopic").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetTopicWiseQuestions/' + topic_id,
+            method: 'get',
+            success: function (resp) {
+                console.log(resp);
+                  // alert(resp.length);
+                  $("#count").html("Total Quesitons : "+resp.length);
+                DisplayQuestions(resp);
+            }
+        })
+    }
+    // function GetContentWiseQuestions() {
+    //     var content_id = $("#ddcontent").val();
+    //     $.ajax({
+    //         url: '/Developer/ContentQuestion/GetContentWiseQuestions/' + content_id,
+    //         method: 'get',
+    //         success: function (resp) {
+    //           //  console.log(resp);
+    //               $("#count").html("Total Quesitons : "+resp.length);
+
+    //             DisplayQuestions(resp);
+    //         }
+    //     })
+    // }
+
+    function GetContentWiseQuestions(content_id) {
+      //  var content_id = $("#ddcontent").val();
+        $.ajax({
+            url: '/Developer/ContentQuestion/GetContentWiseQuestions/' + content_id,
+            method: 'get',
+            success: function (resp) {
+              //  console.log(resp);
+                  $("#count").html("Total Quesitons : "+resp.length);
+
+                DisplayQuestions(resp);
+            }
+        })
+    }
+
+    function DisplayQuestions(questions) {
+        $("#myAccordion").empty();
+
+        $.each(questions, function (i, d) {
+            $("#myAccordion").append("<div class='accordion-item'><h2 class='accordion-header' id='heading" + i + "'><button type='button' class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapse" + i + "'><pre>" + (i + 1) + "." + d.question + "</button></pre></h2><div id='collapse" + i + "' class='accordion-collapse collapse' data-bs-parent='#myAccordion'><div class='card-body'><ol><li>" + d.option1 + "</li><li>" + d.option2 + "</li><li>" + d.option3 + "</li><li>" + d.option4 + "</li></ol><p>Correct Option Number:<b>" + d.correct_option_number + " </b></p><p><a href='/Developer/ContentQuestion/DeleteQuestion/"+d.question_id+"' style='text-decoration:none' class='btn btn-danger btn-sm'>Remove Question</a></p></div></div></div>")
+        })
+    }
+       
+</script>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <a href="/Developer/ContentQuestion/AddQuestions" class="btn btn-primary">Add Content Question</a>
+        </div>
+            <div class="row">
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label>Select Topic</label>
+                    @Html.DropDownList("ddtopic", ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                </div>
+            </div>
+           @*  <div class="col-md-3">
+                <div class="mb-3">
+                    <label>Select Content</label>
+                    <select id="ddcontent" class="form-control">
+                        <option selected disabled>Select Content</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <br/>
+                
+            </div> *@
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="list-group" id="contentlist" style="font-size:small">
+
+                </ul>
+            </div>
+
+            <div class="col-md-9">
+                        <b id="count"></b>
+                        <div class="accordion" id="myAccordion">
+                        </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+@* <div class='accordion-item'><h2 class='accordion-header' id='headingOne'><button type='button' class='accordion-button collapsed' data-bs-toggle='collapse' data-bs-target='#collapseOne'>1. What is HTML?</button></h2><div id='collapseOne' class='accordion-collapse collapse' data-bs-parent='#myAccordion'><div class='card-body'><p>HTML stands for HyperText Markup Language. HTML is the standard markup language for describing the structure of web pages. </p></div></div></div> *@

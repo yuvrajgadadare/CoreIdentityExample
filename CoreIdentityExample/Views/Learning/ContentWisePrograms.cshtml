@@ -1,0 +1,123 @@
+﻿@model IEnumerable<ERP_Models.ProgramQuestionModel>
+@using ERP_Models
+@{
+    ViewData["Title"] = "TopicWiseQuestions";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+@{
+    List<TopicModel> topics = (List<TopicModel>)ViewData["topics"];
+    ContentModel content = (ContentModel)ViewData["content"];
+}
+<style>
+    a {
+        text-decoration: none;
+    }
+
+    pre {
+        white-space: pre-wrap; /* Allows for wrapping while preserving whitespace */
+        font-family: 'Bookman Old Style';
+        font-size: small;
+    }
+</style>
+
+
+<div class="">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand">Topics</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav">
+                        @foreach (var item in topics)
+                        {
+
+                            <a class="nav-item nav-link" style="color:blue" href="/Learning/TopicWisePrograms/@item.topic_id">@item.topic_name</a>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-9" style="padding-top:2%">
+            <h4 style="text-align:center"><span style="color:blue">Programs </h4>
+
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">@ViewBag.topic.topic_name</a></li>
+                <li class="breadcrumb-item"><a href="#">@content.content_name Programs</a></li>
+            </ol>
+            @if (Model.Count() > 0)
+            {
+
+                int i = 1;
+
+                <div>
+                    @foreach (var item in Model)
+                    {
+                        <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                            <div>
+                                <h6>Question @i</h6><br />
+                                <pre><h6>@item.question_title</h6>
+                                        </pre>
+                            </div>
+                            <div>
+                                <b>Description</b>
+                                <br />
+                                <pre>@item.question_description</pre>
+                            </div>
+
+                            <div>
+                                <b>Answers</b>
+                                <br />
+                                <ol>
+                                    @foreach (var answer in item.answers)
+                                    {
+                                        <li>
+                                            <pre>@answer.program_answer</pre>
+                                        </li>
+                                    }
+                                </ol>
+                            </div>
+                        </div>
+                        i++;
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning alert-dismissible d-flex align-items-center fade show">
+                    <i class="bi-exclamation-triangle-fill"></i>
+                    <strong class="mx-2">Warning!</strong> No Programs Available.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+        <div class="col-md-3" style="padding-top:2%">
+            @{
+                List<ContentModel> contents = (List<ContentModel>)ViewData["contents"];
+
+            }
+            <h4 style="text-align:center;color:blue">Contents</h4>
+
+            <ul class="list-group" style="padding-top:9%">
+                @if (contents.Count  > 0)
+                {
+                    @foreach (var item in contents)
+                    {
+                        <li class="list-group-item">
+                            <a href="/Learning/ContentWisePrograms/@item.content_id">@item.content_name <span> (@item.total_program_questions)</span></a>
+                        </li>
+                    }
+
+                }
+            </ul>
+        </div>
+    </div>
+</div>

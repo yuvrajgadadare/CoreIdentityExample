@@ -1,0 +1,180 @@
+﻿@model ERP_Models.EmployeeModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-10">
+        
+        @if (ViewBag.status == true)
+        {
+            
+                
+                <div class="card" id="dvprofile_view">
+                    <div class="card-header">
+                        <h5>Profile Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Employee Name :</label>
+                                    <b>@Model.employee_name</b>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Gender</label><br />
+                                    <b>@Model.gender</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Employee Code</label>
+                                    <b>@Model.employee_code</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Email Address</label>
+                                    <b>@Model.email_address</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Mobile Number</label>
+                                    <b>@Model.mobile_number</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Birth Date</label>
+                                    <b>@Model.birth_date.ToShortDateString()</b>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Qualification</label>
+                                    <b>@Model.qualification</b>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Joining Date</label>
+                                    <b>@Model.joining_date.ToShortDateString()</b>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label>Profile Photo</label>
+                                    <img style="height:70px;width:100px;" src="~/Employees/@Model.profile_photo" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" value="Edit" class="btn btn-info" />
+                    </div>
+                </div>
+           
+
+        }
+        else
+        {
+            
+        
+        <form method="post" enctype="multipart/form-data">
+            
+             @Html.HiddenFor(e=>e.employee_id)
+            @Html.HiddenFor(e=>e.user_id)
+                <div class="card" id="dvprofile_new">
+                <div class="card-header">
+                    <h5>Profile Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Employee Name</label>
+                                @Html.TextBoxFor(e => e.employee_name, new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Gender</label><br/>
+                                @Html.RadioButtonFor(e => e.gender, "Male") <span>Male</span>
+                                @Html.RadioButtonFor(e => e.gender, "Female") <span>Female</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Qualification</label>
+                                    @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                    <div class="mb-3">
+                        <label>Email Address</label>
+                        @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                    </div>
+                        </div>
+                        <div class="col-md-4">
+                    <div class="mb-3">
+                        <label>Mobile Number</label>
+                        @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+                    </div>
+                        </div>
+                        <div class="col-md-4">
+                    <div class="mb-3">
+                        <label>Birth Date</label>
+                        @Html.TextBoxFor(e => e.birth_date, new { @class = "form-control", @type = "date" })
+                    </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                       @*  <div class="col-md-4">
+                    <div class="mb-3">
+                        <label>Qualification</label>
+                        @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+                            </div>
+                        </div> *@
+                        
+                        <div class="col-md-4">
+                    <div class="mb-3">
+                        <label>Joining Date</label>
+                        @Html.TextBoxFor(e => e.joining_date, new { @class = "form-control",@type="date" })
+                    </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Profile Photo</label>
+                                 <input type="file" name="Photo" class="form-control" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,121 @@
+﻿@using ERP_Models
+@model EmployeeRegistrationModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>User Registration</h1>
+<div class="row">
+    <div class="col-md-1"></div>
+        <div class="col-md-10">
+        <form method="post" enctype="multipart/form-data">
+            <div class="card" id="dvprofile_new">
+                <div class="card-header">
+                    <h5>Profile Details</h5>
+                </div>
+                <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="FirstName"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="LastName"></label>
+                                <input asp-for="LastName" class="form-control" />
+                            </div>
+                        </div>
+                 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+            </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Gender</label><br />
+                                @Html.RadioButtonFor(e => e.gender, "Male") <span>Male</span>
+                                @Html.RadioButtonFor(e => e.gender, "Female") <span>Female</span>
+                            </div>
+                        </div>
+                </div>
+                    <div class="row">
+
+                    
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Qualification</label>
+                                @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+                            </div>
+                        </div>
+                     
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Mobile Number</label>
+                                @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                       
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Birth Date</label>
+                                @Html.TextBoxFor(e => e.birth_date, new { @class = "form-control", @type = "date" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Joining Date</label>
+                                @Html.TextBoxFor(e => e.joining_date, new { @class = "form-control", @type = "date" })
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Profile Photo</label>
+                                <input type="file" name="Photo" class="form-control" />
+                            </div>
+
+                        </div>
+                    </div>
+ 
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                </div>
+            </div>
+            </form>
+
+    </div>
+</div>
+
+                   
+            
+            
+         
+           
+    

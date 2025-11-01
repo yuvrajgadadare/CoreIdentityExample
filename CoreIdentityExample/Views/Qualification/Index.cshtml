@@ -1,0 +1,94 @@
+﻿@model ERP_Models.StudentQualificationModel
+@{
+    ViewData["Title"] = "Qualification";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<style>
+    div,table,tr,td,th,button,input{
+        font-size:small
+    }
+</style>
+<div class="container-fluid">
+
+<div class="row">
+    @if (ViewBag.msg!=null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> @ViewBag.msg
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+</div>
+<div class="row">
+    
+        @using(Html.BeginForm())
+        {
+            @Html.HiddenFor(e=>e.student_id)
+         
+
+        
+    
+ 
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Sr No</th>
+                <th>Qualification</th>
+                <th>University</th>
+                <th>Medium</th>
+                <th>Passing Year</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in ViewBag.qualifications)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.qualification</td>
+                    <td>@item.university</td>
+                        <td>@item.medium</td>
+                        <td>@item.passing_year</td>
+                    <td>@item.percentage</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+        <tfoot style="background-color:#176b91">
+                <tr>
+                        <td>
+                            <br />
+                            <input type="submit" value="+" style="font-size:large;color:white;background-color:#176b91" class="btn btn-info btn-sm" />
+                        </td>
+                <td>
+                    <label style="color:white">Qualification</label>
+                    @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
+            </td>
+            <td>
+                    <label style ="color:white">University</label>
+                    @Html.TextBoxFor(e => e.university, new { @class = "form-control" })
+            </td>
+            <td>
+                    <label style="color:white">Passing Year</label>
+                    @Html.TextBoxFor(e => e.passing_year, new { @class = "form-control" })
+        </td>
+        <td>
+                    <label style="color:white">Medium</label>
+                    @Html.TextBoxFor(e => e.medium, new { @class = "form-control" })
+                </td>
+                <td>
+                    <label style="color:white">Percentage</label>
+                    @Html.TextBoxFor(e => e.percentage, new { @class = "form-control" })
+                </td>
+              
+            </tr>
+            </tfoot>
+    </table>
+ }
+
+    </div>
+</div>
+               

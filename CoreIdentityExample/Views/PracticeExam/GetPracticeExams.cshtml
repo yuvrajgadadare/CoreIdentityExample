@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ERP_Models.ExamModel>
+@{
+    ViewData["Title"] = "GetPracticeExams";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+       <div class="col-md-5">
+            <a href="/Learning/Index" style="text-decoration:none;" class="btn btn-primary btn-sm">Practice Exam</a>
+       </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Topic Name</th>
+                <th>Exam Date</th>
+                <th>Exam Time</th>
+                <th>Total Questions</th>
+                <th>Correct Questions</th>
+                <th>Wrong Question</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.topic_name</td>
+                        <td>@item.exam_date.ToShortDateString()</td>
+                        <td>@item.start_time.ToLongTimeString()</td>
+                        <td>@item.total_questions</td>
+                        <td>@item.total_correct_questions</td>
+                        <td>@item.total_wrong_questions</td>
+                        <td>@item.percentage</td>
+                        <td>@item.grade</td>
+                        <td><a href="/PracticeExam/ViewPracticeExam/@item.exam_id">View</a></td>
+                    </tr>
+                    i++;
+                }
+                
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+ 

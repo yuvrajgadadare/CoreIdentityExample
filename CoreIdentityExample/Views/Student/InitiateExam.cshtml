@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Initiate Exam";
+    Layout = "~/Views/Shared/ExamLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            @* <h5>Exam Details</h5> *@
+            @* <ul>
+                <li>You have selected exam for <b>@ViewBag.topic</b> topic</li>
+                <li>Total Questions= <b>@ViewBag.question_count</b> topic</li>
+                <li>Total Duration= <b>2 Hours</b> topic</li>
+            </ul> *@
+            <h4> Assessment For @ViewBag.topic</h4>
+            <div class="">
+                <h4>General Instructions:</h4>
+                <ul>
+                    <li>Attempt all the questions</li>
+                    <li>Total duration of <b>@ViewBag.topic </b> exam is 30 Minutes.</li>
+                    <li>Total number of Marks(per Question) = 2 Marks.</li>
+                    <li>Negative Marking of 0 Mark.</li>
+                    <li>The clock will be set at the server. The countdown timer in the top right corner of screen will display the remaining time available for you to complete the examination.</li>
+                    <li>The Questions Palette displayed on the left side of screen will show the status of each question.</li>
+                </ul>
+                <h4>To Answer a question, do the following:</h4>
+                <ul>
+                    <li>Click on the question number in the Question Palette at the left of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
+                    <li>Click on Save & Next to save your answer for the current question and then go to the next question.</li>
+                    <li>Click on Reset Answer to reset your answer for the current question, and then go to the next question.</li>
+                </ul>
+                <h4>Answering a Question:</h4>
+                <ul>
+                    <li>
+                        Procedure for answering a question:
+                        <ul>
+                            <li>Question Answered will show Green colored.</li>
+                            <li>Question Not Answered will show Red colored.</li>
+                            <li>To deselect your chosen answer, click on the button of the Reset Answer.</li>
+                            <li>To change your chosen answer, click on the button of another option.</li>
+                            <li>To save your answer, you MUST click on the Save & Next button.</li>
+                        </ul>
+                    </li>
+                    <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
+                </ul>
+
+                <div class="col-md-4">
+                    @using (Html.BeginForm("StartExam", "Student", FormMethod.Get))
+                    {
+                        <input type="submit" value="Start Exam" class="btn btn-primary" />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           
+        </div>
+
+    </div>
+</div>

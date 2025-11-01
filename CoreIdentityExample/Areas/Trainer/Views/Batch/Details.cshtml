@@ -1,0 +1,270 @@
+﻿@model ERP_Models.BatchModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        font-size: 12px
+    }
+
+    span {
+        font-size: 12px
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+<style>
+    table {
+        font-size: 12px;
+    }
+
+
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        font-size: 12px
+    }
+
+    span {
+        font-size: 12px
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+
+<script>
+    var attendance = [];
+    var batch_id = -1, schedule_id = -1;
+    function ViewBatchStudents(s_id, b_id) {
+        schedule_id=s_id;
+        batch_id=b_id
+      //    alert(schedule_id + " " + batch_id);
+        $("#studentmodel").modal("show");
+        $.ajax({
+            url: '/Trainer/Batch/GetScheduleWiseData/' + s_id,
+            method:'get',
+            success: function (resp) {
+                console.log(resp);
+                $("#tblscheduledata").empty();
+                $("#tblscheduledata").html("<div class='col-md-2'>Topic:<b>" + resp.topic_name + "</b></div><div class='col-md-4'>Content:<b>" + resp.content_name + "</b></div><div class='col-md-4'>Expected Date:<b>" + resp.expected_date + "</b></div>")
+            }
+        })
+    }
+    function MarkAttendance(rid, isPresent) {
+        var st = { "registration_id": rid, "is_present": isPresent };
+        var index = -1;
+        attendance.forEach(function (d, i) {
+            if (d.registration_id == rid) {
+                index = i;
+
+            }
+        })
+        if (index != -1) {
+            attendance.splice(index, 1);
+            attendance.push(st);
+
+        }
+        else {
+            attendance.push(st);
+
+        }
+        console.log(attendance);
+
+    }
+
+    function SubmitAttendance() {
+        var st = { "batch_schedule_id": schedule_id, "attendance_date": $("#txtdate").val(), "students": attendance };
+        $.ajax({
+            url: '/Trainer/Batch/MarkAttendance',
+            method: 'post',
+            data:st,
+            success: function (resp) {
+                alert(resp);
+                $("#studentmodel").modal("hide");
+                location.reload();
+            }
+        })
+
+    }
+
+
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <h5>Batch Details</h5>
+    </div>
+      
+       
+            <div class="row" style="padding-top:1%">
+                <div class="col-md-4">
+                    @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchDetails.cshtml")
+
+             
+
+                </div>
+                <div class="col-md-8">
+                    @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchStudent_Attendance.cshtml")
+
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
+                        <div class="card-header">
+
+                            <h5 style="text-align:center">Batch Schedule</h5>
+
+                        </div>
+                        <div class="card-body">
+                    <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Content Name</th>
+                                    <th>Expected Date</th>
+                                    <th>Actual Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 1;
+                                }
+                                @foreach (var item in ViewBag.schedule)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.content_name</td>
+                                        <td>@item.expected_date.DayOfWeek<span>,</span> @item.expected_date.ToLongDateString()</td>
+                                        @if (item.actual_date != null)
+                                        {
+                                            <td>@item.actual_date.DayOfWeek<span>,</span>  @item.actual_date.ToLongDateString()</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                        <td>@item.status</td>
+                                        <td>
+                                            @if (@item.status == "Conducted")
+                                            {
+                                                string timestatus = "";
+
+                                                DateTime expected = Convert.ToDateTime(item.expected_date);
+                                                DateTime actual = Convert.ToDateTime(item.actual_date);
+                                                if (expected == actual)
+                                                {
+                                                    timestatus = "On Time";
+                                                }
+                                                else if (expected < actual)
+                                                {
+
+                                                    TimeSpan t = actual.Subtract(expected);
+                                                    timestatus = t.Days + " Delayed";
+                                                }
+                                                else
+                                                {
+                                                    TimeSpan t = expected.Subtract(actual);
+
+                                                    timestatus = t.Days + " Early";
+                                                }
+                                                <span>@timestatus</span>
+                                            }
+                                            else
+                                            {
+                                                <button onclick="ViewBatchStudents(@item.batch_schedule_id,@item.batch_id)">Mark Attendance</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+
+            <div class="modal fade" id="studentmodel" tabindex="-1" data-bs-backdrop="false">
+                <div class="modal-dialog  modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Select Students</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Attendance Date:</label>
+                                    <input type="date" id="txtdate" />
+                                </div>
+                            </div>
+                            <div class="row" id="tblscheduledata">
+                            </div>
+                            <div class="row">
+                                <div class="table-responsive">
+
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr No</th>
+                                                <th>Student Name</th>
+                                                <th>Attendance</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                int k = 1;
+                                            }
+                                            @foreach (var item in ViewBag.students)
+                                            {
+                                                <tr>
+                                                    <td>@k</td>
+                                                    <td>@item.student_name</td>
+                                                    <td>
+                                                        <input type="radio" name="rd_@k" onchange="MarkAttendance(@item.registration_id,1)" />
+                                                        <span>Present</span>
+                                                        &nbsp;
+                                                        <input type="radio" name="rd_@k" onchange="MarkAttendance(@item.registration_id,0)" />
+                                                        <span>Absent</span>
+
+                                                    </td>
+                                                </tr>
+                                                k++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="SubmitAttendance()">Mark Attendance</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
