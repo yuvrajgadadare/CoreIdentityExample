@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CoreIdentityExample</title>
+    <title>@ViewData["Title"] - CIIT</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CoreIdentityExample.styles.css" asp-append-version="true" />
@@ -18,7 +18,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CoreIdentityExample</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/assets/images/mainlogo.png" style="height:70px;width:140px;" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -89,13 +91,13 @@
                         <h4>Admin Section</h4>
 
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="/Master/Dashboard/Index">Dashboard</a></li>
-                            <li class="list-group-item"><a href="/Master/Course/Index">Course</a></li>
-                            <li class="list-group-item"><a href="/Master/Topic/Index">Topic</a></li>
-                            <li class="list-group-item"><a href="/Master/Content/Index">Content</a></li>
-                            <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Developer/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Developer/Course/Index">Course</a></li>
+                            <li class="list-group-item"><a href="/Developer/Topic/Index">Topic</a></li>
+                            <li class="list-group-item"><a href="/Developer/Content/Index">Content</a></li>
+                            <li class="list-group-item"><a href="/Developer/ContentQuestion/Index">Content Question</a></li>
                             <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
-                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li>
+                            <li class="list-group-item"><a href="/Developer/Exam/Index">Exams</a></li>
                         </ul>
                         <hr/>
                         <h4>Student Section</h4>
@@ -152,13 +154,13 @@
                         <h4>Admin Section</h4>
 
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="/Master/Dashboard/Index">Dashboard</a></li>
-                            <li class="list-group-item"><a href="/Master/Course/Index">Course</a></li>
-                            <li class="list-group-item"><a href="/Master/Topic/Index">Topic</a></li>
-                            <li class="list-group-item"><a href="/Master/Content/Index">Content</a></li>
-                            <li class="list-group-item"><a href="/Master/ContentQuestion/Index">Content Question</a></li>
-                            <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
-                            <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li>
+                            <li class="list-group-item"><a href="/Developer/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Developer/Course/Index">Course</a></li>
+                            <li class="list-group-item"><a href="/Developer/Topic/Index">Topic</a></li>
+                            <li class="list-group-item"><a href="/Developer/Content/Index">Content</a></li>
+                            <li class="list-group-item"><a href="/Developer/ContentQuestion/Index">Content Question</a></li>
+                            <li class="list-group-item"><a href="/Developer/Dashboard/Index">Student</a></li>
+                            <li class="list-group-item"><a href="/Developer/Exam/Index">Exams</a></li>
                         </ul>
                     </div>
                     <div class="col-md-10">
@@ -410,7 +412,7 @@
         }
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top fixed-bottom footer text-muted">
         <div class="container">
             &copy; 2025 - CoreIdentityExample - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

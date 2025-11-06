@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP_Models", "ERP_Models\ER
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP_Services", "ERP_Services\ERP_Services.csproj", "{2A42299A-8DAE-4135-A9C4-76B43E794D67}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIIT_NEW_WithCore", "F:\ciit site\CIIT_NEW_WithCore\CIIT_NEW_WithCore\CIIT_NEW_WithCore.csproj", "{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2A42299A-8DAE-4135-A9C4-76B43E794D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A42299A-8DAE-4135-A9C4-76B43E794D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A42299A-8DAE-4135-A9C4-76B43E794D67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
