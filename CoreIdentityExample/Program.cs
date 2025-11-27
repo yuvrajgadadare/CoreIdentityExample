@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-//builder.Services.AddTransient<IExtraService, ExtraService>();
+builder.Services.AddTransient<IExtraService, ExtraService>();
 //builder.Services.AddTransient<ITopicService, TopicService>();
 //builder.Services.AddTransient<IContentService, ContentService>();
 //builder.Services.AddTransient<ICourseService, CourseService>();
@@ -43,6 +43,7 @@ builder.Services.AddTransient<ITopicService, TopicService>();
 builder.Services.AddTransient<IContentService, ContentService>();
 builder.Services.AddTransient<IBatchService, BatchService>();
 builder.Services.AddTransient<IBranchService, BranchService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IEnquiryService, EnquiryService>();

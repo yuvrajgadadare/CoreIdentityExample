@@ -1,5 +1,6 @@
 ﻿@model ERP_Models.ExamModel
 @using ERP_Models
+@{
     ViewData["Title"] = "Schedule Exam";
      Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -137,134 +138,79 @@
     List<ExamModel> submittedexams = (List<ExamModel>)ViewData["submittedExams"];
 }
 <div class="container-fluid">
+   <div class="row mb-3">
+       <div class="col-md-12">
+
+    
+        <a href="#myModal" role="button" class="btn btn-primary" data-bs-toggle="modal">Schedule Exam</a>
+        <div id="myModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                            <h5 class="modal-title">Schedule Exam For Student</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="card">
+                                
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label>Student Name</label>
+                                            @Html.DropDownListFor(e => e.student_id, ViewBag.students as SelectList, "Select Student", new { @class = "form-control" })
+                                            @* @Html.DropDownListFor(e => e.student_id, new SelectList((System.Collections.IEnumerable)ViewData["students"], "student_id", "student_name"), "Select Student", new { @class = "form-control" }) *@
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Topic Name</label>
+                                            @Html.DropDownListFor(e => e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Total Questions</label>
+                                            @Html.TextBoxFor(e => e.total_questions, new { @class = "form-control" })
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Exam Date</label>
+                                            @Html.TextBoxFor(e => e.exam_date, new { @class = "form-control", @type = "date" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Exam Time</label>
+                                            @Html.TextBoxFor(e => e.start_time, new { @class = "form-control", @type = "time" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>End Time</label>
+                                            @Html.TextBoxFor(e => e.end_time, new { @class = "form-control", @type = "time" })
+                                        </div>
+                                    </div>
+                               
+                                    <div class="mb-3">
+                                            <input type="submit" value="Schedule" class="btn btn-primary" />
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        }
+                        @if (ViewBag.msg != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <strong>Success!</strong>@ViewBag.msg
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+    </div>
  <div class="row">   
- <div class="col-md-3">
-     @if(ViewBag.msg!=null)
-        {
-            <div class="alert alert-success alert-dismissible fade show">
-                <strong>Success!</strong>@ViewBag.msg
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
-         
-             
 
-            @* <a href="#myModal" role="button" class="btn btn-lg btn-primary" data-bs-toggle="modal">Launch Demo Modal</a> *@
-
-    <!-- Modal HTML -->
-    @* <div id="myModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content" style="width:700px;">
-                <div class="modal-header">
-                    <h5 class="modal-title">Schedule Exam For Batch</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-7">
-                         <div class="row">
-                   <div class="card-header">
-                       <div class="mb-3">
-                        <label>Batch Name</label>
-                        @Html.DropDownList("ddbatch", ViewBag.batches as SelectList, "Select Batch", new { @class = "form-control" })
-                    </div>
-                    <div class="mb-3">
-                        <label>Topic Name</label>
-                        @Html.DropDownListFor(e=>e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
-                    </div>
-                     <div class="mb-3">
-                        <label>Total Questions</label>
-                        @Html.TextBoxFor(e=>e.total_questions,new{@class="form-control"})
-
-                    </div>
-                    <div class="mb-3">
-                        <label>Exam Date</label>
-                        @Html.TextBoxFor(e=>e.exam_date,new{@class="form-control",@type="date"})
-                    </div>
-                    <div class="mb-3">
-                        <label>Exam Time</label>
-                        @Html.TextBoxFor(e=>e.start_time, new { @class = "form-control", @type = "time" })
-                    </div>
-                       <div class="mb-3">
-                        <label>End Time</label>
-                        @Html.TextBoxFor(e=>e.end_time, new { @class = "form-control", @type = "time" })
-                    </div>
-                </div>
-            </div>
-                    </div>
-                    <div class="col-md-5">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Action</th>
-                                    <th>Student Name</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbldata">
-
-                            </tbody>
-                            <tfoot>
-
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" onclick="ScheduleExamForStudent()" value="Schedule" class="btn btn-primary" />
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div> *@
-
-      @using(Html.BeginForm())
-        { 
-        <div class="card">
-            <div class="card-header">
-                <h4>Schedule Exam For Student</h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="mb-3">
-                        <label>Student Name</label>
-                        @Html.DropDownListFor(e=>e.student_id,ViewBag.students as SelectList,"Select Student",new{@class="form-control"})
-                                @* @Html.DropDownListFor(e => e.student_id, new SelectList((System.Collections.IEnumerable)ViewData["students"], "student_id", "student_name"), "Select Student", new { @class = "form-control" }) *@
-
-                        </div>
-                    <div class="mb-3">
-                        <label>Topic Name</label>
-                        @Html.DropDownListFor(e=>e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
-                    </div>
-                     <div class="mb-3">
-                        <label>Total Questions</label>
-                        @Html.TextBoxFor(e=>e.total_questions,new{@class="form-control"})
-
-                    </div>
-                    <div class="mb-3">
-                        <label>Exam Date</label>
-                        @Html.TextBoxFor(e=>e.exam_date,new{@class="form-control",@type="date"})
-                    </div>
-                    <div class="mb-3">
-                        <label>Exam Time</label>
-                        @Html.TextBoxFor(e=>e.start_time, new { @class = "form-control", @type = "time" })
-                    </div>
-                       <div class="mb-3">
-                        <label>End Time</label>
-                        @Html.TextBoxFor(e=>e.end_time, new { @class = "form-control", @type = "time" })
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <input type="submit"  value="Schedule" class="btn btn-primary" />
-                <a href="/">Cancel</a>
-            </div>
-        </div>
-        }
-       
- 
-     </div> 
- <div class="col-md-9">
+ <div class="mb-3">
      <ul class="nav nav-tabs" id="myTab">
         <li class="nav-item">
             <a href="#home" class="nav-link active" data-bs-toggle="tab">Scheduled Exams</a>
@@ -334,29 +280,46 @@
                         <thead>
                             <tr>
                                 <th>Sr No</th>
-                                <th>Student </th>
-                                <th>Topic</th>
                                 <th>Exam Date</th>
-                                <th>Exam Time</th>
-                                
-                                <th>Status</th>
+                                <th>Student Name</th>
+                                <th>Topic Name</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Total Questions</th>
+                                <th>Correct Questions</th>
+                                <th>Wrong Questions</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (submittedexams != null)
                             {
-                                foreach (var item in submittedexams)
+                                int p = 1;
+
+                                @foreach (var item in submittedexams)
                                 {
                                     <tr>
-                                        <td>@i</td>
+                                        <td>@p</td>
+                                        <td>@item.exam_date.ToShortDateString()</td>
                                         <td>@item.student_name</td>
                                         <td>@item.topic_name</td>
-                                        <td>@item.exam_date.ToShortDateString()</td>
                                         <td>@item.start_time.ToLongTimeString()</td>
-                                        
-                                        <td>@item.status</td>
+                                        <td>@item.end_time.ToLongTimeString()</td>
+                                        <td>@item.total_questions</td>
+                                        <td>@item.total_correct_questions</td>
+                                        <td>@item.total_wrong_questions</td>
+                                        <td>@item.percentage</td>
+                                        <td>@item.grade</td>
+                                        <td>
+                                            <a href="/BatchManagement/Exam/ViewExamDetails/@item.exam_id" class="btn btn-warning btn-sm">View</a>
+
+                                            <a href="/BatchManagement/Exam/PrintCertificate/@item.exam_id" class="btn btn-info btn-sm">Certificate</a>
+                                        </td>
+
                                     </tr>
-                                    i++;
+                                    p++;
                                 }
                             }
                         </tbody>

@@ -1,6 +1,7 @@
 ﻿using ERP_Models;
 using ERP_Services.Interfaces;
 using ERPSystem_Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,8 @@ using System.Collections.Generic;
 namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
 {
     [Area("BatchManagement")]
+    [Authorize]
+
     public class ExamController : Controller
     {
         IMasterService masterService;
@@ -109,9 +112,9 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
            int exam_id=await examService.ScheduleExamForStudent(em);
             string msg=await ShareExamLink(exam_id, em.student_id);
             ViewBag.msg= "Exam Scheduled Successfully," + msg;
-            string employee = HttpContext.Session.GetString("employee");
-            EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            ViewData["employee"] = emp;
+            //string employee = HttpContext.Session.GetString("employee");
+            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
+            //ViewData["employee"] = emp;
             List<TopicModel> topics =await topicService.GetTrainingTopics();
             //List<StudentModel> students = studentService.GetStudents();
             ViewBag.batches = new SelectList(await batchService.GetAllBatches(), "batch_id", "batch_name");

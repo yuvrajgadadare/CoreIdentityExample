@@ -1032,25 +1032,31 @@ namespace ERP_Services.Implementations
             DateTime next_date = b.start_date;
             int total_leactures = b.total_leactures;
             int total_exams = total_leactures / 5;
+            List<DateTime> dates = new List<DateTime>();
+            for (int i = 1; i <= total_exams; i++)
+            {
+                next_date = next_date.AddDays(5);
+                if (next_date.DayOfWeek.ToString().ToLower().Equals("saturday"))
+                {
+                    next_date = next_date.AddDays(2);
+                }
+                else if (next_date.DayOfWeek.ToString().ToLower().Equals("sunday"))
+                {
+                    next_date = next_date.AddDays(1);
+                }
+                dates.Add(next_date);
+
+            }
             foreach (BatchStudentModel bs in await batchService.GetBatchWiseStudents(batch_id))
             {
-                for (int i = 1; i <= total_exams; i++)
+               
+                List<ContentModel> contents = await contentService.GetTopicWiseContents(b.topic_id);
+                foreach (DateTime dt in dates)
                 {
-                    next_date = next_date.AddDays(5);
-                    if (next_date.DayOfWeek.ToString().ToLower().Equals("saturday"))
-                    {
-                        next_date = next_date.AddDays(2);
-                    }
-                    else if (next_date.DayOfWeek.ToString().ToLower().Equals("sunday"))
-                    {
-                        next_date = next_date.AddDays(1);
-                    }
-                    List<ContentModel> contents = await contentService.GetTopicWiseContents(b.topic_id);
-
                     ExamModel exam = new ExamModel()
                     {
                         registration_id = bs.registration_id,
-                        exam_date = next_date,
+                        exam_date = dt,
                         topic_id = b.topic_id,
 
                         //topic_name = b.topic_name,
@@ -1061,7 +1067,6 @@ namespace ERP_Services.Implementations
                         total_questions = total_questions
                     };
                     exams.Add(exam);
-
                 }
             }
             try

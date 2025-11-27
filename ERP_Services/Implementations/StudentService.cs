@@ -114,17 +114,17 @@ namespace ERP_Services.Implementations
                 }
                 cmd.Parameters.AddWithValue("@qualification", qdt);
 
-                //DataTable pdt = new DataTable();
-                //pdt.Columns.Add("payment_date", typeof(DateTime));
-                //pdt.Columns.Add("payment_amount", typeof(float));
-                //pdt.Columns.Add("payment_mode", typeof(string));
-                //pdt.Columns.Add("payment_description", typeof(string));
-                //pdt.Columns.Add("is_paid", typeof(int));
-                //foreach (StudentPaymentModel q in sm.payments)
-                //{
-                //    pdt.Rows.Add(q.payment_date, q.payment_amount, q.payment_mode, q.payment_description, 0);
-                //}
-                //cmd.Parameters.AddWithValue("@payment", pdt);
+                DataTable pdt = new DataTable();
+                pdt.Columns.Add("payment_date", typeof(DateTime));
+                pdt.Columns.Add("payment_amount", typeof(float));
+                pdt.Columns.Add("payment_mode", typeof(string));
+                pdt.Columns.Add("payment_description", typeof(string));
+                pdt.Columns.Add("is_paid", typeof(int));
+                foreach (StudentPaymentModel q in sm.payments)
+                {
+                    pdt.Rows.Add(q.payment_date, q.payment_amount, q.payment_mode, q.payment_description, 1);
+                }
+                cmd.Parameters.AddWithValue("@payment", pdt);
                 try
                 {
                     int cnt = cmd.ExecuteNonQuery();

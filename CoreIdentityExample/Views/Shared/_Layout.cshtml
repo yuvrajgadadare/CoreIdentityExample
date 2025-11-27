@@ -13,6 +13,15 @@
     <link rel="stylesheet" href="~/CoreIdentityExample.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        a{
+            text-decoration:none;
+        }
+
+        body, input, select {
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -82,12 +91,13 @@
         </nav>
     </header>
     <div class="container-fluid">
-        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator") && User.IsInRole("Student") && User.IsInRole("GroupLeader"))
-        {
-            <main role="main" class="pb-3">
+        <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-2">
+     @*    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator") && User.IsInRole("Student") && User.IsInRole("GroupLeader"))
+        {
+            
                         <h4>Admin Section</h4>
 
                         <ul class="list-group">
@@ -137,21 +147,12 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
-
-            </main>
-        }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                   
+        } *@
+         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
         {
-            <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Admin Section</h4>
+                        <h6>Admin Section</h6>
 
                         <ul class="list-group">
                             <li class="list-group-item"><a href="/Developer/Dashboard/Index">Dashboard</a></li>
@@ -162,21 +163,13 @@
                             <li class="list-group-item"><a href="/Developer/Dashboard/Index">Student</a></li>
                             <li class="list-group-item"><a href="/Developer/Exam/Index">Exams</a></li>
                         </ul>
-                    </div>
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
-                
-            </main>
+                        <hr/>
+                   
         }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Student"))
+          @if (SignInManager.IsSignedIn(User) && User.IsInRole("Student"))
         {
-            <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Student Section</h4>
+                        <h6>Student Section</h6>
 
                         <ul class="list-group">
                             <li class="list-group-item"><a href="/Student/Dashboard/Index">Dashboard</a></li>
@@ -186,82 +179,75 @@
                             <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
                             <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
                         </ul>
-                    </div>
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
 
-            </main>
-        }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Developer"))
+                        <hr />
+
+                    }
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Developer"))
         {
-           <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Developer Section</h4>
+                        <h6>Developer Section</h6>
 
                         <ul class="list-group">
-                            <li class="nav-item">
-                                <a class="nav-link " href="/Developer/Dashboard/Index">
-                                    <i class="bi bi-grid"></i>
+                            <li class="list-group-item">
+                                <a href="/Developer/Dashboard/Index">
+                                   
                                     <span>Dashboard</span>
                                 </a>
                             </li><!-- End Dashboard Nav -->
 
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Course/Index">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/Course/Index">
+                                   
                                     <span>Courses</span>
                                 </a>
                             </li><!-- End Profile Page Nav -->
 
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Topic/Video">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/Topic/Video">
+                                  
                                     <span>Topic Videos</span>
                                 </a>
                             </li><!-- End Profile Page Nav -->
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Topic/Index">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a   href="/Developer/Topic/Index">
+                                   
                                     <span>Topic</span>
                                 </a>
                             </li><!-- End Profile Page Nav -->
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/TopicContent/Index">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/TopicContent/Index">
+                                
                                     <span>Topic Content</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/ContentQuestion/Index">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/ContentQuestion/Index">
+                                  
                                     <span>Content Questions</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Interview/AddInterviewQuestion">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/Interview/AddInterviewQuestion">
+                                   
                                     <span>Interview Questions</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Program/AddProgramQuestion">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a href="/Developer/Program/AddProgramQuestion">
+                                    
                                     <span>Programs</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Program/ProgramAnswer">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/Developer/Program/ProgramAnswer">
+                                   
                                     <span>Program Answers</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/Developer/Program/AddProgramQuestionWithAnswer">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a   href="/Developer/Program/AddProgramQuestionWithAnswer">
+                                    
                                     <span>Program Answers</span>
                                 </a>
                             </li>
@@ -273,68 +259,52 @@
                             <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
                             <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
                         </ul>
-                    </div>
-            
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
+                        <hr />
 
-            </main>
-        }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("GroupLeader"))
+
+
+                    }
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("GroupLeader"))
         {
-            <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Developer Section</h4>
+                        <h6>Group Leader Section</h6>
 
                         <ul class="list-group">
-                            <li class="nav-item">
-                                <a class="nav-link " href="/BatchManagement/Dashboard/Index">
-                                    <i class="bi bi-grid"></i>
+                            <li class="list-group-item">
+                                <a   href="/BatchManagement/Dashboard/Index">
+                                  
                                     <span>Dashboard</span>
                                 </a>
                             </li><!-- End Dashboard Nav -->
 
 
 
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/BatchManagement/Batch/Index">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a  href="/BatchManagement/Batch/Index">
+                                    
                                     <span>Batch</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/BatchManagement/Exam/Exams">
+                            <li class="list-group-item">
+                                <a href="/BatchManagement/Exam/Exams">
                                     <i class="bi bi-person"></i>
                                     <span>Submitted Exams</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="/BatchManagement/Exam/ScheduleExam">
-                                    <i class="bi bi-person"></i>
+                            <li class="list-group-item">
+                                <a   href="/BatchManagement/Exam/ScheduleExam">
+                                    
                                     <span>Schedule Exam</span>
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                        <hr />
 
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
-
-            </main>
-        }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Trainer"))
+                    }
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Trainer"))
         {
-            <main role="main" class="pb-3">
 
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Trainer Section</h4>
+                        <h6>Trainer Section</h6>
 
                         <ul class="list-group">
                             <li class="list-group-item"><a href="/Trainer/Dashboard/Index">Dashboard</a></li>
@@ -344,72 +314,63 @@
                             <li class="list-group-item"><a href="/Student/Dashboard/Index">Student</a></li>
                             <li class="list-group-item"><a href="/Master/Exam/Index">Exams</a></li> *@
                         </ul>
-                    </div>
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
+                        <hr />
 
-            </main>
-        }
-        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Accountant"))
+                    }
+       @if (SignInManager.IsSignedIn(User) && User.IsInRole("Accountant"))
         {
-            <main role="main" class="pb-3">
-
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Accountant Section</h4>
+        
+                        <h6>Accountant Section</h6>
 
                         <ul class="list-group">
-                            <li class="nav-item">
-                                <a class="nav-link " href="/Accountant/Dashboard/Index">
-                                    <i class="bi bi-grid"></i>
+                            <li class="list-group-item">
+                                <a  href="/Accountant/Dashboard/Index">
+                                   
                                     <span>Dashboard</span>
                                 </a>
                             </li><!-- End Dashboard Nav -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Accountant/Student/Index">
-                                    <i class="bi bi-grid"></i>
+                            <li class="list-group-item">
+                                <a   href="/Accountant/Student/Index">
+                                    
                                     <span>Student</span>
                                 </a>
                             </li><!-- End Dashboard Nav -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Accountant/Guest/Index">
-                                    <i class="bi bi-grid"></i>
+                           @*  <li class="list-group-item">
+                                <a   href="/Accountant/Guest/Index">
+                                    
                                     <span>Guest</span>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " href="/Accountant/Student/PayFees">
-                                    <i class="bi bi-grid"></i>
+                            </li> *@
+                            <li class="list-group-item">
+                                <a   href="/Accountant/Student/PayFees">
+                                    
                                     <span>Pay Fees</span>
                                 </a>
                             </li><!-- End Dashboard Nav -->
-                            <li class="nav-item">
-                                <a class="nav-link " href="/Accountant/Student/Invoices">
-                                    <i class="bi bi-grid"></i>
+                            <li class="list-group-item">
+                                <a   href="/Accountant/Student/Invoices">
+                                    
                                     <span>Invoices</span>
                                 </a>
                             </li> 
 
                         </ul>
-                    </div>
+                        <hr />
 
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-                </div>
+                    }
 
-            </main>
-        }
+         
         else
         {
-            <main role="main" class="pb-3">
-
-               
-                @RenderBody()
-            </main>
+           
         }
+                </div>
+                <div class="col-md-10">
+                    @RenderBody()
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <footer class="border-top fixed-bottom footer text-muted">

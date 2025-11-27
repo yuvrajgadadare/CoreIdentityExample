@@ -21,7 +21,7 @@ namespace ERP_Services.Implementations
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@type", "Insert");
                 cmd.Parameters.AddWithValue("@batch_id", batch.batch_id);
-                cmd.Parameters.AddWithValue("@batch_name", batch.batch_name);
+              //  cmd.Parameters.AddWithValue("@batch_name", batch.batch_name);
                 cmd.Parameters.AddWithValue("@topic_id", batch.topic_id);
                 cmd.Parameters.AddWithValue("@employee_id", batch.employee_id);
                 cmd.Parameters.AddWithValue("@start_date", batch.start_date);

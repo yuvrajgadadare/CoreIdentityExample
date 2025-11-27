@@ -112,10 +112,10 @@
                             <div class="modal-body">
                                 @using (Html.BeginForm())
                                 {
-                                    <div class="mb-3">
+                                    @* <div class="mb-3">
                                         <label>Batch Name:</label>
                                         @Html.TextBoxFor(e => e.batch_name, new { @class = "form-control" })
-                                    </div>
+                                    </div> *@
                                     <div class="mb-3">
                                         <label>Topic Name:</label>
                                         @Html.DropDownListFor(e => e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })

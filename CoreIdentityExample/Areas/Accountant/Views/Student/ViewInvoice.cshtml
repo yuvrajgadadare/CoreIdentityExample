@@ -28,11 +28,11 @@
     <div class="">
         <input type="button" value="Print Invoice" id="btnprint"  onclick="PrintInvoice()"/>
     </div>
-    <div class="card" id="dv">
+    <div class="card p-5 " id="dv">
      
-        <div class="card-body" style="padding:1%">
+        <div class="card-body p-3 border-2">
           
-            <div class="row" style="padding:1%">
+            <div class="row p-3" >
                 <table>
                     <tr>
                         <td style="width:70%">
@@ -52,11 +52,11 @@
                 </table>
                 
             </div>
-            <div class="row" style="padding:1%">
+            <div class="row p-3" >
                 <table >
                     <tr>
                         <td style="width:70%">
-                            Branch: CIIT Training Institute Hadapsar
+                            Branch : CIIT Training Institute Hadapsar
                         </td>
                         <td>
                            
@@ -79,25 +79,25 @@
             <div class="row">
                 <h4 style="text-align:center">!! Invoice !!</h4>
             </div>
-            <div class="row" style="padding:1%">
+            <div class="row p-3" >
                 <table>
                     <tr>
                         <td style="width:70%">
-                            <p>Student Name:<b>@sm.student_name</b></p>
-                            <p>Email Address:<b>@sm.email_address</b></p>
-                            <p>Course Name:<b>@reg.course_name</b></p>
+                            <p>Student Name : <b>@sm.student_name</b></p>
+                            <p>Email Address : <b>@sm.email_address</b></p>
+                            <p>Course Name : <b>@reg.course_name</b></p>
                         </td>
                         <td style="width:30%">
-                            <p>Mobile Number:<b>@sm.mobile_number</b></p>
-                            <p>Total Fees:<b>@reg.final_fees_amount</b></p>
-                            <p>Registration Date:<b>@reg.registration_date.ToShortDateString()</b></p>
+                            <p>Mobile Number : <b>@sm.mobile_number</b></p>
+                            <p>Total Fees : <b>@reg.final_fees_amount</b></p>
+                            <p>Registration Date : <b>@reg.registration_date.ToShortDateString()</b></p>
                         </div>
                     </tr>
                 </table>
                
               
             </div>
-            <div class="row">
+            <div class="row p-3">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -128,13 +128,13 @@
                             <td>@remaining_amount</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Payment Mode:<b>@Model.payment_mode</b></td>
+                            <td colspan="2">Payment Mode : <b>@Model.payment_mode</b></td>
                         </tr>
                         <tr>
-                            <td colspan="2">Payment Description:<b>@Model.payment_description</b></td>
+                            <td colspan="2">Payment Description : <b>@Model.payment_description</b></td>
                         </tr>
                         <tr>
-                            <td colspan="2">Payment Details:<b>@reg.final_fees_amount</b><span>(Fees-<b>@reg.fees_amount</b>, Gst-<b>@reg.gst</b>, Discount-<b>@reg.discount</b>)</span></td>
+                            <td colspan="2">Payment Details : <b>@reg.final_fees_amount</b><span> ( Fees - <b>@reg.fees_amount</b>, Gst - <b>@reg.gst</b>, Discount - <b>@reg.discount</b> )</span></td>
                         </tr>
                         <tr>
                             <td colspan="2">
