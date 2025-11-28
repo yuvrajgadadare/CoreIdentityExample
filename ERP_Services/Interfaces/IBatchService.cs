@@ -24,6 +24,7 @@ namespace ERP_Services.Interfaces
         Task<List<BatchScheduleModel>> GetBatchWiseSchedule(int batch_id);
         Task< List<BatchModel>> GetTrainerWiseBatches(int trainer_id);
         Task< BatchScheduleModel> GetScheduleWiseSchedule(int batch_schedule_id);
+        Task<List<BatchScheduleExamModel>> GetBatchWiseScheduledExams(int batch_id);
 
         Task MarkStudentScheduleAttendance(ScheduleAttendanceModel s);
         Task<List<StudentMarkAttendance>> GetBatchWiseStudentAttendance(int batch_id, int registration_id);

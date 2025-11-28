@@ -38,16 +38,17 @@ namespace CoreIdentityExample.Areas.Developer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Index(TopicModel topic)
+        public async Task<IActionResult> Index(TopicModel topic)
         {
             //if (HttpContext.Session.GetString("employee") == null)
             //{
             //    return Redirect("/Account/Login");
             //}
-            topicService.AddTopic(topic);
+         await   topicService.AddTopic(topic);
             ViewBag.msg = "Topic Added Successfully";
             ModelState.Clear();
-            ViewBag.topics = topicService.GetTrainingTopics();
+            List<TopicModel> lst = await topicService.GetTrainingTopics();
+            ViewData["topics"] = lst;
 
             return View();
         }

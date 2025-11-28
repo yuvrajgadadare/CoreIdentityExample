@@ -1060,8 +1060,8 @@ namespace ERP_Services.Implementations
                         topic_id = b.topic_id,
 
                         //topic_name = b.topic_name,
-                        start_time = Convert.ToDateTime(next_date.ToShortDateString() + " " + "2:00 PM"),
-                        end_time = Convert.ToDateTime(next_date.ToShortDateString() + " " + "4:00 PM"),
+                        start_time = Convert.ToDateTime(dt.ToShortDateString() + " " + "9:00 AM"),
+                        end_time = Convert.ToDateTime(dt.ToShortDateString() + " " + "6:00 PM"),
                         status = "Not Attended",
                         is_attended = 0,
                         total_questions = total_questions

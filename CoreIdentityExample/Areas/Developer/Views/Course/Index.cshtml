@@ -231,7 +231,7 @@
 <div class="row">
 
 
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="card">
 
             <div class="card-header">
@@ -242,7 +242,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label>Course Name</label>
+                                <label>Course Name</label><br/>
                                 @Html.TextBox("CourseName", "", new { @class = "form-control" })
                             </div>
 
@@ -251,9 +251,9 @@
 
                     <div class="row">
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label>Fees Mode</label>
+                                <label>Fees Mode</label><br />
                                 <select id="FeeMode" class="form-control">
                                     <option selected disabled>Select Fee Mode</option>
                                     <option value="Lumsum">Lumsum</option>
@@ -262,7 +262,7 @@
                             </div>
 
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label>Fees Amount</label>
                                 @Html.TextBox("FeesAmount", "", new { @class = "form-control" })
@@ -281,9 +281,9 @@
                                 @Html.TextBox("fees_change_date", "", new { @class = "form-control" })
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-1">
                             <br />
-                            <input type="button" value="+" id="btnadd" class="btn btn-primary" />
+                            <input type="button" value="+" id="btnadd" class="btn btn-primary btn-sm" />
                         </div>
 
 
@@ -313,21 +313,22 @@
 
     </div>
 
+    <div class="col-md-1"></div>
 
     <div class="col-md-6">
         <div class="accordion" id="myAccordion" style="font-size:12px">
             @foreach (var item in Model)
             {
 
-                <div class="accordion-item mb-1">
+                <div class="accordion-item mb-2 small">
                     <div class="accordion-header" id="heading_@item.course_id">
                         <div class="row">
                             <div class="col-md-10">
-                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse_@item.course_id">@item.course_name </button>
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse_@item.course_id" style="font-size:12px;">@item.course_name </button>
 
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-danger btn-sm" style="margin-top:10%" onclick="RemoveCourse(@item.course_id)">Remove </button>
+                                <button type="button" class="btn btn-danger btn-sm" style="margin-top:10%;font-size:12px;" onclick="RemoveCourse(@item.course_id)">x </button>
 
                             </div>
                         </div>
@@ -336,7 +337,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div>
-                                    <h6>Course Fees-</h6>
+                                    <b>Course Fees-</b>
 
                                     @foreach (var fee in item.courseFees)
                                     {
@@ -352,7 +353,7 @@
 
                                     }
                                     <div>
-                                        <h6>Course Topics</h6>
+                                        <b>Course Topics</b>
                                         <div class="row">
                                             @foreach (var topic in item.topics)
                                             {
@@ -360,9 +361,9 @@
                                             }
 
                                         </div>
-                                        <button class='btn btn-primary' onclick="AddCourseTopic(@item.course_id)">Add Topic</button>
-                                        <a class='btn btn-primary' href="/Developer/Course/CourseSyllabus?course_id=@item.course_id">View Syllabus</a>
-                                        <button class='btn btn-primary' onclick="AddCourseFees(@item.course_id)">Add Course Fee</button>
+                                        <button class='btn btn-primary btn-sm' onclick="AddCourseTopic(@item.course_id)">Add Topic</button>
+                                        <a class='btn btn-primary btn-sm' href="/Developer/Course/CourseSyllabus?course_id=@item.course_id">View Syllabus</a>
+                                        <button class='btn btn-primary btn-sm' onclick="AddCourseFees(@item.course_id)">Add Course Fee</button>
 
                                     </div>
 

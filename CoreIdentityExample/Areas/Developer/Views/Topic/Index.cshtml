@@ -22,6 +22,7 @@
 @{
     List<TopicModel> lst = (List<TopicModel>)ViewData["topics"];
  }
+ <input type="button" value="Add Topic" onclick="AddTopic()" />
 <div class="row">
     <div class="col-4">
         @using (Html.BeginForm())
@@ -91,13 +92,43 @@
         </div>
     </div>
 </div>
+<div id="addtopicModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+              @using (Html.BeginForm())
+            {
+                <div class="modal-body">
+                    <h5 class="modal-title">Topic Form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="mb-3">
+                        <label>Topic Name</label>
+                        @Html.TextBoxFor(e => e.topic_name, new { @class = "form-control" })
+                    </div>
+                    <div class="mb-3">
+
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+
+                    <span style="color:green;">@ViewBag.msg</span>
+                    </div>
+                </div>
+                
+            }
+        </div>
+    </div>
+</div>
 <script>
     var topic_id=0;
-    const AddFolderId=async(tid)=>{
+
+    
+    const AddTopic=async()=>{
+        
+        $("#addtopicModal").modal("show");
+    }
+     const AddFolderId=async(tid)=>{
         topic_id=tid;
         $("#topicModal").modal("show");
     }
-
     const SubmitData=async()=>{
         var st={
             "topic_id":topic_id,

@@ -172,11 +172,13 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             //}
             List<BatchScheduleModel>schedule=await batchService.GetBatchWiseSchedule(id);
             List<BatchStudentModel> students =await batchService.GetBatchWiseStudents(id);
+            List<BatchScheduleExamModel> exams =await batchService.GetBatchWiseScheduledExams(id);
             BatchModel b =await batchService.GetBatch(id);
 
             ViewData["batch"] = b;
 
             ViewData["students"] = students;
+            ViewData["exams"] = exams;
             return View(schedule);
         }
 

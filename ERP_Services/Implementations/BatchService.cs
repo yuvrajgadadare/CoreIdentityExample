@@ -21,7 +21,7 @@ namespace ERP_Services.Implementations
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@type", "Insert");
                 cmd.Parameters.AddWithValue("@batch_id", batch.batch_id);
-              //  cmd.Parameters.AddWithValue("@batch_name", batch.batch_name);
+                //  cmd.Parameters.AddWithValue("@batch_name", batch.batch_name);
                 cmd.Parameters.AddWithValue("@topic_id", batch.topic_id);
                 cmd.Parameters.AddWithValue("@employee_id", batch.employee_id);
                 cmd.Parameters.AddWithValue("@start_date", batch.start_date);
@@ -30,7 +30,7 @@ namespace ERP_Services.Implementations
                 int cnt = cmd.ExecuteNonQuery();
                 con.Close();
             }
-            }
+        }
         public async Task AddBatchSchedule(BatchScheduleModel schedule)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -43,8 +43,8 @@ namespace ERP_Services.Implementations
                 cmd.Parameters.AddWithValue("@batch_id", schedule.batch_id);
                 cmd.Parameters.AddWithValue("@content_id", schedule.content_id);
                 cmd.Parameters.AddWithValue("@expected_date", schedule.expected_date);
-            //    cmd.Parameters.AddWithValue("@actual_date", schedule.actual_date);
-        
+                //    cmd.Parameters.AddWithValue("@actual_date", schedule.actual_date);
+
                 int cnt = cmd.ExecuteNonQuery();
                 con.Close();
             }
@@ -76,7 +76,7 @@ namespace ERP_Services.Implementations
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    
+
 
                     int id = Convert.ToInt32(dr["batch_id"].ToString());
                     string batch_name = dr["batch_name"].ToString();
@@ -97,7 +97,7 @@ namespace ERP_Services.Implementations
                         status = true;
                     }
                     int remaining_leatures = 0;
-                    remaining_leatures= total_leactures - attended_leactures;
+                    remaining_leatures = total_leactures - attended_leactures;
                     float per = 0;
                     if (total_leactures > 0)
                     {
@@ -116,38 +116,38 @@ namespace ERP_Services.Implementations
                     {
                         batch_status = "completed";
                     }
-                    else if (attended_leactures > 0 && attended_leactures<total_leactures)
+                    else if (attended_leactures > 0 && attended_leactures < total_leactures)
                     {
-                        batch_status = attended_leactures+" Leactures Finished";
+                        batch_status = attended_leactures + " Leactures Finished";
                     }
                     else
                     {
                         batch_status = "Not Yet Started";
                     }
-                        BatchModel bm = new BatchModel()
-                        {
-                            batch_id = id,
-                            batch_name = batch_name,
-                            batch_time = batch_time,
-                            end_date = end_date,
-                            start_date = start_date,
-                            topic_id = topic_id,
-                            topic_name = topic_name,
-                            employee_id = employee_id,
-                            employee_name = employee_name,
-                            is_schedule_generated = status,
-                            total_students =cnt,
-                            total_leactures = total_leactures,
-                            attended_leatures = attended_leactures,
-                            remaining_leatures = remaining_leatures,
-                             completed_percentage= per
+                    BatchModel bm = new BatchModel()
+                    {
+                        batch_id = id,
+                        batch_name = batch_name,
+                        batch_time = batch_time,
+                        end_date = end_date,
+                        start_date = start_date,
+                        topic_id = topic_id,
+                        topic_name = topic_name,
+                        employee_id = employee_id,
+                        employee_name = employee_name,
+                        is_schedule_generated = status,
+                        total_students = cnt,
+                        total_leactures = total_leactures,
+                        attended_leatures = attended_leactures,
+                        remaining_leatures = remaining_leatures,
+                        completed_percentage = per
 
-                        };
+                    };
                     lst.Add(bm);
                 }
             }
-                return lst;
-            }
+            return lst;
+        }
         public async Task<List<BatchScheduleModel>> GetAllBatchSchedules()
         {
 
@@ -170,9 +170,9 @@ namespace ERP_Services.Implementations
                     string employee_name = dr["employee_name"].ToString();
                     int content_id = Convert.ToInt32(dr["content_id"].ToString());
                     string content_name = dr["content_name"].ToString();
-                      DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
-                       DateTime ?actual_date=null;
-                  //  string expected_date = dr["expected_date"].ToString();
+                    DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
+                    DateTime? actual_date = null;
+                    //  string expected_date = dr["expected_date"].ToString();
 
                     ////  DateTime actual_date = Convert.ToDateTime(dr["actual_date"].ToString());
                     //string actual_date = dr["actual_date"].ToString();
@@ -198,19 +198,19 @@ namespace ERP_Services.Implementations
                     string batch_time = dr["batch_time"].ToString();
                     BatchScheduleModel bm = new BatchScheduleModel()
                     {
-                         batch_schedule_id=batch_schedule_id,
+                        batch_schedule_id = batch_schedule_id,
                         batch_id = batch_id,
                         batch_name = batch_name,
-                      actual_date = actual_date,
-                       content_id = content_id,
-                        content_name=content_name,
-                         expected_date=expected_date,
+                        actual_date = actual_date,
+                        content_id = content_id,
+                        content_name = content_name,
+                        expected_date = expected_date,
                         topic_id = topic_id,
                         topic_name = topic_name,
                         employee_id = employee_id,
                         employee_name = employee_name,
-                         batch_time=batch_time,
-                         status = status
+                        batch_time = batch_time,
+                        status = status
                     };
                     lst.Add(bm);
                 }
@@ -269,7 +269,7 @@ namespace ERP_Services.Implementations
                 SqlCommand cmd = new SqlCommand("sp_fetch_tbltrainers", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@employee_id", 0);
-                
+
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -300,7 +300,7 @@ namespace ERP_Services.Implementations
         public async Task<BatchModel> GetBatch(int batch_id)
         {
 
-            BatchModel  bm = new BatchModel();
+            BatchModel bm = new BatchModel();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -396,8 +396,8 @@ namespace ERP_Services.Implementations
                         total_students = cnt,
                         total_leactures = total_leactures,
                         attended_leatures = attended_leactures,
-                        remaining_leatures=remaining_leatures,
-                         completed_percentage=per
+                        remaining_leatures = remaining_leatures,
+                        completed_percentage = per
 
                     };
                 }
@@ -426,7 +426,7 @@ namespace ERP_Services.Implementations
                     int content_id = Convert.ToInt32(dr["content_id"].ToString());
                     string content_name = dr["content_name"].ToString();
                     DateTime? actual_date = null;
-                   DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
+                    DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
                     // string expected_date =  dr["expected_date"].ToString() ;
                     //if (expected_date != "")
                     //{
@@ -436,13 +436,13 @@ namespace ERP_Services.Implementations
                     {
                         actual_date = Convert.ToDateTime(dr["actual_date"].ToString());
                     }
-                        //  string actual_date =  dr["actual_date"].ToString() ;
+                    //  string actual_date =  dr["actual_date"].ToString() ;
                     //if (actual_date != "")
                     //{
                     //    actual_date = Convert.ToDateTime(actual_date).ToShortDateString();
                     //}
                     string status = "Not Conducted";
-                    if (actual_date!=null)
+                    if (actual_date != null)
                     {
                         status = "Conducted";
                     }
@@ -452,7 +452,7 @@ namespace ERP_Services.Implementations
                         batch_schedule_id = batch_schedule_id,
                         batch_id = b_id,
                         batch_name = batch_name,
-                      //  actual_date = actual_date,
+                        //  actual_date = actual_date,
                         content_id = content_id,
                         content_name = content_name,
                         expected_date = expected_date,
@@ -460,18 +460,18 @@ namespace ERP_Services.Implementations
                         topic_name = topic_name,
                         employee_id = employee_id,
                         employee_name = employee_name,
-                         actual_date=actual_date,
-                          batch_time = batch_time,
-                           status = status,
+                        actual_date = actual_date,
+                        batch_time = batch_time,
+                        status = status,
                     };
                     lst.Add(bm);
                 }
             }
             return lst;
         }
-        public async Task<BatchScheduleModel>  GetScheduleWiseSchedule(int batch_schedule_id)
+        public async Task<BatchScheduleModel> GetScheduleWiseSchedule(int batch_schedule_id)
         {
-           BatchScheduleModel  st = new  BatchScheduleModel();
+            BatchScheduleModel st = new BatchScheduleModel();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -506,7 +506,7 @@ namespace ERP_Services.Implementations
 
 
                     string status = "Not Conducted";
-                    if (actual_date !=null)
+                    if (actual_date != null)
                     {
                         status = "Conducted";
                     }
@@ -535,7 +535,7 @@ namespace ERP_Services.Implementations
         public async Task<List<BatchStudentModel>> GetBatchWiseStudents(int batch_id)
         {
             List<BatchStudentModel> lst = new List<BatchStudentModel>();
-            using(SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_batch_wise_students", con);
@@ -568,7 +568,7 @@ namespace ERP_Services.Implementations
                         registration_id = registration_id,
                         student_id = student_id,
                         student_name = student_name,
-                         course_name= course_name
+                        course_name = course_name
                     };
                     lst.Add(bm);
                 }
@@ -585,7 +585,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_topic_wise_students", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@topic_id", bm.topic_id   );
+                cmd.Parameters.AddWithValue("@topic_id", bm.topic_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -634,7 +634,7 @@ namespace ERP_Services.Implementations
                     string batch_name = dr["batch_name"].ToString();
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
-                  //  int trainer_id = Convert.ToInt32(dr["trainer_id"].ToString());
+                    //  int trainer_id = Convert.ToInt32(dr["trainer_id"].ToString());
                     string employee_name = dr["employee_name"].ToString();
                     DateTime start_date = Convert.ToDateTime(dr["start_date"].ToString());
                     DateTime end_date = Convert.ToDateTime(dr["end_date"].ToString());
@@ -718,9 +718,9 @@ namespace ERP_Services.Implementations
                         total_students = cnt,
                         total_leactures = total_leactures,
                         attended_leatures = attended_leactures,
-                        batch_status=batch_status,
+                        batch_status = batch_status,
                         remaining_leatures = total_leactures - attended_leactures,
-                         completed_percentage=per
+                        completed_percentage = per
                     };
                     lst.Add(bm);
                 }
@@ -734,7 +734,7 @@ namespace ERP_Services.Implementations
             dt.Columns.Add("registration_id", typeof(int));
             dt.Columns.Add("is_present", typeof(int));
             dt.Columns.Add("flag", typeof(int));
-            foreach(StudentAttendanceModel sam in s.students)
+            foreach (StudentAttendanceModel sam in s.students)
             {
                 dt.Rows.Add(sam.registration_id, sam.is_present, 0);
             }
@@ -753,7 +753,7 @@ namespace ERP_Services.Implementations
                 int cnt = cmd.ExecuteNonQuery();
                 con.Close();
             }
-            }
+        }
 
 
 
@@ -772,8 +772,8 @@ namespace ERP_Services.Implementations
                 while (dr.Read())
                 {
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
-                  //  int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
-                   // int id = Convert.ToInt32(dr["batch_id"].ToString());
+                    //  int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
+                    // int id = Convert.ToInt32(dr["batch_id"].ToString());
                     string batch_name = dr["batch_name"].ToString();
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int content_id = Convert.ToInt32(dr["content_id"].ToString());
@@ -787,14 +787,14 @@ namespace ERP_Services.Implementations
                     string attendance = dr["attendance"].ToString();
                     StudentMarkAttendance bm = new StudentMarkAttendance()
                     {
-                        actual_date = actual_date ,
+                        actual_date = actual_date,
                         attendance = attendance,
                         attendance_date = attendance_date,
                         batch_id = batch_id,
                         batch_name = batch_name,
                         content_id = content_id,
                         content_name = content_name,
-                        expected_date = expected_date ,
+                        expected_date = expected_date,
                         is_present = is_present,
                         registration_id = registration_id,
                         student_id = student_id,
@@ -825,7 +825,7 @@ namespace ERP_Services.Implementations
                     int batch_id = Convert.ToInt32(dr["batch_id"].ToString());
                     string batch_name = dr["batch_name"].ToString();
                     DateTime start_date = Convert.ToDateTime(dr["start_date"].ToString());
-                   // DateTime end_date = Convert.ToDateTime(dr["end_date"].ToString()); 
+                    // DateTime end_date = Convert.ToDateTime(dr["end_date"].ToString()); 
                     DateTime registration_date = Convert.ToDateTime(dr["registration_date"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
@@ -859,11 +859,11 @@ namespace ERP_Services.Implementations
                         topic_name = topic_name,
                         employee_id = employee_id,
                         employee_name = employee_name,
-                        schedule= schedule,
-                         attendance= attendane,
-                          total_leactures=total_leactures,
-                           attended_leactures=attended_leactures,
-                            remaining_leactures=remaining_leactures
+                        schedule = schedule,
+                        attendance = attendane,
+                        total_leactures = total_leactures,
+                        attended_leactures = attended_leactures,
+                        remaining_leactures = remaining_leactures
                     };
                     lst.Add(bm);
                 }
@@ -1024,7 +1024,7 @@ namespace ERP_Services.Implementations
                         employee_id = employee_id,
                         employee_name = employee_name,
                         is_schedule_generated = status,
-                      //  total_students = cnt,
+                        //  total_students = cnt,
                         total_leactures = total_leactures,
                         attended_leatures = attended_leactures,
                         remaining_leatures = remaining_leatures,
@@ -1059,7 +1059,42 @@ namespace ERP_Services.Implementations
             throw new NotImplementedException();
         }
 
+        public async Task<List<BatchScheduleExamModel>> GetBatchWiseScheduledExams(int batch_id)
+        {
+            List<BatchScheduleExamModel> lst = new List<BatchScheduleExamModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_batch_wise_exams", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@batch_id", batch_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    string batch_name = dr["batch_name"].ToString();
+                   
+                    DateTime start_time = Convert.ToDateTime(dr["start_time"].ToString());
+                    DateTime exam_date = Convert.ToDateTime(dr["exam_date"].ToString());
+                    int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
+                    string topic_name = dr["topic_name"].ToString();
+
+                    BatchScheduleExamModel bm = new BatchScheduleExamModel()
+                    {
+                        batch_name = batch_name,
+                        exam_date = exam_date,
+                        start_time = start_time,
+                        batch_id = batch_id,
+
+                        topic_id = topic_id,
+                        topic_name = topic_name
 
 
+                    };
+                    lst.Add(bm);
+                }
+            }
+            return lst;
+
+        }
     }
 }
