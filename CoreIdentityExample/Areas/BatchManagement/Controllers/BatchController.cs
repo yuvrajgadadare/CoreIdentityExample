@@ -87,28 +87,52 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             ViewData["batches"]  = batchlist;
             return View(b);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Index(BatchModel batch)
+        //{
+        //    //if (HttpContext.Session.GetString("employee") == null)
+        //    //{
+        //    //    return Redirect("/Account/Login");
+        //    //}
+        //    //string employee = HttpContext.Session.GetString("employee");
+
+        //    //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
+        //    //ViewData["employee"] = emp;
+        //    batchService.AddBatch(batch);
+        //    ModelState.Clear();
+        //    ViewBag.msg = "Batch Created Successfully";
+        //    BatchModel b = new BatchModel();
+
+        //    SelectList topics = new SelectList(await topicService.GetTrainingTopics(), "topic_id", "topic_name");
+        //    SelectList trainers = new SelectList(await batchService.GetAllTrainers(), "employee_id", "employee_name");
+        //    ViewBag.topics = topics;
+        //    ViewBag.trainers = trainers;
+        //    ViewData["batches"] = batchService.GetAllBatches().Result;
+        //    return View(b);
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Index(BatchModel batch)
+        public async Task<string>  CreateNewBatch(BatchModel batch)
         {
             //if (HttpContext.Session.GetString("employee") == null)
             //{
             //    return Redirect("/Account/Login");
             //}
             //string employee = HttpContext.Session.GetString("employee");
-            
+
             //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
             //ViewData["employee"] = emp;
-            batchService.AddBatch(batch);
-            ModelState.Clear();
-            ViewBag.msg = "Batch Created Successfully";
-            BatchModel b = new BatchModel();
+          await  batchService.AddBatch(batch);
+          //  ModelState.Clear();
+          return "Batch Created Successfully";
+            //BatchModel b = new BatchModel();
 
-            SelectList topics = new SelectList(await topicService.GetTrainingTopics(), "topic_id", "topic_name");
-            SelectList trainers = new SelectList(await batchService.GetAllTrainers(), "employee_id", "employee_name");
-            ViewBag.topics = topics;
-            ViewBag.trainers = trainers;
-            ViewData["batches"] = batchService.GetAllBatches().Result;
-            return View(b);
+            //SelectList topics = new SelectList(await topicService.GetTrainingTopics(), "topic_id", "topic_name");
+            //SelectList trainers = new SelectList(await batchService.GetAllTrainers(), "employee_id", "employee_name");
+            //ViewBag.topics = topics;
+            //ViewBag.trainers = trainers;
+            //ViewData["batches"] = batchService.GetAllBatches().Result;
+            //return View(b);
         }
         public async Task<IActionResult> DeleteBatch(int id)
         {

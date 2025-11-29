@@ -61,6 +61,29 @@
 
     })
     }
+           function AddNewBatch() {
+    
+       var st = {
+                 "topic_id": $("#topic_id").val(),
+                    "employee_id": $("#employee_id").val(),
+                          "start_date": $("#start_date").val(),
+                          "end_date": $("#end_date").val(),
+                                "batch_time": $("#batch_time").val(),
+
+          };
+       $.ajax({
+          url: '/BatchManagement/Batch/CreateNewBatch',
+       method:'post',
+       data:st,
+       success: function (resp) {
+       alert(resp);
+          $("#myBatchModal").modal("hide");
+      // window.location.href = "/BatchManagement/Batch/Index";
+      location.reload();
+       }
+       })
+       }
+
     function AddBatchStudents() {
     var data="";
     $.each(students, function (i, d) {
@@ -74,8 +97,8 @@
     success: function (resp) {
     alert(resp);
     $("#studentmodel").modal("hide");
-    //window.location.href = "/BatchManagement/Batch/Index";
-    location.reload();
+    window.location.href = "/BatchManagement/Batch/Index";
+   // location.reload();
     }
     })
     }
@@ -94,7 +117,7 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <a href="#myModal" role="button" class="btn btn-sm btn-primary" data-bs-toggle="modal">Create New Batch</a>
+            <a href="#myBatchModal" role="button" class="btn btn-sm btn-primary" data-bs-toggle="modal">Create New Batch</a>
 
         </div>
         <div class="card-body">
@@ -102,7 +125,7 @@
             <div class="row">
 
                 <!-- Modal HTML -->
-                <div id="myModal" class="modal fade" tabindex="-1">
+                <div id="myBatchModal" class="modal fade" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -110,8 +133,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                @using (Html.BeginForm())
-                                {
+                                
                                     @* <div class="mb-3">
                                         <label>Batch Name:</label>
                                         @Html.TextBoxFor(e => e.batch_name, new { @class = "form-control" })
@@ -138,10 +160,10 @@
                                         @Html.TextBoxFor(e => e.batch_time, new { @class = "form-control", @type = "time" })
                                     </div>
                                     <div class="mb-3">
-                                        <input type="submit" value="Submit" class="btn btn-primary" />
+                                        <input type="button" value="Submit" onclick="AddNewBatch()" class="btn btn-primary" />
                                         <h5>@ViewBag.msg</h5>
                                     </div>
-                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -189,16 +211,16 @@
                                             {
                                                 <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a>
                                             }
-                                            <input type="button" id="btnaddstudents" value="Add Students" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
+                                            <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
                                             @if (!item.is_schedule_exams_generated)
                                             {
                                                 <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
 
                                             }
-                                            else
+                                          @*   else
                                             {
                                                 <span>Generated Scheduled Exams</span>
-                                            }
+                                            } *@
                                             <a href="/BatchManagement/Batch/DeleteBatch/@item.batch_id" class="btn btn-danger btn-sm" style="font-size:12px;">Remove</a>
                                         </td>
                                     </tr>
