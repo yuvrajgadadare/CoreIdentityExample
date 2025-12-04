@@ -4,7 +4,7 @@ namespace ERP_Services.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<List<EmployeeModel>> GetEmployees();
+        Task<List<EmployeeModel>> GetEmployees(int branch_id);
         //List<TrainerModel> GetTrainers();
         Task< string> NextEmployeeCode();
         Task< EmployeeModel>  GetEmployee(int id);

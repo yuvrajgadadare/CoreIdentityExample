@@ -65,7 +65,7 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task<List<EnquiryModel>> GetEnquiries()
+        public async Task<List<EnquiryModel>> GetEnquiries(int branch_id)
         {
             List<EnquiryModel> lst = new List<EnquiryModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -73,7 +73,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblenquiries", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@enquiry_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", 0);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -92,7 +92,6 @@ namespace ERP_Services.Implementations
                     string enquiry_fors = dr["enquiry_fors"].ToString();
                     string interested_topics = dr["interested_topics"].ToString();
                     string status = dr["status"].ToString();
-                   int branch_id=Convert.ToInt32( dr["branch_id"].ToString());
                     string branch_name = dr["branch_name"].ToString();
                     EnquiryModel e = new EnquiryModel()
                     {

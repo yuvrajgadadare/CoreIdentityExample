@@ -17,7 +17,8 @@
         public string qualification { get; set; }
        // public string password { get; set; }
         public float salary { get; set; }
-
+        public int branch_id { get; set; }
+        public string? branch_name { get; set; }
         public List<RoleModel> roles { get; set; }
     }
 }

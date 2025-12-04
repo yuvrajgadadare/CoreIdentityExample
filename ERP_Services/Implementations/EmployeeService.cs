@@ -24,7 +24,7 @@ namespace ERP_Services.Implementations
                 cmd.Parameters.AddWithValue("@employee_id", employee.employee_id);
                 cmd.Parameters.AddWithValue("@user_id", employee.user_id);
                 cmd.Parameters.AddWithValue("@employee_name", employee.employee_name);
-                //cmd.Parameters.AddWithValue("@role_id", employee.role_id);
+                cmd.Parameters.AddWithValue("@branch_id", employee.branch_id);
                 cmd.Parameters.AddWithValue("@employee_code", employee.employee_code);
                    cmd.Parameters.AddWithValue("@email_address", employee.email_address);
                 cmd.Parameters.AddWithValue("@mobile_number", employee.mobile_number);
@@ -216,6 +216,8 @@ namespace ERP_Services.Implementations
                     string role_name = dr["role_name"].ToString();
                     string profile_photo = dr["profile_photo"].ToString();
                     string role_id =  dr["role_id"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name =  dr["branch_name"].ToString();
                     float salary = (float)Convert.ToDouble(dr["salary"].ToString());
                     st = new EmployeeModel()
                     {
@@ -231,7 +233,10 @@ namespace ERP_Services.Implementations
                         salary = salary,
                         profile_photo = profile_photo,
                         qualification = qualification,
-                        gender = gender
+                        gender = gender,
+                         branch_name = branch_name,
+                          branch_id = branch_id
+                           
                     };
                      
                 }
@@ -265,7 +270,8 @@ namespace ERP_Services.Implementations
                     string profile_photo = dr["profile_photo"].ToString();
                     string role_id =  dr["role_id"].ToString();
                     float salary = (float)Convert.ToDouble(dr["salary"].ToString());
-                    st = new EmployeeModel()
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString(); st = new EmployeeModel()
                     {
                         employee_id = employee_id,
                         birth_date = birth_date,
@@ -279,7 +285,9 @@ namespace ERP_Services.Implementations
                         salary = salary,
                         profile_photo = profile_photo,
                         qualification = qualification,
-                        gender = gender
+                        gender = gender,
+                         branch_id = branch_id,
+                          branch_name = branch_name,
                     };
 
                 }
@@ -314,6 +322,8 @@ namespace ERP_Services.Implementations
                     string profile_photo = dr["profile_photo"].ToString();
                     string role_id =  dr["role_id"].ToString();
                     float salary = (float)Convert.ToDouble(dr["salary"].ToString());
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     EmployeeModel e = new EmployeeModel()
                     {
                         employee_id = id,
@@ -329,7 +339,9 @@ namespace ERP_Services.Implementations
                          profile_photo=profile_photo,
                           gender=gender,
                            qualification=qualification,
-                            roles= roles
+                            roles= roles,
+                             branch_id=branch_id,
+                              branch_name=branch_name,
                     };
                     lst.Add(e);
                 }

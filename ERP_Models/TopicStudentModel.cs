@@ -9,7 +9,7 @@
         public string topic_name { get; set;}
         public string student_name { get; set;}
         public string course_name { get; set; }
-
-
+        public int branch_id { get; set; }
+        public string branch_name { get; set; }
     }
 }

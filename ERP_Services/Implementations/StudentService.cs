@@ -72,6 +72,7 @@ namespace ERP_Services.Implementations
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@type", "Insert");
                 cmd.Parameters.AddWithValue("@student_id", sm.student_id);
+                cmd.Parameters.AddWithValue("@branch_id", sm.branch_id);
                 cmd.Parameters.AddWithValue("@student_name", sm.student_name);
                 cmd.Parameters.AddWithValue("@last_name", sm.last_name);
                 cmd.Parameters.AddWithValue("@gender", sm.gender);
@@ -145,6 +146,7 @@ namespace ERP_Services.Implementations
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@type", "Update");
                 cmd.Parameters.AddWithValue("@student_id", sm.student_id);
+                cmd.Parameters.AddWithValue("@branch_id", sm.branch_id);
                 cmd.Parameters.AddWithValue("@student_name", sm.student_name);
                 cmd.Parameters.AddWithValue("@last_name", sm.last_name);
                 cmd.Parameters.AddWithValue("@gender", sm.gender);
@@ -203,6 +205,8 @@ namespace ERP_Services.Implementations
                     string payment_description = dr["payment_description"].ToString();
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
 
@@ -218,7 +222,11 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_id = branch_id,
+                          branch_name=branch_name
+                          
+                         
                     };
                     lst.Add(e);
                 }
@@ -252,7 +260,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     StudentPaymentModel e = new StudentPaymentModel()
                     {
                         student_id = student_id,
@@ -265,7 +274,9 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_name=branch_name,
+                          branch_id = branch_id
                     };
                     lst.Add(e);
                 }
@@ -287,6 +298,8 @@ namespace ERP_Services.Implementations
                 {
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     string last_name = dr["last_name"].ToString();
                     string gender = dr["gender"].ToString();
                     string email_address = dr["email_address"].ToString();
@@ -348,7 +361,9 @@ namespace ERP_Services.Implementations
                         local_address =local_address,
                          permanent_address=permanent_address,
                         permanent_identification_number = permanent_identification_number,
-                           whatsapp_number=whatsapp_number
+                           whatsapp_number=whatsapp_number,
+                            branch_id=branch_id,
+                             branch_name = branch_name
                            
                          
                      
@@ -382,7 +397,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     st = new StudentPaymentModel()
                     {
                         student_id = student_id,
@@ -395,7 +411,9 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_id = branch_id,
+                          branch_name=branch_name
                     };
                     
                 }
@@ -423,7 +441,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     st = new StudentPaymentModel()
                     {
                         student_id = student_id,
@@ -435,7 +454,9 @@ namespace ERP_Services.Implementations
                        // payment_description = payment_description,
                         payment_id = payment_id,
                        // payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_name=branch_name,
+                          branch_id=branch_id
                     };
 
                 }
@@ -451,7 +472,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_payments", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@payment_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", 0);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -466,6 +487,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
 
                     StudentPaymentModel e = new StudentPaymentModel()
                     {
@@ -479,7 +502,9 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_id = branch_id,
+                          branch_name=branch_name
                     };
                     lst.Add(e);
                 }
@@ -511,6 +536,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
 
                     StudentPaymentModel e = new StudentPaymentModel()
                     {
@@ -524,7 +551,9 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_name=branch_name,
+                          branch_id=branch_id
                     };
                     lst.Add(e);
                 }
@@ -533,7 +562,7 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task<List<StudentModel>> GetStudents()
+        public async Task<List<StudentModel>> GetStudents(int branch_id)
         {
             List<StudentModel> lst = new List<StudentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -541,7 +570,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_details", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@student_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -564,6 +593,9 @@ namespace ERP_Services.Implementations
                     string aadhar_card_photo = dr["aadhar_card_photo"].ToString();
                     string aadhar_card_number = dr["aadhar_card_number"].ToString();
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
+                  //  int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+
                     DateTime registration_date = Convert.ToDateTime(dr["registration_date"].ToString()); List<RegistrationModel> registrations = await GetStudentWiseRegistrations(student_id);
                         StudentModel e = new StudentModel()
                         {
@@ -587,7 +619,9 @@ namespace ERP_Services.Implementations
                             permanent_identification_number = permanent_identification_number,
                             whatsapp_number = whatsapp_number,
                              registration_date=registration_date,
-                              registration_id=registration_id
+                              registration_id=registration_id,
+                               branch_id=branch_id,
+                                branch_name=branch_name
                         };
                         lst.Add(e);
                 }
@@ -596,10 +630,10 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task<List<StudentModel>> GetYearWiseStudents(int year)
+        public async Task<List<StudentModel>> GetYearWiseStudents(int year,int branch_id)
         {
 
-            List<StudentModel> lst =   GetStudents().Result.Where(e => e.registration_date.Year.Equals(year)).ToList();
+            List<StudentModel> lst =   GetStudents(branch_id).Result.Where(e => e.registration_date.Year.Equals(year)).ToList();
             return lst;
         }
         public async Task<bool> IsEmailExist(string email_address)
@@ -636,7 +670,7 @@ namespace ERP_Services.Implementations
             }
             return status;
         }
-        public async Task<List<StudentModel>> GetAllStudents()
+        public async Task<List<StudentModel>> GetAllStudents(int branch_id)
         {
             List<StudentModel> lst = new List<StudentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -644,7 +678,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_alltblstudent_details", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@student_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -668,6 +702,7 @@ namespace ERP_Services.Implementations
                     string aadhar_card_number = dr["aadhar_card_number"].ToString();
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     DateTime registration_date = Convert.ToDateTime(dr["registration_date"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     List<RegistrationModel> registrations = await GetStudentWiseRegistrations(student_id);
                     StudentModel e = new StudentModel()
                     {
@@ -691,7 +726,9 @@ namespace ERP_Services.Implementations
                         permanent_identification_number = permanent_identification_number,
                         whatsapp_number = whatsapp_number,
                         registration_date = registration_date,
-                        registration_id = registration_id
+                        registration_id = registration_id,
+                         branch_name = branch_name,
+                          branch_id = branch_id
                     };
                     lst.Add(e);
 
@@ -700,7 +737,7 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-        public async Task<List<StudentModel>> GetGuestStudents()
+        public async Task<List<StudentModel>> GetGuestStudents(int branch_id)
         {
             List<StudentModel> lst = new List<StudentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -708,12 +745,13 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_guest_details", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@student_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    string branch_name = dr["branch_name"].ToString();
                     string last_name = dr["last_name"].ToString();
                     string gender = dr["gender"].ToString();
                     string email_address = dr["email_address"].ToString();
@@ -756,7 +794,9 @@ namespace ERP_Services.Implementations
                         permanent_identification_number = permanent_identification_number,
                         whatsapp_number = whatsapp_number,
                         registration_date=registration_date,
-                         registration_id=registration_id
+                         registration_id=registration_id,
+                          branch_id=branch_id,
+                           branch_name=branch_name
                     };
                     lst.Add(e);
 
@@ -789,6 +829,8 @@ namespace ERP_Services.Implementations
                     float gst = (float)Convert.ToDouble(dr["gst"].ToString());
                     float discount = (float)Convert.ToDouble(dr["discount"].ToString());
                     float final_fees_amount = (float)Convert.ToDouble(dr["final_fees_amount"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
                     List<StudentPaymentModel> payments = await GetRegistrationWisePayments(registration_id);
                     float paid_amount = 0, remaining_amount = 0;
                    
@@ -833,7 +875,9 @@ namespace ERP_Services.Implementations
                             paid_amount = paid_amount,
                             remaining_amount = remaining_amount,
                             fees_status = status,
-                            current_status=current_status
+                            current_status=current_status,
+                               branch_id = branch_id,
+                                branch_name=branch_name
 
 
                         };
@@ -845,7 +889,7 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task<List<RegistrationModel>> GetAllRegistrations()
+        public async Task<List<RegistrationModel>> GetAllRegistrations(int branch_id)
         {
             List<RegistrationModel> lst = new List<RegistrationModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -853,13 +897,14 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_registrations", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@registration_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    string branch_name = dr["branch_name"].ToString();
                     string student_code = dr["student_code"].ToString();
                     string current_status = dr["current_status"].ToString();
                     int fee_id = Convert.ToInt32(dr["fee_id"].ToString());
@@ -914,6 +959,8 @@ namespace ERP_Services.Implementations
                             remaining_amount = remaining_amount,
                             fees_status = status,
                             student_code = student_code,
+                             branch_name=branch_name,
+                              branch_id = branch_id
 
 
                         };
@@ -924,7 +971,7 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-        public async Task<List<RegistrationModel>> GetAllGuestRegistrations()
+        public async Task<List<RegistrationModel>> GetAllGuestRegistrations(int branch_id)
         {
             List<RegistrationModel> lst = new List<RegistrationModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -932,13 +979,14 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_guest_registrations", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@registration_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", 0);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    string branch_name = dr["branch_name"].ToString();
                     string student_code = dr["student_code"].ToString();
                     int fee_id = Convert.ToInt32(dr["fee_id"].ToString());
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
@@ -992,6 +1040,8 @@ namespace ERP_Services.Implementations
                         remaining_amount = remaining_amount,
                         fees_status = status,
                         student_code = student_code,
+                         branch_id = branch_id,
+                          branch_name=branch_name
 
 
                     };
@@ -1017,6 +1067,8 @@ namespace ERP_Services.Implementations
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     string student_code = dr["student_code"].ToString();
                     string current_status = dr["current_status"].ToString();
                     int fee_id = Convert.ToInt32(dr["fee_id"].ToString());
@@ -1069,7 +1121,9 @@ namespace ERP_Services.Implementations
                             final_fees_amount = final_fees_amount,
                             paid_amount = paid_amount,
                             remaining_amount = remaining_amount,
-                            fees_status = status
+                            fees_status = status,
+                             branch_name=branch_name,
+                              branch_id = branch_id
 
 
                         };
@@ -1105,7 +1159,8 @@ namespace ERP_Services.Implementations
                     float gst = (float)Convert.ToDouble(dr["gst"].ToString());
                     float discount = (float)Convert.ToDouble(dr["discount"].ToString());
                     float final_fees_amount = (float)Convert.ToDouble(dr["final_fees_amount"].ToString());
-                    List<StudentPaymentModel> payments = await GetRegistrationWisePayments(registration_id);
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString(); List<StudentPaymentModel> payments = await GetRegistrationWisePayments(registration_id);
                     float paid_amount = 0, remaining_amount = 0;
 
                     if (payments.Count() > 0)
@@ -1148,7 +1203,9 @@ namespace ERP_Services.Implementations
                         final_fees_amount = final_fees_amount,
                         paid_amount = paid_amount,
                         remaining_amount = remaining_amount,
-                        fees_status = status
+                        fees_status = status,
+                         branch_id = branch_id,
+                          branch_name=branch_name
 
 
                     };
@@ -1354,6 +1411,8 @@ namespace ERP_Services.Implementations
                     string student_name = dr["student_name"].ToString();
                     int course_id = Convert.ToInt32(dr["course_id"].ToString());
                     string course_name = dr["course_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString(); List<StudentPaymentModel> payments = await GetRegistrationWisePayments(registration_id);
 
                     StudentPaymentModel e = new StudentPaymentModel()
                     {
@@ -1367,7 +1426,9 @@ namespace ERP_Services.Implementations
                         payment_description = payment_description,
                         payment_id = payment_id,
                         payment_mode = payment_mode,
-                        student_name = student_name
+                        student_name = student_name,
+                         branch_name=branch_name,
+                          branch_id = branch_id
                     };
                     lst.Add(e);
                 }

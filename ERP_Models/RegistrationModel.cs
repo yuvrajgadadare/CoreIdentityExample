@@ -11,6 +11,8 @@ namespace ERP_Models
         public int registration_id { get; set; }
         public int student_id { get; set; }
         public string student_code { get; set; }
+         public int branch_id { get; set; }
+        public string branch_name { get; set; }
         public string student_name { get; set; }
         public string last_name { get; set; }
         public DateTime registration_date { get; set; }

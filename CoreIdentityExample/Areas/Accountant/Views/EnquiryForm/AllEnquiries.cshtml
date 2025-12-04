@@ -1,0 +1,49 @@
+﻿@using ERP_Models
+@model IEnumerable<EnquiryModel>
+@{
+    ViewData["Title"] = "AllEnquiries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<a href="/Enquiry/Index" style="text-decoration:none">Enquiry Form</a>
+
+<h5>All Enquiries</h5>
+<div class="container-fluid">
+    <div class="row">
+        @{
+            int i = 1;
+        }
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Candidate Name</th>
+                    <th>Enquiry Date</th>
+                    <th>Qualification</th>
+                    <th>Enquiry For</th>
+                    <th>Lead Source</th>
+                    <th>Interested Topics</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.candidate_name</td>
+                        <td style="width:120px;">@item.enquiry_date.ToShortDateString()</td>
+                        <td>@item.qualification</td>
+                        <td>@item.enquiry_fors</td>
+                        <td>@item.lead_sources</td>
+                        <td>@item.interested_topics</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="~/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="~/assets/vendor/tinymce/tinymce.min.js"></script>

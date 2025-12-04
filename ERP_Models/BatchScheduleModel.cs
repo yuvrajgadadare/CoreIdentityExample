@@ -5,6 +5,8 @@
         public int batch_schedule_id { get; set; }
         public int batch_id { get; set; }
         public string batch_name { get; set; }
+        public int branch_id { get; set; }
+        public string branch_name { get; set; }
         public string batch_time { get; set; }
         public int employee_id { get; set; }
         public string employee_name { get; set; }

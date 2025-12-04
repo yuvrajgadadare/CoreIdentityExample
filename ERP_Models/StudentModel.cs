@@ -26,6 +26,8 @@
         public string aadhar_card_photo {  get; set; }
         public int registration_id { get; set; }
         public DateTime registration_date { get; set; }
+        public int branch_id { get; set; }
+        public string? branch_name { get; set; }
         public List<StudentQualificationModel> qualifications { get; set; }
     }
 }

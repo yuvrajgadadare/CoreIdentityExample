@@ -1,12 +1,9 @@
 ﻿
 using ERP_Models;
 using ERP_Services.Interfaces;
-using ERPSystem_Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using System.Data;
 
 namespace ERP_Services.Areas.BatchManagement.Controllers
 {
@@ -85,6 +82,7 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             ViewBag.topics = topics;
             ViewBag.trainers = trainers;
             ViewData["batches"]  = batchlist;
+            ViewData["deletedbatches"]  = batchService.GetAllDeletedBatches();
             return View(b);
         }
         //[HttpPost]
@@ -134,11 +132,23 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             //ViewData["batches"] = batchService.GetAllBatches().Result;
             //return View(b);
         }
-        public async Task<IActionResult> DeleteBatch(int id)
+        //public async Task<IActionResult> DeleteBatch(int id)
+        //{
+        //    batchService.DeleteBatch(id);
+
+        //    return RedirectToAction("Index");
+        //}
+        public async Task<string> DeleteBatch(int id)
         {
-            batchService.DeleteBatch(id);
-           
-            return RedirectToAction("Index");
+            await batchService.DeleteBatch(id);
+
+            return "Batch removed successfully";
+        }
+        public async Task<string> RestoreBatch(int id)
+        {
+            await batchService.RestoreBatch(id);
+
+            return "Batch restored successfully";
         }
         public async Task<JsonResult> GetBatchWiseStudents(int id)
         {

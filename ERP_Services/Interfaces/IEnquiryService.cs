@@ -10,7 +10,7 @@ namespace ERP_Services.Interfaces
         Task< int> AddEnquiry(EnquiryModel enquiry);
         Task AddEnquiryFollowup(EnquiryFollowupModel m);
         Task SendPromotionalMessage(EnquiryPromotionModel m);
-        Task< List<EnquiryModel>> GetEnquiries();
+        Task< List<EnquiryModel>> GetEnquiries(int branch_id);
         Task<EnquiryModel> GetEnquiry(int enquiry_id);
         Task< List<EnquiryFollowupModel>> GetEnquiryFollowups();
         Task< List<EnquiryFollowupModel>> GetEnquiryWiseFollowups(int enquiry_id);

@@ -43,12 +43,12 @@
     function ViewStudents(bid) {
     batch_id = bid;
     $.ajax({
-    url: '/BatchManagement/Batch/GetTopicWiseStudents/' + bid,
-    method:'get',
-    success: function (resp) {
-    console.log(resp);
-    allstudents = resp;
-    Display(allstudents);
+        url: '/BatchManagement/Batch/GetTopicWiseStudents/' + bid,
+        method:'get',
+        success: function (resp) {
+        console.log(resp);
+        allstudents = resp;
+        Display(allstudents);
     }
     })
     $("#studentmodel").modal("show");
@@ -91,27 +91,42 @@
     })
     var st = { "batch_id": batch_id, "registration_ids": data };
     $.ajax({
-    url: '/BatchManagement/Batch/AddBatchStudents',
-    method:'post',
-    data:st,
-    success: function (resp) {
-    alert(resp);
-    $("#studentmodel").modal("hide");
-    window.location.href = "/BatchManagement/Batch/Index";
-   // location.reload();
+        url: '/BatchManagement/Batch/AddBatchStudents',
+        method:'post',
+        data:st,
+        success: function (resp) {
+        alert(resp);
+        $("#studentmodel").modal("hide");
+    // window.location.href = "/BatchManagement/Batch/Index";
+     location.reload();
     }
     })
     }
+
+
+       function DeleteBatch(id) {
+        if(confirm("")){
+                 $.ajax({
+              url: '/BatchManagement/Batch/DeleteBatch/'+id,
+              method:'post',
+              success: function (resp) {
+              alert(resp);
+              // window.location.href = "/BatchManagement/Batch/Index";
+               location.reload();       }
+          })
+        }  
+     
+       }
 
     function FilterStudents() {
-    var txt = $("#txtfilter").val();
-    $("#tblstudentdata").empty();
+        var txt = $("#txtfilter").val();
+        $("#tblstudentdata").empty();
 
-    $.each(allstudents, function (i, d) {
-    if (d.student_name.toLowerCase().includes(txt.toLowerCase())) {
-    $("#tblstudentdata").append("<div class='col-md-3'><input type='checkbox' name='chkstudent' onchange='SelectStudent(" + d.registration_id + ")'/> " + d.student_name + "</div>");
-    }
-    })
+        $.each(allstudents, function (i, d) {
+        if (d.student_name.toLowerCase().includes(txt.toLowerCase())) {
+        $("#tblstudentdata").append("<div class='col-md-3'><input type='checkbox' name='chkstudent' onchange='SelectStudent(" + d.registration_id + ")'/> " + d.student_name + "</div>");
+        }
+        })
     }
 </script>
 <div class="container-fluid">
@@ -221,13 +236,70 @@
                                             {
                                                 <span>Generated Scheduled Exams</span>
                                             } *@
-                                            <a href="/BatchManagement/Batch/DeleteBatch/@item.batch_id" class="btn btn-danger btn-sm" style="font-size:12px;">Remove</a>
+                                            <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
                                         </td>
                                     </tr>
                                     i++;
                                 }
                             </tbody>
                         </table>
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Batch Name</th>
+                                    <th>Topic Name</th>
+                                    <th>Trainer Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Batch Time</th>
+                                    <th>#Students</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                      i = 1;
+                                    List<BatchModel> lstdeletedbatches = (List<BatchModel>)ViewData["deletedbatches"];
+                                }
+                                @foreach (var item in lstdeletedbatches)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.batch_name</td>
+                                        <td>@item.topic_name</td>
+                                        <td>@item.employee_name</td>
+                                        <td>@item.start_date.ToShortDateString()</td>
+                                        <td>@item.end_date.ToShortDateString()</td>
+                                        <td>@item.batch_time</td>
+                                        <td>@item.total_students</td>
+                                        <td>
+                                            @if (!item.is_schedule_generated)
+                                            {
+                                                <input style="font-size:12px;" type="button" value="Generate Schedule" onclick="GenerateSchedule(@item.batch_id)" class="btn btn-sm btn-primary" />
+                                            }
+                                            else
+                                            {
+                                                <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a>
+                                            }
+                                            <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
+                                            @if (!item.is_schedule_exams_generated)
+                                            {
+                                                <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
+
+                                            }
+                                            @*   else
+                                            {
+                                                <span>Generated Scheduled Exams</span>
+                                            } *@
+                                            <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+
                    </div>
             </div>
             </div>
