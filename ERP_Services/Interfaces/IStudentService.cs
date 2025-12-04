@@ -12,13 +12,13 @@ namespace ERP_Services.Interfaces
         Task<bool> IsEmailExist(string email_address);
         Task<bool> IsMobileExist(string mobile_number);
         Task<List<StudentModel>>  GetStudents(int branch_id);
-        Task<List<StudentModel>> GetYearWiseStudents(int year);
+        Task<List<StudentModel>> GetYearWiseStudents(int year, int branch_id);
         Task<List<StudentModel>>  GetAllStudents(int branch_id);
-        Task<List<StudentModel>>  GetGuestStudents();
+        Task<List<StudentModel>>  GetGuestStudents(int branch_id);
         Task<StudentModel>  GetStudent(int id);
         Task<List<RegistrationModel>> GetStudentWiseRegistrations(int student_id);
         Task<List<RegistrationModel>> GetAllRegistrations(int branch_id);
-        Task<List<RegistrationModel>> GetAllGuestRegistrations();
+        Task<List<RegistrationModel>> GetAllGuestRegistrations(int branch_id);
         Task<RegistrationModel> GetGuestRegistration(int id);
         Task<RegistrationModel> GetRegistration(int id);
         Task<List<StudentPaymentModel>> GetStudentPayments(int branch_id);

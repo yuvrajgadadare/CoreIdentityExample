@@ -296,7 +296,7 @@ namespace ERP_Services.Implementations
             return   st;
         }
 
-        public async Task<List<EmployeeModel>> GetEmployees()
+        public async Task<List<EmployeeModel>> GetEmployees(int branch_id)
         {
             List<EmployeeModel> lst = new List<EmployeeModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -304,7 +304,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblemployees", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@employee_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -322,7 +322,7 @@ namespace ERP_Services.Implementations
                     string profile_photo = dr["profile_photo"].ToString();
                     string role_id =  dr["role_id"].ToString();
                     float salary = (float)Convert.ToDouble(dr["salary"].ToString());
-                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                   // int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
                     string branch_name = dr["branch_name"].ToString();
                     EmployeeModel e = new EmployeeModel()
                     {

@@ -464,7 +464,7 @@ namespace ERP_Services.Implementations
             }
             return st;
         }
-        public async Task<List<StudentPaymentModel>> GetStudentPayments()
+        public async Task<List<StudentPaymentModel>> GetStudentPayments(int GetStudentPayments)
         {
             List<StudentPaymentModel> lst = new List<StudentPaymentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -472,7 +472,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_payments", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@branch_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", GetStudentPayments);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
