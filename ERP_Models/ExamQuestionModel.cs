@@ -4,6 +4,8 @@
     {
         public int exam_id { get; set; }
         public int question_id { get; set; }
+        public int branch_id { get; set; }
+        public string branch_name { get; set; }
         public int exam_question_id { get; set; }
         public string question { get; set; }
         public string option1 { get; set; }

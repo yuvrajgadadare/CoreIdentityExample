@@ -7,7 +7,8 @@
         public int registration_id { get; set; }
         public string status { get; set; }
         public int is_attended { get; set; }
-
+        public int branch_id { get; set; }
+        public string branch_name { get; set; }
         public string student_name { get; set; }
         public string email_address { get; set; }
         public string mobile_number { get; set; }

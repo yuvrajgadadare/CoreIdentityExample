@@ -106,7 +106,9 @@ namespace CoreIdentityExample.Controllers
 
         public async Task< IActionResult> AllEnquiries()
         {
-            List<EnquiryModel>lst=await enquiryService.GetEnquiries();
+            int branch_id = (int)HttpContext.Session.GetInt32("branch_id");
+
+            List<EnquiryModel>lst=await enquiryService.GetEnquiries(branch_id);
             return View(lst);
         }
     }

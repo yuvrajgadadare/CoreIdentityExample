@@ -42,7 +42,8 @@ namespace ERP_Services.Implementations
                     DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
 
                     int total_questions = questions.Count;
                     int total_correct_questions = 0;
@@ -95,6 +96,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
+                         branch_id = branch_id,
+                          branch_name=branch_name
+                         
                     };
 
                 }
@@ -125,7 +129,8 @@ namespace ERP_Services.Implementations
                     string option4 = dr["option4"].ToString();
                     int correct_option_number = Convert.ToInt32(dr["correct_option_number"].ToString());
                     int submitted_option_number = Convert.ToInt32(dr["submitted_option_number"].ToString());
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     ExamQuestionModel e = new ExamQuestionModel()
                     {
                         correct_option_number = correct_option_number,
@@ -138,6 +143,8 @@ namespace ERP_Services.Implementations
                         question = question,
                         question_id = question_id,
                         submitted_option_number = submitted_option_number,
+                          branch_name=branch_name,
+                           branch_id=branch_id
 
                     };
                     lst.Add(e);
@@ -271,7 +278,7 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task<List<ExamModel>> ViewAllScheduleExams()
+        public async Task<List<ExamModel>> ViewAllScheduleExams(int branch_id)
         {
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -279,6 +286,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_scheduled_exams", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -295,6 +303,8 @@ namespace ERP_Services.Implementations
                     int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
                     string topic_name = dr["topic_name"].ToString();
                     string status = dr["status"].ToString();
+                  //  int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     ExamModel e = new ExamModel()
                     {
                         student_id = student_id,
@@ -308,7 +318,9 @@ namespace ERP_Services.Implementations
                         student_name = student_name,
                         topic_name = topic_name,
                         status = status,
-                        total_questions = total_questions
+                        total_questions = total_questions,
+                         branch_id = branch_id,
+                          branch_name=branch_name
                     };
                     lst.Add(e);
                 }
@@ -317,7 +329,7 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task<List<ExamModel>> ViewAllSubmittedExams()
+        public async Task<List<ExamModel>> ViewAllSubmittedExams(int branch_id)
         {
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -325,6 +337,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_Submitted_exams", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -338,7 +351,7 @@ namespace ERP_Services.Implementations
                     DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
-
+                    string branch_name = dr["branch_name"].ToString();
                     string topic_name = dr["topic_name"].ToString();
                     string status = dr["status"].ToString();
                     ExamModel e = new ExamModel()
@@ -353,7 +366,9 @@ namespace ERP_Services.Implementations
                         student_name = student_name,
                         topic_name = topic_name,
                         status = status,
-                        total_questions = total_questions
+                        total_questions = total_questions,
+                         branch_name=branch_name,
+                          branch_id = branch_id
                     };
                     lst.Add(e);
                 }
@@ -362,7 +377,7 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task<List<ExamModel>> ViewAllRejectedExams()
+        public async Task<List<ExamModel>> ViewAllRejectedExams(int branch_id)
         {
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -370,6 +385,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_Rejected_exams", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -383,7 +399,7 @@ namespace ERP_Services.Implementations
                     //DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
-
+                    string branch_name = dr["branch_name"].ToString();
                     string topic_name = dr["topic_name"].ToString();
                     string status = dr["status"].ToString();
                     ExamModel e = new ExamModel()
@@ -436,7 +452,7 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task<List<ExamModel>> GetAllPracticeExams()
+        public async Task<List<ExamModel>> GetAllPracticeExams(int branch_id)
         {
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -444,6 +460,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_practice_exam", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -462,6 +479,7 @@ namespace ERP_Services.Implementations
                     string status = dr["status"].ToString();
 
                     string topic_name = dr["topic_name"].ToString();
+                    string branch_name = dr["branch_name"].ToString();
 
                     ExamModel st = null;
                     List<ExamQuestionModel> questions = await GetPracticeExamWiseQuestionResult(exam_id);
@@ -517,7 +535,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
-                        status = status
+                        status = status,
+                         branch_id = branch_id,
+                          branch_name= branch_name
 
                     };
                     lst.Add(st);
@@ -549,7 +569,8 @@ namespace ERP_Services.Implementations
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
                     string status = dr["status"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     string topic_name = dr["topic_name"].ToString();
 
                     ExamModel st = null;
@@ -606,7 +627,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
-                        status = status
+                        status = status,
+                         branch_name=branch_name,
+                          branch_id = branch_id
 
                     };
                     lst.Add(st);
@@ -684,6 +707,8 @@ namespace ERP_Services.Implementations
                     DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
 
 
                     int total_questions = questions.Count;
@@ -737,6 +762,8 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
+                         branch_id = branch_id,
+                          branch_name=branch_name
                     };
 
                 }
@@ -748,7 +775,8 @@ namespace ERP_Services.Implementations
 
         public async Task<List<ExamModel>> ViewExamWiseScheduleExams(int exam_id)
         {
-            List<ExamModel> lst = await ViewAllScheduleExams();
+           ExamModel e=await GetExam(exam_id);
+            List<ExamModel> lst = await ViewAllScheduleExams(e.branch_id);
 
             return lst.Where(e => e.exam_id.Equals(exam_id)).ToList();
         }
@@ -776,7 +804,8 @@ namespace ERP_Services.Implementations
                     string status = dr["status"].ToString();
 
                     string topic_name = dr["topic_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     ExamModel st = null;
                     List<ExamQuestionModel> questions = await GetExamWiseQuestionResult(exam_id);
 
@@ -831,7 +860,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
-                        status = status
+                        status = status,
+                         branch_id = branch_id,
+                          branch_name=branch_name
 
                     };
                     lst.Add(st);
@@ -840,7 +871,7 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-        public async Task<List<ExamModel>> GetAllExams()
+        public async Task<List<ExamModel>> GetAllExams(int branch_id)
         {
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -848,6 +879,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_Submitted_exams", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -892,7 +924,8 @@ namespace ERP_Services.Implementations
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
                     string status = dr["status"].ToString();
-
+                   // int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
                     string topic_name = dr["topic_name"].ToString();
 
                     ExamModel st = null;
@@ -949,7 +982,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
-                        status = status
+                        status = status,
+                         branch_id = branch_id,
+                         branch_name=branch_name
                     };
                     lst.Add(st);
                 }
@@ -1292,7 +1327,8 @@ namespace ERP_Services.Implementations
                     DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
                     int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
-
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
 
                     int total_questions = questions.Count;
                     int total_correct_questions = 0;
@@ -1343,6 +1379,9 @@ namespace ERP_Services.Implementations
                         total_wrong_questions = total_wrong_questions,
                         percentage = percentage,
                         grade = grade,
+                         branch_id = branch_id,
+                          branch_name=branch_name
+                         
                     };
 
                 }

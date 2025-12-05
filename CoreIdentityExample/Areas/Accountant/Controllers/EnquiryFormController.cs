@@ -1,10 +1,14 @@
 ﻿using ERP_Models;
+using ERP_Services.Implementations;
 using ERP_Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
+    [Authorize]
     public class EnquiryFormController : Controller
     {
         IMasterService masterService;
@@ -13,11 +17,12 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
         IExtraService extraService;
         EmailSettings _settings;
         ITopicService topicService;
+        IEmployeeService employeeService;
         //public ExtraService(IOptions<EmailSettings> settings)
         //{
         //    _settings = settings.Value;
         //}
-        public EnquiryFormController(IOptions<EmailSettings> settings, IMasterService masterService, IEnquiryService enquiryService, IExtraService extraService, IBranchService branchService, ITopicService topicService)
+        public EnquiryFormController(IOptions<EmailSettings> settings, IMasterService masterService, IEnquiryService enquiryService, IExtraService extraService, IBranchService branchService, ITopicService topicService, IEmployeeService employeeService)
         {
             this.masterService = masterService;
             this.enquiryService = enquiryService;
@@ -25,6 +30,7 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             _settings = settings.Value;
             this.branchService = branchService;
             this.topicService = topicService;
+            this.employeeService = employeeService;
         }
         public async Task<IActionResult> Index()
         {
@@ -103,7 +109,9 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
 
         public async Task<IActionResult> AllEnquiries()
         {
-            List<EnquiryModel> lst = await enquiryService.GetEnquiries();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel d = await employeeService.GetEmployeeByUserId(userId);
+            List<EnquiryModel> lst = await enquiryService.GetEnquiries(d.branch_id);
             return View(lst);
         }
     }

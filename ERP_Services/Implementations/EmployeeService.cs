@@ -40,21 +40,21 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task AddEmployeeRole(RoleModel role)
-        {
-            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("sp_employee_role", con);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@type", "Insert");
-                cmd.Parameters.AddWithValue("@employee_role_id", role.employee_role_id);
-                cmd.Parameters.AddWithValue("@employee_id", role.employee_id);
-                cmd.Parameters.AddWithValue("@role_id", role.role_id);
+        //public async Task AddEmployeeRole(RoleModel role)
+        //{
+        //    //using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+        //    //{
+        //    //    con.Open();
+        //    //    SqlCommand cmd = new SqlCommand("sp_employee_role", con);
+        //    //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        //    //    cmd.Parameters.AddWithValue("@type", "Insert");
+        //    //    cmd.Parameters.AddWithValue("@employee_role_id", role.employee_role_id);
+        //    //    cmd.Parameters.AddWithValue("@employee_id", role.employee_id);
+        //    //    cmd.Parameters.AddWithValue("@role_id", role.role_id);
                 
-                SqlDataReader dr = cmd.ExecuteReader();
-            }
-        }
+        //    //    SqlDataReader dr = cmd.ExecuteReader();
+        //    //}
+        //}
 
         public async Task AddTrainerTopics(List<TrainerTopicModel> topics)
         {
@@ -157,8 +157,7 @@ namespace ERP_Services.Implementations
                         employee_name = employee_name,
                         joining_date = joining_date,
                         mobile_number = mobile_number,
-                        role_id = role_id,
-                        role_name = role_name,
+                   
                         salary = salary,
                          gender=gender,
                           qualification=qualification,
@@ -228,8 +227,7 @@ namespace ERP_Services.Implementations
                         employee_name = employee_name,
                         joining_date = joining_date,
                         mobile_number = mobile_number,
-                        role_id = role_id,
-                        role_name = role_name,
+                   
                         salary = salary,
                         profile_photo = profile_photo,
                         qualification = qualification,
@@ -280,8 +278,7 @@ namespace ERP_Services.Implementations
                         employee_name = employee_name,
                         joining_date = joining_date,
                         mobile_number = mobile_number,
-                        role_id = role_id,
-                        role_name = role_name,
+                      
                         salary = salary,
                         profile_photo = profile_photo,
                         qualification = qualification,
@@ -309,8 +306,8 @@ namespace ERP_Services.Implementations
                 while (dr.Read())
                 {
                     int id = Convert.ToInt32(dr["employee_id"].ToString());
-                    EmployeeModel emp =await GetEmployeeWiseRoles(id);
-                    List<RoleModel> roles =  emp.roles;
+                    List<RoleModel> roles = await GetEmployeeWiseRoles(id);
+                  // List<RoleModel> roles =  emp.roles;
                     DateTime birth_date = Convert.ToDateTime(dr["birth_date"].ToString());
                     DateTime joining_date = Convert.ToDateTime(dr["joining_date"].ToString());
                     string employee_name = dr["employee_name"].ToString();
@@ -333,8 +330,7 @@ namespace ERP_Services.Implementations
                         employee_name = employee_name,
                         joining_date = joining_date,
                         mobile_number = mobile_number,
-                        role_id = role_id,
-                        role_name = role_name,
+                        
                         salary = salary,
                          profile_photo=profile_photo,
                           gender=gender,
@@ -350,47 +346,44 @@ namespace ERP_Services.Implementations
             return lst;
         }
 
-        public async Task< EmployeeModel> GetEmployeeWiseRoles(int employee_id)
+        public async Task<List<RoleModel>> GetEmployeeWiseRoles(int employee_id)
         {
             List<RoleModel> lst = new List<RoleModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("sp_fetch_employee_wise_roles", con);
+                SqlCommand cmd = new SqlCommand("erpuser.sp_fetch_employee_wise_roles", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@employee_id", employee_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    string employee_name = dr["employee_name"].ToString();
-                    string employee_code = dr["employee_code"].ToString();
-                    int employee_role_id = Convert.ToInt32(dr["employee_role_id"].ToString());
-                    string role_name = dr["role_name"].ToString();
-                    string role_id =  dr["role_id"].ToString();
+                    //string employee_name = dr["employee_name"].ToString();
+                    //string employee_code = dr["employee_code"].ToString();
+                    //int employee_role_id = Convert.ToInt32(dr["employee_role_id"].ToString());
+                    string role_name = dr["RoleId"].ToString();
+                    string role_id =  dr["RoleName"].ToString();
 
 
                     RoleModel r = new RoleModel()
                     {
-                        employee_id = employee_id,
 
                         role_id = role_id,
                         role_name = role_name,
-                        employee_name = employee_name,
-                        employee_role_id = employee_role_id
+                      
                          
                     };
                     lst.Add(r);
                 }
                 con.Close();
             }
-            EmployeeModel emp =await GetEmployee(employee_id);
-            emp.roles= lst;
-            return emp;
+        
+            return lst;
         }
 
-        public List<RoleModel> GetRoleWiseEmployees(string role_id)
+        public List<EmployeeModel> GetRoleWiseEmployees(string role_id)
         {
-            List<RoleModel> lst = new List<RoleModel>();
+            List<EmployeeModel> lst = new List<EmployeeModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -403,18 +396,28 @@ namespace ERP_Services.Implementations
                     int employee_id = Convert.ToInt32(dr["employee_id"].ToString());
                     string employee_name = dr["employee_name"].ToString();
                     string employee_code = dr["employee_code"].ToString();
-                    int employee_role_id = Convert.ToInt32(dr["employee_role_id"].ToString());
-                    string role_name = dr["role_name"].ToString();
+                    string user_name = dr["UserName"].ToString();
+                    string email = dr["Email"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+                    //int employee_role_id = Convert.ToInt32(dr["employee_role_id"].ToString());
+                    string role_name = dr["RoleName"].ToString();
+                  //  string role_id = dr["RoleId"].ToString();
+                    string user_id = dr["User_id"].ToString();
 
 
-                    RoleModel r = new RoleModel()
+                    EmployeeModel r = new  EmployeeModel()
                     {
                         employee_id = employee_id,
-
-                        role_id = role_id,
-                        role_name = role_name,
-                        employee_name = employee_name,
-                        employee_role_id = employee_role_id
+                         branch_id = branch_id,
+                          employee_code=employee_code,
+                           branch_name=branch_name,
+                            employee_name=employee_name,
+                             email_address=email,
+                              user_name=user_name,
+                               
+                         
+                     
                     };
                     lst.Add(r);
                 }
@@ -522,20 +525,20 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task UpdateEmployeeRole(RoleModel role)
-        {
-            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("sp_employee_role", con);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@type", "Update");
-                cmd.Parameters.AddWithValue("@employee_role_id", role.employee_role_id);
-                cmd.Parameters.AddWithValue("@employee_id", role.employee_id);
-                cmd.Parameters.AddWithValue("@role_id", role.role_id);
+        //public async Task UpdateEmployeeRole(RoleModel role)
+        //{
+        //    using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+        //    {
+        //        con.Open();
+        //        SqlCommand cmd = new SqlCommand("sp_employee_role", con);
+        //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        //        cmd.Parameters.AddWithValue("@type", "Update");
+        //        cmd.Parameters.AddWithValue("@employee_role_id", role.employee_role_id);
+        //        cmd.Parameters.AddWithValue("@employee_id", role.employee_id);
+        //        cmd.Parameters.AddWithValue("@role_id", role.role_id);
 
-                SqlDataReader dr = cmd.ExecuteReader();
-            }
-        }
+        //        SqlDataReader dr = cmd.ExecuteReader();
+        //    }
+        //}
     }
 }

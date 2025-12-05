@@ -536,69 +536,69 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-        //public async Task<BatchScheduleModel> GetScheduleWiseSchedule(int batch_schedule_id)
-        //{
-        //    BatchScheduleModel st = new BatchScheduleModel();
-        //    using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
-        //    {
-        //        con.Open();
-        //        SqlCommand cmd = new SqlCommand("sp_fetch_batch_schedule", con);
-        //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@batch_schedule_id", batch_schedule_id);
-        //        SqlDataReader dr = cmd.ExecuteReader();
-        //        while (dr.Read())
-        //        {
-        //            //int batch_schedule_id = Convert.ToInt32(dr["batch_schedule_id"].ToString());
-        //            int b_id = Convert.ToInt32(dr["batch_id"].ToString());
-        //            string batch_name = dr["batch_name"].ToString();
-        //            int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
-        //            string topic_name = dr["topic_name"].ToString();
-        //            int employee_id = Convert.ToInt32(dr["employee_id"].ToString());
-        //            string employee_name = dr["employee_name"].ToString();
-        //            int content_id = Convert.ToInt32(dr["content_id"].ToString());
-        //            string content_name = dr["content_name"].ToString();
+        public async Task<BatchScheduleModel> GetScheduleWiseSchedule(int batch_schedule_id)
+        {
+            BatchScheduleModel st = new BatchScheduleModel();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_batch_schedule", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@batch_schedule_id", batch_schedule_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    //int batch_schedule_id = Convert.ToInt32(dr["batch_schedule_id"].ToString());
+                    int b_id = Convert.ToInt32(dr["batch_id"].ToString());
+                    string batch_name = dr["batch_name"].ToString();
+                    int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
+                    string topic_name = dr["topic_name"].ToString();
+                    int employee_id = Convert.ToInt32(dr["employee_id"].ToString());
+                    string employee_name = dr["employee_name"].ToString();
+                    int content_id = Convert.ToInt32(dr["content_id"].ToString());
+                    string content_name = dr["content_name"].ToString();
 
-        //            DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
-        //            // string expected_date = dr["expected_date"].ToString();
-        //            //if (expected_date != "")
-        //            //{
-        //            //    expected_date = Convert.ToDateTime(expected_date).ToShortDateString();
-        //            //}
-        //            DateTime actual_date = Convert.ToDateTime(dr["actual_date"].ToString());
-        //            //string actual_date = dr["actual_date"].ToString();
-        //            //if (actual_date != "")
-        //            //{
-        //            //    actual_date = Convert.ToDateTime(actual_date).ToShortDateString();
-        //            //}
+                    DateTime expected_date = Convert.ToDateTime(dr["expected_date"].ToString());
+                    // string expected_date = dr["expected_date"].ToString();
+                    //if (expected_date != "")
+                    //{
+                    //    expected_date = Convert.ToDateTime(expected_date).ToShortDateString();
+                    //}
+                    DateTime actual_date = Convert.ToDateTime(dr["actual_date"].ToString());
+                    //string actual_date = dr["actual_date"].ToString();
+                    //if (actual_date != "")
+                    //{
+                    //    actual_date = Convert.ToDateTime(actual_date).ToShortDateString();
+                    //}
 
 
-        //            string status = "Not Conducted";
-        //            if (actual_date != null)
-        //            {
-        //                status = "Conducted";
-        //            }
-        //            string batch_time = dr["batch_time"].ToString();
-        //            st = new BatchScheduleModel()
-        //            {
-        //                batch_schedule_id = batch_schedule_id,
-        //                batch_id = b_id,
-        //                batch_name = batch_name,
-        //                //  actual_date = actual_date,
-        //                content_id = content_id,
-        //                content_name = content_name,
-        //                expected_date = expected_date,
-        //                topic_id = topic_id,
-        //                topic_name = topic_name,
-        //                employee_id = employee_id,
-        //                employee_name = employee_name,
-        //                actual_date = actual_date,
-        //                batch_time = batch_time,
-        //                status = status,
-        //            };
-        //        }
-        //    }
-        //    return st;
-        //}
+                    string status = "Not Conducted";
+                    if (actual_date != null)
+                    {
+                        status = "Conducted";
+                    }
+                    string batch_time = dr["batch_time"].ToString();
+                    st = new BatchScheduleModel()
+                    {
+                        batch_schedule_id = batch_schedule_id,
+                        batch_id = b_id,
+                        batch_name = batch_name,
+                        //  actual_date = actual_date,
+                        content_id = content_id,
+                        content_name = content_name,
+                        expected_date = expected_date,
+                        topic_id = topic_id,
+                        topic_name = topic_name,
+                        employee_id = employee_id,
+                        employee_name = employee_name,
+                        actual_date = actual_date,
+                        batch_time = batch_time,
+                        status = status,
+                    };
+                }
+            }
+            return st;
+        }
         public async Task<List<BatchStudentModel>> GetBatchWiseStudents(int batch_id)
         {
             List<BatchStudentModel> lst = new List<BatchStudentModel>();

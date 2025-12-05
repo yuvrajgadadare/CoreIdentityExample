@@ -217,7 +217,9 @@ namespace CoreIdentityExample.Controllers
                 if (result.Succeeded)
                 {
                     ApplicationUser user=await userManager.FindByNameAsync(model.Email);
-                     
+                    var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+                    
                     if (await userManager.IsInRoleAsync(user, "Administrator"))
                     {
                         return Redirect("/Developer/Dashboard/Index");

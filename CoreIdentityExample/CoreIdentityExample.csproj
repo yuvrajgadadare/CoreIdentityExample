@@ -31,6 +31,8 @@
     <Folder Include="Areas\BatchManagement\Models\" />
     <Folder Include="Areas\Developer\Data\" />
     <Folder Include="Areas\Developer\Models\" />
+    <Folder Include="Areas\SuperUser\Data\" />
+    <Folder Include="Areas\SuperUser\Models\" />
     <Folder Include="Areas\Trainer\Data\" />
     <Folder Include="Areas\Trainer\Models\" />
     <Folder Include="Models\" />

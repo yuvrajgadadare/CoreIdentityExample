@@ -211,19 +211,15 @@
  <div class="row">   
 
  <div class="mb-3">
-     <ul class="nav nav-tabs" id="myTab">
-        <li class="nav-item">
-            <a href="#home" class="nav-link active" data-bs-toggle="tab">Scheduled Exams</a>
-        </li>
-        <li class="nav-item">
-            <a href="#profile" class="nav-link" data-bs-toggle="tab">Submitted Exams</a>
-        </li>
-        <li class="nav-item">
-            <a href="#messages" class="nav-link" data-bs-toggle="tab">Rejected Exams</a>
-        </li>
-    </ul>
+            <nav class="nav nav-pills nav-fill">
+                <a href="#scheduledexams" class="nav-item nav-link active" data-bs-toggle="tab">Scheduled Exams</a>
+                <a href="#submittedexams" class="nav-item nav-link" data-bs-toggle="tab">Submitted Exams</a>
+                <a href="#rejectedexams" class="nav-item nav-link" data-bs-toggle="tab">Rejected Exams</a>
+
+            </nav>
+      
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="home">
+                <div class="tab-pane fade show active mt-3" id="scheduledexams">
             <h4 class="mt-2">Scheduled Exams</h4>
          
                     @{
@@ -268,7 +264,7 @@
 
      </table>
         </div>
-        <div class="tab-pane fade" id="profile">
+                <div class="tab-pane fade mt-3" id="submittedexams">
             <h4 class="mt-2">Submitted Exams</h4>
           
             
@@ -327,7 +323,7 @@
      </table>
 
         </div>
-        <div class="tab-pane fade" id="messages">
+                <div class="tab-pane fade mt-3" id="rejectedexams">
             <h4 class="mt-2">Rejected Exams</h4>
     
         @{

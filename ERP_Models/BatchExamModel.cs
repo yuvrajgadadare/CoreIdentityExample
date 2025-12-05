@@ -12,6 +12,8 @@ namespace ERP_Models
         public int student_id { get; set; }
         public int registration_id { get; set; }
         public string status { get; set; }
+        public int branch_id { get; set; }
+        public string branch_name { get; set; }
         public int batch_id { get; set; }
         public string batch { get; set; }
         public int is_attended { get; set; }

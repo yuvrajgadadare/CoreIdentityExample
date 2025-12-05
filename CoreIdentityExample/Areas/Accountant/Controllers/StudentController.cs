@@ -1,14 +1,18 @@
 ﻿using ERP_Models;
+using ERP_Services.Implementations;
 using ERP_Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using NuGet.Configuration;
 using System;
+using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
     [Area(areaName: "Accountant")]
+    [Authorize]
     public class StudentController : Controller
     {
         IStudentService studentService;
@@ -18,7 +22,9 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
         IExtraService extraService;
         EmailSettings _settings;
         ICourseService courseService;
-        public StudentController(IStudentService studentService, IMasterService masterService, IWebHostEnvironment environment, IExtraService extraService,IOptions<EmailSettings> settings, IBatchService batchService, ICourseService courseService)
+        IEmployeeService employeeService;
+        IBranchService branchService;
+        public StudentController(IStudentService studentService, IMasterService masterService, IWebHostEnvironment environment, IExtraService extraService,IOptions<EmailSettings> settings, IBatchService batchService, ICourseService courseService, IEmployeeService employeeService,IBranchService branchService)
         {
             this.studentService = studentService;
             this.masterService = masterService;
@@ -27,6 +33,8 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             _settings = settings.Value;
             this.batchService = batchService;
             this.courseService = courseService;
+            this.employeeService = employeeService;
+            this.branchService = branchService;
         }
         public async Task<bool> IsEmailExist(string email_address)
         {
@@ -43,6 +51,7 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             // ViewData["students"] = studentService.GetStudents();
             //ViewBag.courses =await GetCoursesForGuest();
             ViewData["courses"] = await courseService.GetCourseFees();
+            ViewBag.branches  = await branchService.GetAllBranches();
             string pinnumber =await studentService.NextPINNumber();
             StudentModel sm = new StudentModel() { permanent_identification_number = pinnumber };
             return View(sm);
@@ -89,7 +98,9 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //{
             //    return Redirect("/Account/Login");
             //}
-            
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
             Random r = new Random();
             int n = r.Next(1, 1000);
             d.student_code = "Guest";
@@ -140,8 +151,8 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             // ViewData["students"] = studentService.GetStudents();
             ModelState.Clear();
             ViewBag.msg = "Student Added Successfully";
-            ViewData["students"] =await studentService.GetStudents();
-            ViewData["guest"] =await studentService.GetGuestStudents();
+            ViewData["students"] =await studentService.GetStudents(emp.branch_id);
+            ViewData["guest"] =await studentService.GetGuestStudents(emp.branch_id);
             ViewData["courses"] = await courseService.GetCourseFees();
 
             //ViewBag.courses = GetCourses();
@@ -186,8 +197,8 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
         {
             ViewBag.courses = await GetFees();
             ViewBag.qualifications = await GetQualifications();
-
-           //ViewData["qualifications"] = await courseService.GetTrainingCourses();
+            ViewBag.branches = new SelectList(await branchService.GetAllBranches(), "branch_id", "branch_name");
+            //ViewData["qualifications"] = await courseService.GetTrainingCourses();
             StudentModel sm = new StudentModel() { };
             return View(sm);
         }
@@ -299,9 +310,13 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //StudentModel sm = new StudentModel();
             // ViewData["students"] = studentService.GetStudents();
             ModelState.Clear();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
             ViewBag.msg = "Student Added Successfully";
-            ViewData["students"] = await studentService.GetStudents();
-            ViewData["guest"] = await studentService.GetGuestStudents();
+            ViewData["students"] = await studentService.GetStudents(emp.branch_id);
+            ViewData["guest"] = await studentService.GetGuestStudents(emp.branch_id);
             //ViewBag.courses = GetCourses();
             ViewData["courses"] = await courseService.GetTrainingCourses();
             ViewBag.years = await extraService.GetYears();
@@ -319,17 +334,15 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //{
             //    return Redirect("/Account/Login");
             //}
-            
-               List<StudentModel> lst= await studentService.GetStudents();
-             
-          
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
+            List<StudentModel> lst= await studentService.GetStudents(emp.branch_id);
             ViewBag.years =await extraService.GetYears();
-            
             //ViewData["courses"] =await masterService.GetTrainingCourses();
-            
             return View(lst);
         }
-         
         [HttpPost]
         public async Task<IActionResult> Index(int year)
         {
@@ -337,7 +350,11 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //{
             //    return Redirect("/Account/Login");
             //}
-            List<StudentModel> lst = await studentService.GetYearWiseStudents(year);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
+            List<StudentModel> lst = await studentService.GetYearWiseStudents(year,emp.branch_id);
             ViewBag.years = await extraService.GetYears();
             //ViewData["courses"] =await masterService.GetTrainingCourses();
             ViewBag.result =  year;
@@ -365,7 +382,10 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //{
             //    return Redirect("/Account/Login");
             //}
-            List<RegistrationModel>lst=await studentService.GetAllRegistrations();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+            List<RegistrationModel>lst=await studentService.GetAllRegistrations(emp.branch_id);
             StudentPaymentModel sm = new StudentPaymentModel();
             //ViewBag.registrations = new SelectList(lst,"registration_id","student_name");
             ViewBag.registrations = await GetRegisteredStudents();
@@ -384,8 +404,11 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
            await studentService.UpdatePayment(s);
             ViewBag.msg = "Payment Accepted Successfully";
             ModelState.Clear();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
 
-            List<RegistrationModel> lst =await studentService.GetAllRegistrations();
+
+            List<RegistrationModel> lst =await studentService.GetAllRegistrations(emp.branch_id);
             StudentPaymentModel sm = new StudentPaymentModel();
             //ViewBag.registrations = new SelectList(lst, "registration_id", "student_name");
             ViewBag.registrations = await GetRegisteredStudents();
@@ -395,8 +418,12 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
 
         public async Task<List<SelectListItem>> GetRegisteredStudents()
         {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
             List<SelectListItem> lst = new List<SelectListItem>();
-            foreach(RegistrationModel s in await studentService.GetAllRegistrations())
+            foreach(RegistrationModel s in await studentService.GetAllRegistrations(emp.branch_id))
             {
                 string name = s.student_name + " " + s.last_name + "("+s.course_name+")";
                 SelectListItem sm = new SelectListItem() { Value=s.registration_id.ToString(), Text=name };
@@ -406,7 +433,11 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
         }
         public async Task<JsonResult> GetStudentDetails()
         {
-             List<StudentModel> lst =await studentService.GetStudents();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
+            List<StudentModel> lst =await studentService.GetStudents(emp.branch_id);
             return Json(lst);
         }
         public async Task<JsonResult> GetRegistrationDetails(int id)
@@ -426,7 +457,10 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //{
             //    return Redirect("/Account/Login");
             //}
-            List<StudentPaymentModel> invoices =await studentService.GetStudentPayments();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+            List<StudentPaymentModel> invoices =await studentService.GetStudentPayments(emp.branch_id);
             return View(invoices);
         }
         public async Task<IActionResult> ViewInvoice(int registration_id,int payment_id)

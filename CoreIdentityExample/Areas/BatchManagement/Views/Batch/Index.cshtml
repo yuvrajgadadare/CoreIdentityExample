@@ -130,185 +130,209 @@
     }
 </script>
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-header">
-            <a href="#myBatchModal" role="button" class="btn btn-sm btn-primary" data-bs-toggle="modal">Create New Batch</a>
+    <nav class="nav nav-pills nav-fill">
+        <a href="#activebatches" class="nav-item nav-link active" data-bs-toggle="tab">Active Batches</a>
+        <a href="#deletedbatches" class="nav-item nav-link" data-bs-toggle="tab">Deleted Batches</a>
+     
+    </nav>
+    <div class="tab-content">
+        <div class="tab-pane fade show active mt-3" id="activebatches" >
+            <a href="#myBatchModal" role="button" class="btn btn-sm text-primary" data-bs-toggle="modal">New Batch</a>
 
-        </div>
-        <div class="card-body">
+            <div class="card mb-3 mt-3">
+                 
+                <div class="card-body">
 
-            <div class="row">
+                    <div class="row">
 
-                <!-- Modal HTML -->
-                <div id="myBatchModal" class="modal fade" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">New Batch Form</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                
-                                    @* <div class="mb-3">
+                        <!-- Modal HTML -->
+                        <div id="myBatchModal" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">New Batch Form</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        @* <div class="mb-3">
                                         <label>Batch Name:</label>
                                         @Html.TextBoxFor(e => e.batch_name, new { @class = "form-control" })
                                     </div> *@
-                                    <div class="mb-3">
-                                        <label>Topic Name:</label>
-                                        @Html.DropDownListFor(e => e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Trainer Name:</label>
-                                        @Html.DropDownList("employee_id", ViewBag.trainers as SelectList, "Select Trainer", new { @class = "form-control" })
+                                        <div class="mb-3">
+                                            <label>Topic Name:</label>
+                                            @Html.DropDownListFor(e => e.topic_id, ViewBag.topics as SelectList, "Select Topic", new { @class = "form-control" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Trainer Name:</label>
+                                            @Html.DropDownList("employee_id", ViewBag.trainers as SelectList, "Select Trainer", new { @class = "form-control" })
+
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Start Date:</label>
+                                            @Html.TextBoxFor(e => e.start_date, new { @class = "form-control", @type = "date" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>End Date:</label>
+                                            @Html.TextBoxFor(e => e.end_date, new { @class = "form-control", @type = "date" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Batch Time:</label>
+                                            @Html.TextBoxFor(e => e.batch_time, new { @class = "form-control", @type = "time" })
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="button" value="Submit" onclick="AddNewBatch()" class="btn btn-primary" />
+                                            <h5>@ViewBag.msg</h5>
+                                        </div>
 
                                     </div>
-                                    <div class="mb-3">
-                                        <label>Start Date:</label>
-                                        @Html.TextBoxFor(e => e.start_date, new { @class = "form-control", @type = "date" })
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>End Date:</label>
-                                        @Html.TextBoxFor(e => e.end_date, new { @class = "form-control", @type = "date" })
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Batch Time:</label>
-                                        @Html.TextBoxFor(e => e.batch_time, new { @class = "form-control", @type = "time" })
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="button" value="Submit" onclick="AddNewBatch()" class="btn btn-primary" />
-                                        <h5>@ViewBag.msg</h5>
-                                    </div>
-                                
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <h5 class="mt-2">Active Batches</h5>
+
+                            <div class="table-responsive">
+
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Batch Name</th>
+                                            <th>Topic Name</th>
+                                            <th>Trainer Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Batch Time</th>
+                                            <th>#Students</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 1;
+                                            List<BatchModel> lstbatches = (List<BatchModel>)ViewData["batches"];
+                                        }
+                                        @foreach (var item in lstbatches)
+                                        {
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@item.batch_name</td>
+                                                <td>@item.topic_name</td>
+                                                <td>@item.employee_name</td>
+                                                <td>@item.start_date.ToShortDateString()</td>
+                                                <td>@item.end_date.ToShortDateString()</td>
+                                                <td>@item.batch_time</td>
+                                                <td>@item.total_students</td>
+                                                <td>
+                                                    @if (!item.is_schedule_generated)
+                                                    {
+                                                        <input style="font-size:12px;" type="button" value="Generate Schedule" onclick="GenerateSchedule(@item.batch_id)" class="btn btn-sm btn-primary" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a>
+                                                    }
+                                                    <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
+                                                    @if (!item.is_schedule_exams_generated)
+                                                    {
+                                                        <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
+
+                                                    }
+                                                    @*   else
+                                            {
+                                                <span>Generated Scheduled Exams</span>
+                                            } *@
+                                                    <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+                                <hr />
+
+
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Batch Name</th>
-                                    <th>Topic Name</th>
-                                    <th>Trainer Name</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Batch Time</th>
-                                    <th>#Students</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    int i = 1;
-                                    List<BatchModel> lstbatches = (List<BatchModel>)ViewData["batches"];
-                                }
-                                @foreach (var item in lstbatches)
-                                {
-                                    <tr>
-                                        <td>@i</td>
-                                        <td>@item.batch_name</td>
-                                        <td>@item.topic_name</td>
-                                        <td>@item.employee_name</td>
-                                        <td>@item.start_date.ToShortDateString()</td>
-                                        <td>@item.end_date.ToShortDateString()</td>
-                                        <td>@item.batch_time</td>
-                                        <td>@item.total_students</td>
-                                        <td>
-                                            @if (!item.is_schedule_generated)
-                                            {
-                                                <input style="font-size:12px;" type="button" value="Generate Schedule" onclick="GenerateSchedule(@item.batch_id)" class="btn btn-sm btn-primary" />
-                                            }
-                                            else
-                                            {
-                                                <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a>
-                                            }
-                                            <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
-                                            @if (!item.is_schedule_exams_generated)
-                                            {
-                                                <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
 
-                                            }
-                                          @*   else
-                                            {
-                                                <span>Generated Scheduled Exams</span>
-                                            } *@
-                                            <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            </tbody>
-                        </table>
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Batch Name</th>
-                                    <th>Topic Name</th>
-                                    <th>Trainer Name</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Batch Time</th>
-                                    <th>#Students</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                      i = 1;
-                                    List<BatchModel> lstdeletedbatches = (List<BatchModel>)ViewData["deletedbatches"];
-                                }
-                                @foreach (var item in lstdeletedbatches)
-                                {
-                                    <tr>
-                                        <td>@i</td>
-                                        <td>@item.batch_name</td>
-                                        <td>@item.topic_name</td>
-                                        <td>@item.employee_name</td>
-                                        <td>@item.start_date.ToShortDateString()</td>
-                                        <td>@item.end_date.ToShortDateString()</td>
-                                        <td>@item.batch_time</td>
-                                        <td>@item.total_students</td>
-                                        <td>
-                                            @if (!item.is_schedule_generated)
-                                            {
-                                                <input style="font-size:12px;" type="button" value="Generate Schedule" onclick="GenerateSchedule(@item.batch_id)" class="btn btn-sm btn-primary" />
-                                            }
-                                            else
-                                            {
-                                                <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a>
-                                            }
-                                            <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" />
-                                            @if (!item.is_schedule_exams_generated)
-                                            {
-                                                <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
-
-                                            }
-                                            @*   else
-                                            {
-                                                <span>Generated Scheduled Exams</span>
-                                            } *@
-                                            <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            </tbody>
-                        </table>
-
-                   </div>
-            </div>
             </div>
         </div>
+        <div class="tab-pane fade mt-3" id="deletedbatches">
+            <div class="card">
                 
-             
-        
-    </div>
+                <div class="card-body">
+                    <h5>Deleted Batches</h5>
 
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Batch Name</th>
+                                <th>Topic Name</th>
+                                <th>Trainer Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Batch Time</th>
+                                <th>#Students</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                i = 1;
+                                List<BatchModel> lstdeletedbatches = (List<BatchModel>)ViewData["deletedbatches"];
+                            }
+                            @foreach (var item in lstdeletedbatches)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.batch_name</td>
+                                    <td>@item.topic_name</td>
+                                    <td>@item.employee_name</td>
+                                    <td>@item.start_date.ToShortDateString()</td>
+                                    <td>@item.end_date.ToShortDateString()</td>
+                                    <td>@item.batch_time</td>
+                                    <td>@item.total_students</td>
+                                    <td>
+                                        @if (!item.is_schedule_generated)
+                                        {
+                                            @* <input style="font-size:12px;" type="button" value="Generate Schedule" onclick="GenerateSchedule(@item.batch_id)" class="btn btn-sm btn-primary" /> *@
+                                        }
+                                        else
+                                        {
+                                            @* <a style="font-size:12px;" href="/BatchManagement/Batch/ViewBatchSchedule/@item.batch_id" class="btn btn-sm btn-primary">View Schedule</a> *@
+                                        }
+                                        @* <input type="button" id="btnaddstudents" value="Add Students" class="btn btn-info btn-sm" onclick="ViewStudents(@item.batch_id)" style="font-size:12px;" /> *@
+                                        @if (!item.is_schedule_exams_generated)
+                                        {
+                                            @* <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" /> *@
+
+                                        }
+                                        @*   else
+                                            {
+                                                <span>Generated Scheduled Exams</span>
+                                            } *@
+                                        <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+  
+ 
 
 </div>
 <div class="modal fade" id="studentmodel" tabindex="-1" data-bs-backdrop="false">

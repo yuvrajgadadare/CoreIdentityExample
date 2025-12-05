@@ -4,6 +4,7 @@ using ERPSystem_Models;
  
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.BatchManagement.Controllers
 {
@@ -79,8 +80,8 @@ namespace CoreIdentityExample.Areas.BatchManagement.Controllers
 
         public async Task<string> ChangeProfilePhoto(IFormFile file)
         {
-            int employee_id = (int)HttpContext.Session.GetInt32("employee_id");
-            EmployeeModel d =await employeeService.GetEmployee(employee_id);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel d = await employeeService.GetEmployeeByUserId(userId);
             Random r = new Random();
             int n = r.Next(1, 1000);
             string imgname = d.employee_name + "_" + n + Path.GetExtension(file.FileName);
@@ -92,7 +93,7 @@ namespace CoreIdentityExample.Areas.BatchManagement.Controllers
             FileStream fs = new FileStream(imgpath, FileMode.Create, FileAccess.Write);
             file.CopyTo(fs);
             // d.profile_photo = imgname;
-            EmployeeModel emp = new EmployeeModel() { employee_id = employee_id, profile_photo = imgname };
+            EmployeeModel emp = new EmployeeModel() { employee_id = d.employee_id, profile_photo = imgname };
            await employeeService.ChangeProfilePhoto(emp);
             //string aadharname = d.student_name + "_adhr_" + r.Next(1, 1000) + Path.GetExtension(aadharcard.FileName);
             //string aadharpath = environment.WebRootPath + "/Students/AadharCards/" + aadharname;
@@ -103,7 +104,7 @@ namespace CoreIdentityExample.Areas.BatchManagement.Controllers
             //FileStream fsaadhar = new FileStream(aadharpath, FileMode.Create, FileAccess.Write);
             //aadharcard.CopyTo(fsaadhar);
             //d.aadhar_card_photo = aadharname;
-            d = await employeeService.GetEmployee(employee_id);
+            d = await employeeService.GetEmployee(d.employee_id);
             HttpContext.Session.SetString("employee", JsonConvert.SerializeObject(d));
             HttpContext.Session.SetString("employee_name", d.employee_name);
             HttpContext.Session.SetInt32("employee_id", d.employee_id);

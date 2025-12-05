@@ -1,9 +1,11 @@
 ﻿
 using ERP_Models;
 using ERP_Services.Interfaces;
+using Google.Apis.Drive.v3.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace ERP_Services.Areas.BatchManagement.Controllers
 {
@@ -18,6 +20,7 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
         IExamService examService;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        public static  int branch_id = 0;
         public BatchController(RoleManager<ApplicationRole> _roleManager, UserManager<ApplicationUser> _userManager, IBatchService batchService, IMasterService masterService, ITopicService topicService, IContentService contentService,IEmployeeService employeeService,IExamService examService)
         {
             this.batchService = batchService;
@@ -28,6 +31,7 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             this._userManager = _userManager;
             this.employeeService = employeeService;
             this.examService = examService;
+
         }
         public async Task<IActionResult> Index()
         {
@@ -38,7 +42,10 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             //string employee = HttpContext.Session.GetString("employee");
             //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
             //ViewData["employee"] = emp;
-            BatchModel b=new BatchModel();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel employee = await employeeService.GetEmployeeByUserId(userId);
+            branch_id = employee.branch_id;
+            BatchModel b =new BatchModel();
             List<UserRoleViewModel> users=new List<UserRoleViewModel>();
             List<EmployeeModel> lst = new List<EmployeeModel>();
             foreach (var user in _userManager.Users.ToList())
@@ -63,7 +70,9 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             SelectList topics = new SelectList(await topicService.GetTrainingTopics(), "topic_id", "topic_name");
             //SelectList trainers = new SelectList(users, "UserId", "UserName");
             SelectList trainers = new SelectList(lst, "employee_id", "employee_name");
-            List<BatchModel> batches=  await batchService.GetAllBatches();
+
+            
+            List<BatchModel> batches=  await batchService.GetAllBatches(branch_id);
             List<BatchModel> batchlist =new List<BatchModel>();
             foreach (var batch in batches) {
 
@@ -82,7 +91,9 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             ViewBag.topics = topics;
             ViewBag.trainers = trainers;
             ViewData["batches"]  = batchlist;
-            ViewData["deletedbatches"]  = batchService.GetAllDeletedBatches();
+           // int branch_id = (int)HttpContext.Session.GetInt32("branch_id");
+
+            ViewData["deletedbatches"]  = await batchService.GetAllDeletedBatches(branch_id);
             return View(b);
         }
         //[HttpPost]

@@ -14,12 +14,12 @@ namespace ERP_Services.Interfaces
         Task UpdateEmployeeDetails(EmployeeModel employee);
         //Task ChangeEmployeeDetailPassword(EmployeeModel employee);
         Task ChangeProfilePhoto(EmployeeModel employee);
-        Task AddEmployeeRole(RoleModel role);
-        Task UpdateEmployeeRole(RoleModel role);
-        Task DeleteEmployeeRole(int employee_role_id);
+        //Task AddEmployeeRole(RoleModel role);
+        //Task UpdateEmployeeRole(RoleModel role);
+        //Task DeleteEmployeeRole(int employee_role_id);
         //Task RestoreEmployeeRole(int employee_role_id);
-       Task< EmployeeModel> GetEmployeeWiseRoles(int employee_id);
-        List<RoleModel> GetRoleWiseEmployees(string role_id);
+       Task<List<RoleModel>> GetEmployeeWiseRoles(int employee_id);
+        List<EmployeeModel> GetRoleWiseEmployees(string role_id);
 
         Task AddTrainerTopics(List<TrainerTopicModel> topics);
         Task< List<TrainerTopicModel>> GetTrainerWiseTopics(int employee_id);

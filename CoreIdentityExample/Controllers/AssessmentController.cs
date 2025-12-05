@@ -25,8 +25,10 @@ namespace CoreIdentityExample.Controllers
         }
         public async Task<IActionResult> Index(int exam_id,int student_id)
         {
+            int branch_id = (int)HttpContext.Session.GetInt32("branch_id");
+
             StudentModel student = await studentService.GetStudent(student_id);
-            List<ExamModel> examlist =await examService.ViewAllScheduleExams();
+            List<ExamModel> examlist =await examService.ViewAllScheduleExams(branch_id);
             ExamModel exam = examlist.FirstOrDefault(e => e.exam_id.Equals(exam_id));
             HttpContext.Session.SetString("student_name", student.student_name);
             HttpContext.Session.SetInt32("student_id", student.student_id);

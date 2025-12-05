@@ -23,13 +23,13 @@
 <div class="row">
     <div class="col-md-10">
         <div class="row">
-            <div class="col-md-8" style="text-align:center">
+            <div class="col-md-4" style="text-align:center">
                 <h5>Student Registration Form</h5>
             </div>
+            
             <div class="col-md-4 mb-3">
                 <div>
-                    Registration Date
-                    <input type="date" id="txtregistration_date" />
+                  
                 </div>
 
             </div>
@@ -40,8 +40,21 @@
                 <div class="card-body">
                  
                     <h6 class="card-title">Student Profile Details</h6>
+                    <div class="row mt-3 mb-3">
+                        <div class="col-md-3">
+                            Select Branch
+                            @Html.DropDownList("ddbranch", ViewBag.branches as SelectList, "Select Branch")
 
+                        </div>
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-3">
+                            Registration Date
+                            <input type="date" id="txtregistration_date" />
+                        </div>
+                    </div>
                     <div class="row mb-3">
+
                         <div class="col-md-4">
                             <div class="">
                                 <label>First Name</label>
@@ -316,6 +329,8 @@
          
 
         var stud={
+            "branch_id":document.getElementById("ddbranch").value,
+            "registration_date":document.getElementById("txtregistration_date").value,
             "student_name":document.getElementById("txtstudent_name").value,
             "last_name":document.getElementById("txtlast_name").value,
             "gender":gender,
@@ -333,7 +348,7 @@
             "payments":payments,
             "qualifications":qualifications
         }
-
+        console.log(stud);
         const response=await fetch("/Accountant/Student/SubmitStudentRegistrationForm",{
             method:'post',
             body:JSON.stringify(stud),

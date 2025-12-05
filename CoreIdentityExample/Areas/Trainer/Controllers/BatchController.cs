@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Trainer.Controllers
 {
@@ -21,7 +22,7 @@ namespace CoreIdentityExample.Areas.Trainer.Controllers
             //using constructor injection
             IEmployeeService employeeService;
             IExtraService extraService;
-     
+     static int branch_id;
         public BatchController(IBatchService batchService, IMasterService masterService, IEmployeeService employeeService, IExtraService extraService, UserManager<ApplicationUser> userManager)
         {
             this.batchService = batchService;
@@ -29,15 +30,17 @@ namespace CoreIdentityExample.Areas.Trainer.Controllers
             this.employeeService = employeeService;
             this.extraService = extraService;
             this.userManager = userManager;
+          
 
         }
-            public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
             {
 
             string uname = User.Identity.Name;
             ViewBag.user = uname;
             string userId = userManager.GetUserId(User);
             EmployeeModel employee = await employeeService.GetEmployeeByUserId(userId);
+            branch_id = employee.branch_id;
 
             ViewData["trainer"] = employee;
 
@@ -67,7 +70,9 @@ namespace CoreIdentityExample.Areas.Trainer.Controllers
 
             public async Task<JsonResult> GetScheduleWiseData(int id)
             {
-                BatchScheduleModel bs = await batchService.GetScheduleWiseSchedule(id);
+           
+
+            BatchScheduleModel bs = await batchService.GetScheduleWiseSchedule(id);
                 return Json(bs);
             }
 

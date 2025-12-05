@@ -11,8 +11,8 @@ namespace ERP_Services.Interfaces
     {
         Task SubmitExam(ExamModel exam);
         Task SubmitPracticeExam(ExamModel exam);
-        Task<List<ExamModel>> GetAllExams();
-        Task<List<ExamModel>> GetAllPracticeExams();
+        Task<List<ExamModel>> GetAllExams(int branch_id);
+        Task<List<ExamModel>> GetAllPracticeExams(int branch_id);
         Task<List<ExamModel>> GetStudentWiseExams(int student_id);
         Task<List<ExamModel>> GetStudentWisePracticeExams(int student_id);
 
@@ -25,10 +25,10 @@ namespace ERP_Services.Interfaces
         Task<int> ScheduleExamForStudent(ExamModel exam);
         Task SubmitScheduledExam(ExamModel exam);
         Task RejectScheduledExam(int exam_id);
-        Task<List<ExamModel>> ViewAllScheduleExams();
+        Task<List<ExamModel>> ViewAllScheduleExams(int branch_id);
         Task<List<ExamModel>> ViewExamWiseScheduleExams(int exam_id);
-        Task<List<ExamModel>> ViewAllSubmittedExams();
-        Task<List<ExamModel>> ViewAllRejectedExams();
+        Task<List<ExamModel>> ViewAllSubmittedExams(int branch_id);
+        Task<List<ExamModel>> ViewAllRejectedExams(int branch_id);
         //Task  GetRegistrationAndBatchWiseScheduledExams(int batch_id);
         Task GenerateBatchExams(int batch_id,int total_questions);
         Task<List<BatchExamModel>> GetBatchWiseScheduledStudentExams(int batch_id);
