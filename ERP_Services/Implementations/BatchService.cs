@@ -657,6 +657,7 @@ namespace ERP_Services.Implementations
                 SqlCommand cmd = new SqlCommand("sp_fetch_topic_wise_students", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@topic_id", bm.topic_id);
+                cmd.Parameters.AddWithValue("@branch_id", bm.branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {

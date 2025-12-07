@@ -131,7 +131,11 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
 
             //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
             //ViewData["employee"] = emp;
-          await  batchService.AddBatch(batch);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel employee = await employeeService.GetEmployeeByUserId(userId);
+            branch_id = employee.branch_id;
+            batch.branch_id = branch_id;
+            await  batchService.AddBatch(batch);
           //  ModelState.Clear();
           return "Batch Created Successfully";
             //BatchModel b = new BatchModel();

@@ -1,8 +1,158 @@
-﻿
+﻿@using ERP_Models
+@model  EmployeeModel 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<EmployeeModel> employeelist=(List<EmployeeModel>) ViewData["employees"];
 }
 
-<h1>Index</h1>
+<div class="container-fluid">
+   <div class="row">
 
+
+        @foreach (var item in employeelist)
+                {
+        <div class="col-md-3 mb-3 ">
+                <div class="card">
+                    <img src="~/Employees/@item.profile_photo" class="w-100 border-bottom" alt="..." style="height:200px;">
+                    <div class="card-body">
+                        <h6 class="card-title">@item.employee_name</h6>
+                        <div class="card-text">Employee Code : <b>@item.employee_code</b></div>
+                        <div class="card-text">Joined on : <b>@item.joining_date.ToLongDateString()</b></div>
+                        <div class="card-text">Branch : <b>@item.branch_name</b></div>
+                    </div>
+                    
+                    <ul class="list-group list-group-flush">
+                        
+                        @if (item.roles.Count>1)
+                        {
+                            int cnt = item.roles.Count-1;
+                            string roles = item.roles[0].role_name + " +" + cnt + " Role(s)";
+                          
+                            <li class="list-group-item">
+                                <h6 class="card-title"> Roles</h6>
+                                @roles
+                            </li>
+
+                        }
+                        else if(item.roles.Count==1)
+                        {
+
+                            <li class="list-group-item">
+                                <h6 class="card-title"> Roles</h6>
+                                @item.roles[0].role_name
+                            </li>
+                        }
+                    </ul>
+                    <div class="card-footer">
+                        <div class="row">
+                            <button type="button" class="btn btn-primary" onclick="ViewProfile(@item.employee_id)">
+                               View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+    }
+    </div>
+    <div id="myModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Profile Details</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    @using(Html.BeginForm()){
+                   <div id="dvprofile">
+                       <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Employee Id</label>
+                                    @Html.TextBoxFor(e => e.employee_id, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Employee Name</label>
+                                    @Html.TextBoxFor(e => e.employee_name, new { @class = "form-control" })
+                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Employee Code</label>
+                                    @Html.TextBoxFor(e => e.employee_code, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Gender</label>
+                                    @Html.TextBoxFor(e => e.gender, new { @class = "form-control" })
+                            </div>
+                          
+                       
+                            <div class="col-md-12 mb-3">
+                            <label>Email</label>
+                                    @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                            </div>
+                      
+
+                            <div class="col-md-6 mb-3">
+                       
+                            <label>Birth Date</label>
+                                    @Html.TextBoxFor(e => e.birth_date, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+                                    <label>Joining Date</label>
+                                    @Html.TextBoxFor(e => e.joining_date, new { @class = "form-control" })
+                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Salary</label>
+                                    @Html.TextBoxFor(e => e.salary, new { @class = "form-control" })
+                            </div>
+                            </div>
+                       
+                        <div class="mb-3">
+                            <label>Branch</label>
+                            @Html.DropDownListFor(e=>e.branch_id, ViewBag.branches as SelectList,"Select Branch",new{@class="form-control"})
+                        </div>
+                        <div class="mb-3">
+                            <h6>Roles</h6>
+                            <div class="row" id="rolelist"></div>
+                        </div>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                   </div>
+                   }
+                </div>
+              
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+var employee_id=0;
+  const ViewProfile=async(eid)=>{
+      employee_id=eid;
+          const response=await fetch("/SuperUser/Employee/GetEmployee/"+eid);
+          const e=await response.json();
+                  $("#employee_id").val(e.employee_id);
+                  $("#employee_name").val(e.employee_name);
+                      $("#employee_code").val(e.employee_code);
+                          $("#birth_date").val(e.birth_date.split("T")[0]);
+                          $("#joining_date").val(e.joining_date.split("T")[0]);
+                              $("#salary").val(e.salary);
+                                      $("#branch_id").val(e.branch_id);
+                                          $("#email_address").val(e.email_address);
+                                              $("#gender").val(e.gender);
+                            var data="";
+                            $.each(e.roles,function(i,d){
+
+                                        data+="<div class='col-md-4'>> "+d.role_name+"</div>";
+                            })
+                                $("#rolelist").html(data);
+              $("#myModal").modal("show");
+
+  }
+       
+</script>
