@@ -20,13 +20,13 @@ namespace ERP_Models
         [EmailAddress]
         [Remote(action: "IsEmailAvailable", controller: "Account")]
         public string Email { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        //[Required]
+        //[DataType(DataType.Password)]
+        //public string Password { get; set; }
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Confirm password")]
+        //[Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
+        //public string ConfirmPassword { get; set; }
 
         [Required]
 
@@ -40,7 +40,7 @@ namespace ERP_Models
         public DateTime birth_date { get; set; }
         [Required]
         public DateTime joining_date { get; set; }
-     
+        public int branch_id { get; set; }
      
         public string qualification { get; set; }
         // public string password { get; set; }

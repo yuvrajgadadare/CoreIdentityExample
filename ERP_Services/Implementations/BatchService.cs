@@ -347,7 +347,7 @@ namespace ERP_Services.Implementations
                         gender = gender,
                         mobile_number = mobile_number,
                         profile_photo = profile_photo,
-                        qualification = qualification,
+                        //qualification = qualification,
                          branch_id = branch_id,
                           branch_name = branch_name
                     };

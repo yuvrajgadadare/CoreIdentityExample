@@ -20,7 +20,7 @@
         //public string  role_id{ get; set; }
         public string user_id { get; set; }
         public string profile_photo { get; set; }
-        public string qualification { get; set; }
+       public string qualification { get; set; }
         public List<RoleModel> roles { get; set; }
     }
 }

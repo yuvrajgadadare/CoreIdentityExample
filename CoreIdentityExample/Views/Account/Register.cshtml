@@ -4,10 +4,12 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="row">
-    <div class="col-md-3"></div>
-        <div class="col-md-6">
+
+       
         <form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
             <div class="card" id="dvprofile_new">
                 <div class="card-header">
                     <h5 style="text-align:center">  User Registration  </h5>
@@ -43,32 +45,9 @@
                         </div>
                     </div>
                 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Password"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="ConfirmPassword"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-            </div>
-                    
-                </div>
-                    <div class="row">
+            
 
                     
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Qualification</label>
-                                @Html.TextBoxFor(e => e.qualification, new { @class = "form-control" })
-                            </div>
-                        </div>
-                     
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label>Mobile Number</label>
@@ -108,11 +87,18 @@
 
                 </div>
             </div>
-            </form>
+            <div class="col-md-3">
+                <div style="color:Red">
+                    @Html.ValidationSummary()
+                </div>
+            </div>
+        </div>
 
     </div>
-</div>
 
+            </form>
+
+ 
                    
             
             

@@ -30,7 +30,7 @@ namespace ERP_Services.Implementations
                 cmd.Parameters.AddWithValue("@mobile_number", employee.mobile_number);
                 cmd.Parameters.AddWithValue("@profile_photo", employee.profile_photo);
                 cmd.Parameters.AddWithValue("@gender", employee.gender);
-                cmd.Parameters.AddWithValue("@qualification", employee.qualification);
+               cmd.Parameters.AddWithValue("@qualification", employee.qualification);
                 cmd.Parameters.AddWithValue("@birth_date", employee.birth_date);
                 cmd.Parameters.AddWithValue("@joining_date", employee.joining_date);
                 cmd.Parameters.AddWithValue("@salary", employee.salary);
@@ -160,7 +160,7 @@ namespace ERP_Services.Implementations
                    
                         salary = salary,
                          gender=gender,
-                          qualification=qualification,
+                          //qualification=qualification,
                          profile_photo=profile_photo
                     };
                     con.Close();
@@ -283,7 +283,7 @@ namespace ERP_Services.Implementations
                       
                         salary = salary,
                         profile_photo = profile_photo,
-                        qualification = qualification,
+                        //qualification = qualification,
                         gender = gender,
                          branch_id = branch_id,
                           branch_name = branch_name,

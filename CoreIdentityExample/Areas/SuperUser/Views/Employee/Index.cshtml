@@ -7,6 +7,7 @@
 }
 
 <div class="container-fluid">
+    <a href="/SuperUser/Employee/AddEmployee">New Employee</a>
    <div class="row">
 
 
@@ -17,9 +18,21 @@
                     <img src="~/Employees/@item.profile_photo" class="w-100 border-bottom" alt="..." style="height:200px;">
                     <div class="card-body">
                         <h6 class="card-title">@item.employee_name</h6>
-                        <div class="card-text">Employee Code : <b>@item.employee_code</b></div>
-                        <div class="card-text">Joined on : <b>@item.joining_date.ToLongDateString()</b></div>
-                        <div class="card-text">Branch : <b>@item.branch_name</b></div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Employee Code</label><br/>
+                                <b>@item.employee_code</b>
+                            </div>
+                            <div class="col-md-4">
+                                Joined on<br/>
+                                <b>@item.joining_date.ToShortDateString()</b>
+                            </div>
+                            <div class="col-md-4">
+                                Branch<br/>
+                                <b>@item.branch_name</b>
+                            </div>
+                              </div>
+                       
                     </div>
                     
                     <ul class="list-group list-group-flush">
@@ -84,14 +97,15 @@
                                 <label>Gender</label>
                                     @Html.TextBoxFor(e => e.gender, new { @class = "form-control" })
                             </div>
-                          
-                       
-                            <div class="col-md-12 mb-3">
-                            <label>Email</label>
+                                <div class="col-md-6 mb-3">
+                                    <label>Email</label>
                                     @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+                                </div>
+                       
+                            <div class="col-md-6 mb-3">
+                            <label>Mobile</label>
+                                    @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
                             </div>
-                      
-
                             <div class="col-md-6 mb-3">
                        
                             <label>Birth Date</label>
@@ -143,7 +157,8 @@ var employee_id=0;
                           $("#joining_date").val(e.joining_date.split("T")[0]);
                               $("#salary").val(e.salary);
                                       $("#branch_id").val(e.branch_id);
-                                          $("#email_address").val(e.email_address);
+                                              $("#email_address").val(e.email_address);
+                                              $("#mobile_number").val(e.mobile_number);
                                               $("#gender").val(e.gender);
                             var data="";
                             $.each(e.roles,function(i,d){

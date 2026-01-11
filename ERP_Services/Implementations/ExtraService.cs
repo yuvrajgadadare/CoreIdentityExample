@@ -131,21 +131,59 @@ namespace ERP_Services.Implementations
         }
 
 
+        //public async Task<string> GetRandomPassword(int length)
+        //{
+
+        //    const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$";
+
+        //    StringBuilder sb = new StringBuilder();
+        //    Random rnd = new Random();
+
+        //    for (int i = 0; i < length; i++)
+        //    {
+        //        int index = rnd.Next(chars.Length);
+
+        //        sb.Append(chars[index]);
+        //    }
+
+        //        return sb.ToString();
+        //}
         public async Task<string> GetRandomPassword(int length)
         {
 
-            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const string upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string digitChars = "0123456789";
+            const string nonAlphanumericChars = "@#$%&*";
 
-            StringBuilder sb = new StringBuilder();
-            Random rnd = new Random();
+            // All allowed characters
+            string allChars = lowerCaseChars + upperCaseChars + digitChars + nonAlphanumericChars;
 
-            for (int i = 0; i < length; i++)
+            // Ensure at least one of each type if password length allows
+
+            //StringBuilder password = new StringBuilder();
+            string password = "";
+            Random r = new Random();
+            int p = r.Next(0, lowerCaseChars.Length - 1);
+            password += lowerCaseChars[p];
+            p = r.Next(0, upperCaseChars.Length - 1);
+            password += upperCaseChars[p];
+
+            p = r.Next(0, nonAlphanumericChars.Length - 1);
+            password += nonAlphanumericChars[p];
+            p = r.Next(0, digitChars.Length - 1);
+            password += digitChars[p];
+
+            for (int i = 5; i <= length; i++)
             {
-                int index = rnd.Next(chars.Length);
-                sb.Append(chars[index]);
+                p = r.Next(0, allChars.Length - 1);
+                password += allChars[p];
             }
 
-            return sb.ToString();
+
+            // Shuffle the password to randomize the position of the guaranteed characters
+            return password.ToString();
+
         }
 
 

@@ -34,7 +34,7 @@ namespace ERP_Services.Implementations
                         gender = gender,
                         mobile_number = mobile_number,
                         profile_photo = profile_photo,
-                        qualification = qualification,
+                        //qualification = qualification,
                         employee_id = id,
                         employee_name = name,
                         employee_code= employee_code

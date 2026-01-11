@@ -69,8 +69,9 @@ namespace CoreIdentityExample.Controllers
                     LastName = model.LastName,
 
                 };
+                string password = await extraService.GetRandomPassword(10);
                 // Store user data in AspNetUsers database table
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, password);
                 // If user is successfully created, sign-in the user using
                 // SignInManager and redirect to index action of HomeController
                 if (result.Succeeded)
@@ -88,7 +89,7 @@ namespace CoreIdentityExample.Controllers
                         employee_code = await employeeService.NextEmployeeCode(),
                         birth_date = model.birth_date,
                          gender=model.gender,
-                          qualification=model.qualification,
+                          //qualification=model.qualification,
                           mobile_number=model.mobile_number
                          
 
@@ -311,6 +312,58 @@ namespace CoreIdentityExample.Controllers
             await employeeService.AddEmployeeDetails(e);
             return View(e);
 
+        }
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login"); // User not found, redirect to login
+            }
+
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (changePasswordResult.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Your password has been changed successfully.";
+                return RedirectToAction("ChangePasswordConfirmation");
+            }
+
+            foreach (var error in changePasswordResult.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            //return View(model);
+            //if (changePasswordResult.Succeeded)
+            //{
+            //    // Update the security stamp to invalidate old cookies and sign the user in with a new cookie
+            //    await userManager.UpdateSecurityStampAsync(user);
+            //    await signInManager.SignInAsync(user, isPersistent: false);
+            //    ViewBag.msg = "Your password has been changed.";
+            //    return View();
+            //}
+
+            //// If the action fails, add errors to the model state and return the view
+            //foreach (var error in changePasswordResult.Errors)
+            //{
+            //    ModelState.AddModelError(string.Empty, error.Description);
+            //}
+
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult ChangePasswordConfirmation()
+        {
+            return View();
         }
         [HttpGet]
         [AllowAnonymous]
