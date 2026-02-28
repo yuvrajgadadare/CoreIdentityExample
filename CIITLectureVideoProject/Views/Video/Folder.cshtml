@@ -1,0 +1,118 @@
+﻿@model DriveIndexViewModel
+
+ 
+    <style>
+
+        body {
+            background-color: #f5f7fb;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .video-icon {
+            font-size: 40px;
+            color: #dc3545;
+        }
+
+    </style>
+
+ 
+
+    <div class="">
+        <div class="row">
+            <div class="col-md-3">
+            @{
+                DriveIndexViewModel st = (DriveIndexViewModel)ViewData["videodata"];
+            }
+           <ul class="list-group">
+                @foreach(var item in st.Folders)
+                {
+                    
+                    <li class="list-group-item">
+
+                        <a href="/Video/Folder/@item.Id"  style="text-decoration:none">
+                            @item.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+            </div>
+            <div class="col-md-9">
+            <h3 class="mb-4">
+
+                <i class="fa fa-video"></i> Folders
+
+            </h3>
+            <div class="row">
+
+                @foreach (var f in Model.Folders)
+                {
+                    <div class="col-md-3">
+
+                        <div class="card card-hover bg-info mb-4">
+                            <div class="card-body text-center">
+                                <div class="row">
+                                    
+                                    <a href="/Video/Folder/@f.Id"
+                                       class="btn btn-warning btn-sm mt-2">
+                                        @f.Name
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+            <h3 class="mb-4">
+
+                <i class="fa fa-video"></i>  Videos
+
+            </h3>
+            <div class="row">
+
+                @foreach (var video in Model.Videos)
+                {
+                    <div class="col-md-3">
+
+                        <div class="card card-hover bg-info mb-4">
+                            <div class="card-body text-center">
+                                 <div class="row">
+                                    <h6>@video.Name.Split(".")[0]</h6>
+                                    <a href="/Video/Play/@video.Id"
+                                       class="btn btn-warning btn-sm mt-2">
+                                        Play
+                                    </a>
+                                 </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+            </div>
+        </div>
+
+     @{
+         TempData.Keep();
+     }
+
+
+        <a href="/Video/Index" class="btn btn-secondary">
+
+            Back
+
+        </a>
+
+
+    </div>
+
+ 

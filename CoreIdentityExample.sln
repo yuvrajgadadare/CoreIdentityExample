@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERP_Services", "ERP_Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIIT_NEW_WithCore", "F:\ciit site\CIIT_NEW_WithCore\CIIT_NEW_WithCore\CIIT_NEW_WithCore.csproj", "{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIITLectureVideoProject", "CIITLectureVideoProject\CIITLectureVideoProject.csproj", "{82F06AE6-0227-4800-A9C6-15BC3871011E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83CA5A98-AFCC-9C9E-F245-3418CB498DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F06AE6-0227-4800-A9C6-15BC3871011E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F06AE6-0227-4800-A9C6-15BC3871011E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F06AE6-0227-4800-A9C6-15BC3871011E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F06AE6-0227-4800-A9C6-15BC3871011E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

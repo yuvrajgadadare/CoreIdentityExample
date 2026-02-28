@@ -211,8 +211,18 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             string password = await extraService.GetRandomPassword(10);
             sm.password = password;
             sm.student_code = "Student";
-            await  studentService.AddStudentRegistration(sm);
-            return "Student Registered Successfully";
+           string msg= await  studentService.AddStudentRegistration(sm);
+            if (msg == "1")
+            {
+                string message = "<h2>Dear<br/> " + sm.student_name + ",</h2><p>Your Account has been Created successfully.You can refer <a href='https://ciitstudent.com/' target='_blank'>ciitstudent.com</a> login by email address  <b>" + sm.email_address + "</b> and password <b>" + password + "</b></p><br/><br/><h4>Regards,CIIT Training Institute Pvt. Ltd.</h4>";
+                EmailModel em = new EmailModel() { UserName = sm.student_name, EmailAddress = sm.email_address, Message = message, Subject = "Registration Confirmation" };
+                await extraService.SendEmail(em, _settings);
+                return "Student Registered Successfully";
+            }
+            else
+            {
+                return msg;
+            }
         }
         public async Task<IActionResult> NewRegistration()
         {

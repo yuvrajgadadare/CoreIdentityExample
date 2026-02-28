@@ -63,8 +63,9 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task AddStudentRegistration(StudentModel sm)
+        public async Task<string> AddStudentRegistration(StudentModel sm)
         {
+            string msg = "";
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -125,16 +126,22 @@ namespace ERP_Services.Implementations
                 {
                     pdt.Rows.Add(q.payment_date, q.payment_amount, q.payment_mode, q.payment_description, 1);
                 }
+               
                 cmd.Parameters.AddWithValue("@payment", pdt);
                 try
                 {
                     int cnt = cmd.ExecuteNonQuery();
+                    if (cnt > 0)
+                    {
+                        msg = "1";
+                    }
                 }
                 catch(Exception ex)
                 {
-                    string msg = ex.Message;
+                      msg = "Exception=>" + ex.Message;
                 }
                 con.Close();
+                return msg;
             }
         }
         public async Task UpdateStudentDetails(StudentModel sm)

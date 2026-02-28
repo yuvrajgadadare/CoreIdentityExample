@@ -1,0 +1,108 @@
+﻿@model DriveIndexViewModel
+  
+    <style>
+
+        body {
+            background-color: #f5f7fb;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .folder-icon {
+            font-size: 40px;
+            color: #ffc107;
+        }
+
+        .video-icon {
+            font-size: 40px;
+            color: #dc3545;
+        }
+
+    </style>
+
+ 
+    <div class="container mt-4">
+
+
+        <h3 class="mb-4">
+
+            <i class="fa fa-folder"></i> Folders
+
+        </h3>
+
+
+        <div class="row">
+
+            @foreach (var folder in Model.Folders)
+            {
+                <div class="col-md-3">
+
+                    <div class="card card-hover mb-4">
+
+                        <div class="card-body text-center">
+
+                            <i class="fa fa-folder folder-icon mb-3"></i>
+
+                            <h6>@folder.Name</h6>
+
+                             <a href="/Video/Folder/@folder.Id" class="btn btn-warning btn-sm mt-2">
+
+                                Open
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+
+        <h3 class="mb-4 mt-5">
+
+            <i class="fa fa-video"></i> Videos
+
+        </h3>
+
+
+        <div class="row">
+
+            @foreach (var video in Model.Videos)
+            {
+                <div class="col-md-3">
+
+                    <div class="card card-hover mb-4">
+
+                        <div class="card-body text-center">
+
+                            <i class="fa fa-file-video video-icon mb-3"></i>
+
+                            <h6>@video.Name</h6>
+
+                            <a href="/Video/Play/@video.Id"
+                               class="btn btn-danger btn-sm mt-2">
+
+                                Play
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+ 

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ciitlecturevideoproject",
+  "private_key_id": "671a3a15ff15cb0c02d37aad403f778de7e49d9c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDeANr1pgDp+8E0\nIXWI4hOWYnWQCU28JHxL/lhhytmAlY+CnDC48hYZloEao2SBrUdQK0g+YgDFb3xL\n7f5/HNGt9QWAZnFktOSUMdoODvpy8Iisc5OXHcYNT51eQfDChDIIf8474tF97HjR\nCz5D1RPKmjOkHyfdGBUFJaX32+WR/mdR6E+v/nAsQh9zoj8p11AF4feHY5WV33am\nhCTqkqG6xcoCNyHahvdSi6OmTPfWp3XX7t1f0XEIW4+mVU3IDed2Q9lAwCDvt97j\nU1EB4o/ikzRhbOKUpEj7dtGx/4Yo8ukbal/glcKMgV/ci+lhVT7gJ+k15wDZedrA\nzDsO7SdzAgMBAAECggEACN664Oa9kZu79/PASPRTeQY9EUC16OcCSl0CtgGPWCph\nngPUlIcjp+kSBnjxypacS1E3ZTqwMjNGoZgEO5rwq8Um757oN/BcU6l8P2SM0CvZ\nIh7KDlcjsyNzs7DpyDPU9e75U/43hZL9rsiGt9obHNS1bIDMLHLKYDbFX1ZbYU5Y\nTyF7SfbMIYUujU7Jn5VooyKiOMyDmgahny/oqpX6uhH/VRytCUdAPXyeSP9KgL3B\nKN2/zjLDrsTIcrRhkgCiAbqCQXdSETKHxd+lp1AVJSL0fXwe+HLwKQTecFlkMXYr\njk9G2vcGz+0w1wJrJtNEjW0GssVUvUQlj+PggXBlQQKBgQD0SGyIM6jD4GAwg+qt\n6yNgt3lqxAl4u3maPrXAf7z7XwIwpTe6sDOnFWB3o7HYazEcpjuKdfL9kTtwce2h\nRl45/L6PLjeDx/1BOd4hS0phGeK47P54ZBB7Y2GJCDDQM2K+O92c4Gh1ClEVPtj5\nrHaf+Bu9WguCXNaKUrrDadniQQKBgQDoptuyCAifzNqkiZ3Djt4l53u51vrZfQ68\nsr2jxSfwKrZpAeEIPTcOqeXtVLjLb4sVoEhZ6LBdtY1nKV/G3aoBnaTFgRlzaEs2\n61wbVT7ULrLEcWPDP2XXqwwADQHvm0oqVmaRaOVR6Z/qAPR4/rDUUQpZuxpbSBmU\nLZj7KG70swKBgQCHfrBsb7L5Srgv0MvXwefymnIHTUsvo1UUwBnR90hcaVtungWm\nUFumHo5ObgaUUwh/qpi1+SxZhzff6+FxpfVX1p/gDTOPrdsEVdOmxfswlsoR5qpT\nHrWhqwMLnfZtVUM83znR7QsjeCB3V0/EVOvLWTQRuCNQIKyDNtYO0+SdwQKBgQC8\nW/ubVC3HU0/hzxlP7yekgJoHiCpoU3vPAtfO9By1sZ8lvUO4K/ebg6qIUAOdkZ2F\n0NNDF8VS2V62myTUGTs/O6bf0PoOGe5rdHqKFqZbm8NYkIU42udViUKZ9+4NVCjj\nxjgcmlSv0PqLtmI4Y9w+ya4boARiyykKczBciAvtSQKBgEf+Azy7HwryNavS323T\nIQhMV2d0HP+v3kI9D1E2AxqNVtUYEXOYFO6oIP96Af0FHpcxEeBXr1OtVq6CfICE\nac5pJDlJ4bNMP3BWFR56e4D/xOHzS6HkaX3zxHbx17J6q/xRci+SPaxAoh7mDP7M\nuwyO77d661HbIir5uA04g979\n-----END PRIVATE KEY-----\n",
+  "client_email": "ciit-drive@ciitlecturevideoproject.iam.gserviceaccount.com",
+  "client_id": "112559278804774332016",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ciit-drive%40ciitlecturevideoproject.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

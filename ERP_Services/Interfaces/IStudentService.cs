@@ -6,7 +6,7 @@ namespace ERP_Services.Interfaces
         Task<string> NextPINNumber();
         Task ChangeStudentCourse(RegistrationModel r);
 
-        Task AddStudentRegistration(StudentModel sm);
+        Task<string> AddStudentRegistration(StudentModel sm);
         Task AddStudentPaymentSchedule(int registration_id, float registration_amount);
         Task UpdateStudentDetails(StudentModel sm);
         Task<bool> IsEmailExist(string email_address);

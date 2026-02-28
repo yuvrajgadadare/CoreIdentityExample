@@ -1,10 +1,15 @@
 ﻿using ERP_Models;
 using ERP_Services.Interfaces;
+using Google.Apis.Drive.v3.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Data;
 using System.Security.Claims;
+using System.Text;
 
 namespace CoreIdentityExample.Controllers
 {
@@ -17,16 +22,17 @@ namespace CoreIdentityExample.Controllers
         //using constructor injection
         IEmployeeService employeeService;
         IExtraService extraService;
-
+        EmailSettings _settings;
         IWebHostEnvironment _env;
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,IEmployeeService employeeService, IExtraService extraService,IWebHostEnvironment env)
+            SignInManager<ApplicationUser> signInManager,IEmployeeService employeeService, IExtraService extraService,IWebHostEnvironment env,IOptions<EmailSettings> emailSettings)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.employeeService = employeeService;
             this.extraService = extraService;
             this._env = env;
+            this._settings=emailSettings.Value;
         }
 
         public IActionResult Index()
@@ -76,10 +82,6 @@ namespace CoreIdentityExample.Controllers
                 // SignInManager and redirect to index action of HomeController
                 if (result.Succeeded)
                 {
-
-
-
-
                     EmployeeModel em = new EmployeeModel()
                     {
                         user_id = user.Id,
@@ -91,8 +93,6 @@ namespace CoreIdentityExample.Controllers
                          gender=model.gender,
                           //qualification=model.qualification,
                           mobile_number=model.mobile_number
-                         
-
                     };
                     Random r = new Random();
                     string imgname = em.employee_code + r.Next(1000, 100000) + Path.GetExtension(photo.FileName);
@@ -201,7 +201,6 @@ namespace CoreIdentityExample.Controllers
         //    // If we got this far, something failed, redisplay form
         //    return View(model);
         //}
-
         [HttpGet]
         public IActionResult Login(string? ReturnUrl = null)
         {
@@ -214,13 +213,12 @@ namespace CoreIdentityExample.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     ApplicationUser user=await userManager.FindByNameAsync(model.Email);
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
-                    
                     if (await userManager.IsInRoleAsync(user, "Administrator"))
                     {
                         return Redirect("/Developer/Dashboard/Index");
@@ -371,5 +369,97 @@ namespace CoreIdentityExample.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel em)
+        {
+
+            if (await SendPasswordResetLinkAsync(em.EmailAddress))
+            {
+                return View("ForgotPasswordConfirmation");
+            }
+            else
+            {
+                ViewBag.Message = "employee with given email address is not present";
+                return View();
+            }
+            }
+        public async Task<bool> SendPasswordResetLinkAsync(string email)
+        {
+            // Try to find the user by their email address
+            var user = await userManager.FindByEmailAsync(email);
+            // Security measure: 	
+             
+       // Do not reveal whether the user exists or not — 
+       // always behave the same if the user is not found or the email is not confirmed
+    if (user == null)
+                return false;
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedEmail = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            // Construct the password reset link with the encoded token and user’s email
+            // var baseUrl = _configuration["AppSettings:BaseUrl"];
+            var baseUrl = "https://ciitstudent.com/";
+            var resetLink = $"{baseUrl}/Account/ResetPassword?email={encodedEmail}&token={encodedToken}";
+            // Send the reset link via email to the user
+            string html = $@"
+            <html><body style='font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:20px;'>
+              <div style='max-width:600px; margin:auto; background:#fff; padding:30px; border-radius:8px;'>
+                <h2 style='color:#333;'>Password Reset Request</h2>
+                <p style='font-size:16px; color:#555;'>Hi {user.UserName},</p>
+                <p style='font-size:16px; color:#555;'>We received a request to reset your password. Click the button below to choose a new one.</p>
+                <p style='text-align:center;'>
+                  <a href='{resetLink}' style='background:#0d6efd; color:#fff; padding:12px 24px; border-radius:6px; text-decoration:none; font-weight:bold;'>Reset Password</a>
+                </p>
+                <p style='font-size:13px; color:#777;'>If you didn't request this, you can ignore this email.</p>
+                <p style='font-size:12px; color:#999; margin-top:30px;'>&copy; {DateTime.UtcNow.Year} Dot Net Tutorials. All rights reserved.</p>
+              </div>
+            </body></html>";
+            EmailModel em = new EmailModel() { UserName = user.UserName, EmailAddress = user.Email, Subject = "Forgot password link", Message = html };
+
+            await extraService.SendEmail(em,_settings);
+            return true;
+        }
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ResetPassword(string email, string token)
+        {
+
+          
+            
+            //  var email_address = WebEncoders.Base64UrlDecode(email);
+
+            var user = await userManager.FindByEmailAsync(email);
+            ResetPasswordViewModel rm=new ResetPasswordViewModel() {  Email= email, Token=token };
+            return View(rm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            byte[] decodedemail = WebEncoders.Base64UrlDecode(model.Email);
+            string email_address = Encoding.UTF8.GetString(decodedemail);
+          
+            var decodedBytes = WebEncoders.Base64UrlDecode(model.Token);
+            var decodedToken = Encoding.UTF8.GetString(decodedBytes);
+            var user = await userManager.FindByEmailAsync(email_address);
+            var result = await userManager.ResetPasswordAsync(user,decodedToken,model.Password);
+            if (result.Succeeded)
+                return View("ResetPasswordConfirmation");
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
+        }
+
     }
 }
