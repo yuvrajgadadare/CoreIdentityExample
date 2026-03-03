@@ -1,6 +1,6 @@
-﻿@{
-  
+﻿@model DriveIndexViewModel
 
+@{
     var videoId = ViewBag.VideoId;
     var videoName = ViewBag.VideoName ?? "Video Player";
 }
@@ -38,10 +38,8 @@
 
 
     <div class="row">
-        <div class="col-md-3">
-            @{
-                DriveIndexViewModel st = (DriveIndexViewModel)ViewData["videodata"];
-            }
+        <div class="col-md-2">
+            
             <a href="/Video/Index"
                class="btn btn-light back-btn">
 
@@ -51,7 +49,7 @@
 
             </a>
             <ul class="list-group">
-                @foreach (var item in st.Folders)
+                @foreach (var item in Model.Folders)
                 {
 
                     <li class="list-group-item">
@@ -63,21 +61,19 @@
                 }
             </ul>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
 
 
-
-        <video id="videoPlayer"
+  <video id="videoPlayer"
                controls
-               controlsList="nodownload" autoplay muted style="height:500px;width:100%"
-               disablePictureInPicture>
+               controlsList="nodownload" autoplay muted style="height:500px;width:100%">
 
 
             <source src="/Video/Stream/@videoId" type="video/mp4">
 
 
-        </video>
-
+        </video>  
+         
 
 
         <div class="loader" id="loader">
@@ -88,21 +84,23 @@
 
             </div>
         </div>
-        <div class="col-md-3">
-            @{
-                List<Google.Apis.Drive.v3.Data.File> std = (List<Google.Apis.Drive.v3.Data.File>)TempData["videolist"];
-                TempData.Keep();
-            }
+        <div class="col-md-2">
+
             <a href="/Video/Index"
                class="btn btn-light back-btn">
+
                 <i class="fa fa-arrow-left"></i>
+
                 Back
+
             </a>
             <ul class="list-group">
-                @foreach (var item in std)
+                @foreach (var item in Model.Videos)
                 {
+
                     <li class="list-group-item">
-                        <a href="/Video/Folder/@item.Id" style="text-decoration:none">
+
+                        <a href="/Video/Play/@item.Id" style="text-decoration:none">
                             @item.Name
                         </a>
                     </li>

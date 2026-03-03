@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@using (Html.BeginForm("Index", "Sample", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    <input type="file" name="videoFile" accept="video/*" />
+    <button type="submit">Upload</button>
+}
+
+ 
+

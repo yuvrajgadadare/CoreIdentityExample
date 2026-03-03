@@ -1,14 +1,30 @@
+using CIITLectureVideoProject.Models;
 using CIITLectureVideoProject.Services;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-builder.Services.AddScoped<GoogleDriveService>();
+builder.Services.AddDbContext<CIITDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerIdentityConnection"));
+});
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
+builder.Services.AddTransient<ICacheService,CacheService>();
+builder.Services.AddScoped<GoogleDriveService>();
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueLengthLimit = int.MaxValue;
+    options.MultipartBodyLengthLimit = int.MaxValue; // if don't set default value is: 128 MB
+    options.MultipartHeadersLengthLimit = int.MaxValue;
+
 });
 var app = builder.Build();
 

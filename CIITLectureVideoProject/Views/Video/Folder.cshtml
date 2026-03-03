@@ -24,7 +24,7 @@
 
     <div class="">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
             @{
                 DriveIndexViewModel st = (DriveIndexViewModel)ViewData["videodata"];
             }
@@ -41,7 +41,7 @@
                 }
             </ul>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
             <h3 class="mb-4">
 
                 <i class="fa fa-video"></i> Folders
@@ -99,6 +99,23 @@
 
             </div>
             </div>
+        <div class="col-md-2">
+            @{
+                DriveIndexViewModel sts = (DriveIndexViewModel)ViewData["videodata"];
+            }
+            <ul class="list-group">
+                @foreach (var item in sts.Folders)
+                {
+
+                    <li class="list-group-item">
+
+                        <a href="/Video/Folder/@item.Id" style="text-decoration:none">
+                            @item.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
         </div>
 
      @{
