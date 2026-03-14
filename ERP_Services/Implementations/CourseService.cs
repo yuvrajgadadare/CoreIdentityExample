@@ -33,7 +33,7 @@ namespace ERP_Services.Implementations
                 dt.Columns.Add("fees_amount", typeof(float));
                 dt.Columns.Add("gst", typeof(float));
                 dt.Columns.Add("fee_mode", typeof(string));
-                dt.Columns.Add("fees_change_date", typeof(int));
+                dt.Columns.Add("fees_change_date", typeof(DateTime));
                 foreach (CourseFeeModel f in course.courseFees)
                 {
                     dt.Rows.Add(f.fees_amount, f.gst, f.fee_mode, f.fees_change_date);

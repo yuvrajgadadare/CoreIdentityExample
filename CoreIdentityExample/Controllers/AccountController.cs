@@ -219,7 +219,7 @@ namespace CoreIdentityExample.Controllers
                     ApplicationUser user=await userManager.FindByNameAsync(model.Email);
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                     EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
-                    if (await userManager.IsInRoleAsync(user, "Administrator"))
+               //     if (await userManager.IsInRoleAsync(user, "Administrator"))
                     {
                         return Redirect("/Developer/Dashboard/Index");
                     }
@@ -405,7 +405,7 @@ namespace CoreIdentityExample.Controllers
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             // Construct the password reset link with the encoded token and user’s email
             // var baseUrl = _configuration["AppSettings:BaseUrl"];
-            var baseUrl = "https://ciitstudent.com/";
+            var baseUrl = "https://ciitstudent.com";
             var resetLink = $"{baseUrl}/Account/ResetPassword?email={encodedEmail}&token={encodedToken}";
             // Send the reset link via email to the user
             string html = $@"

@@ -57,6 +57,7 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
                 {
                     enquiryfordata += "," + e.enquiry_for;
                 }
+
             }
             enquiryfordata = enquiryfordata.Substring(1, enquiryfordata.Length - 1);
             string leadsourcedata = "";

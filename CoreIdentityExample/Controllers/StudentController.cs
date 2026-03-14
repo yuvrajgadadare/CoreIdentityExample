@@ -296,7 +296,7 @@ namespace CoreIdentityExample.Controllers
             int student_id = (int)HttpContext.Session.GetInt32("student_id");
             StudentModel d = await studentService.GetStudent(student_id);
             Random r = new Random();
-            int n = r.Next(1, 1000);
+            int n = r.Next(1, 100000);
             string imgname = d.student_name + "_" + n + Path.GetExtension(file.FileName);
             string imgpath = environment.WebRootPath + "/Students/Profiles/" + imgname;
             if (System.IO.File.Exists(imgpath))
