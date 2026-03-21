@@ -9,67 +9,75 @@
 <div class="container-fluid">
     <a href="/SuperUser/Employee/AddEmployee">New Employee</a>
    <div class="row">
+        
+            @{
+                int i = 1;
 
-
-        @foreach (var item in employeelist)
-                {
-        <div class="col-md-3 mb-3 ">
-                <div class="card">
-                    <img src="~/Employees/@item.profile_photo" class="w-100 border-bottom" alt="..." style="height:200px;">
-                    <div class="card-body">
-                        <h6 class="card-title">@item.employee_name</h6>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Employee Code</label><br/>
-                                <b>@item.employee_code</b>
-                            </div>
-                            <div class="col-md-4">
-                                Joined on<br/>
-                                <b>@item.joining_date.ToShortDateString()</b>
-                            </div>
-                            <div class="col-md-4">
-                                Branch<br/>
-                                <b>@item.branch_name</b>
-                            </div>
-                              </div>
-                       
+            }
+             @foreach (var item in employeelist)
+        {
+            <div class="mb-3">                
+            <div class="card">
+                
+                    <div class="card-header">
+                        <h6>@item.employee_name</h6>
                     </div>
-                    
-                    <ul class="list-group list-group-flush">
-                        
-                        @if (item.roles.Count>1)
-                        {
-                            int cnt = item.roles.Count-1;
-                            string roles = item.roles[0].role_name + " +" + cnt + " Role(s)";
-                          
-                            <li class="list-group-item">
-                                <h6 class="card-title"> Roles</h6>
-                                @roles
-                            </li>
-
-                        }
-                        else if(item.roles.Count==1)
-                        {
-
-                            <li class="list-group-item">
-                                <h6 class="card-title"> Roles</h6>
-                                @item.roles[0].role_name
-                            </li>
-                        }
-                    </ul>
-                    <div class="card-footer">
+                    <div class="card-body">
                         <div class="row">
-                            <button type="button" class="btn btn-primary" onclick="ViewProfile(@item.employee_id)">
-                               View
-                            </button>
+                            <div class="col-md-2">
+                                <img src="~/Employees/@item.profile_photo" style="height:100px;width:120px;">
+                              
+                            </div>
+                            <div class="col-md-4">
+                                <table>
+                                    <tr>
+                                        <td>Employee Code :</td>
+                                        <td><b>@item.employee_code</b></td>
+                                        </tr>
+                                    <tr>
+                                        <td>Branch Name :</td>
+                                        <td><b>@item.branch_name</b></td>
+                                    <tr>
+                                        <td>Joining Date :</td>
+                                        <td>
+                                          
+                                            <b>@item.joining_date.ToShortDateString()</b><br />
+                                        </td>
+                                    </tr>
+                                </table>
+                               
+                            </div>
+                            <div class="col-md-4">
+                                <h6 style="text-align:center">Roles</h6> 
+                                <div class="row">
+
+                                @if (item.roles != null || item.roles.Count > 0)
+                                {
+                                    @foreach (var r in item.roles)
+                                    {
+                                        <div class="col-md-4 mb-3">@r.role_name</div>
+                                    }
+                                }
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 pt-2">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="ViewProfile(@item.employee_id)">
+                                    View
+                                </button>
+
+
+                            </div>
                         </div>
                     </div>
-                </div>
+                   
+            </div>
         </div>
 
-
-    }
+                i++;
+            }
     </div>
+    
     <div id="myModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">

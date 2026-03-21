@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CoreIdentityExample.Areas.Accountant.Controllers
+namespace CoreIdentityExample.Areas.Counsellor.Controllers
 {
-    [Area(areaName:"Accountant")]
+    [Area(areaName: "Counsellor")]
+
     public class DashboardController : Controller
     {
         public IActionResult Index()
         {
-            string data = "";
-            data = data.Substring(data.Length - 1);
             return View();
         }
     }

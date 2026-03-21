@@ -160,16 +160,13 @@
          @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
         {
 
-                        <h6>Admin Section</h6>
+                        <h6>Administrator / Superuser Section</h6>
 
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="/Developer/Dashboard/Index">Dashboard</a></li>
-                            <li class="list-group-item"><a href="/Developer/Course/Index">Course</a></li>
-                            <li class="list-group-item"><a href="/Developer/Topic/Index">Topic</a></li>
-                            <li class="list-group-item"><a href="/Developer/Content/Index">Content</a></li>
-                            <li class="list-group-item"><a href="/Developer/ContentQuestion/Index">Content Question</a></li>
-                            <li class="list-group-item"><a href="/Developer/Dashboard/Index">Student</a></li>
-                            <li class="list-group-item"><a href="/Developer/Exam/Index">Exams</a></li>
+                            <li class="list-group-item"><a href="/Administrator/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/SuperUser/Employee/Index">Employees</a></li>
+                            <li class="list-group-item"><a href="/Administration/ListRoles">Roles</a></li>
+                            
                         </ul>
                         <hr/>
                    

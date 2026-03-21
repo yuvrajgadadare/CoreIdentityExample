@@ -218,11 +218,19 @@ namespace CoreIdentityExample.Controllers
                 {
                     ApplicationUser user=await userManager.FindByNameAsync(model.Email);
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
-               //     if (await userManager.IsInRoleAsync(user, "Administrator"))
+                    var userd=await userManager.FindByIdAsync(userId);
+                    var roles = User.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
+                    if (roles!=null && roles.Count>0)
                     {
-                        return Redirect("/Developer/Dashboard/Index");
+                        string role = roles[0];
+                        return Redirect($"/{role}/Dashboard/Index");
                     }
+                    //EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+               //     if (await userManager.IsInRoleAsync(user, "Administrator"))
+                    
                     // Handle successful login
                     // Check if the ReturnUrl is not null and is a local URL
                     if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
