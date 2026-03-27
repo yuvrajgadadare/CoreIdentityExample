@@ -64,7 +64,59 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
+        public async Task<List<EnquiryModel>> GetAllEnquiries()
+        {
+            List<EnquiryModel> lst = new List<EnquiryModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_tblenquiries", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            //    cmd.Parameters.AddWithValue("@branch_id", branch_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int id = Convert.ToInt32(dr["enquiry_id"].ToString());
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    DateTime enquiry_date = Convert.ToDateTime(dr["enquiry_date"].ToString());
+                    string cname = dr["candidate_name"].ToString();
+                    string gender = dr["gender"].ToString();
+                    string local_address = dr["local_address"].ToString();
+                    string email = dr["email_address"].ToString();
+                    string mob = dr["mobile_number"].ToString();
 
+                    DateTime bdate = Convert.ToDateTime(dr["birth_date"].ToString());
+
+                    string qualification = dr["qualification"].ToString();
+                    string lead_sources = dr["lead_sources"].ToString();
+                    string enquiry_fors = dr["enquiry_fors"].ToString();
+                    string interested_topics = dr["interested_topics"].ToString();
+                    string status = dr["status"].ToString();
+                    string branch_name = dr["branch_name"].ToString();
+                    EnquiryModel e = new EnquiryModel()
+                    {
+                        enquiry_id = id,
+                        birth_date = bdate,
+                        branch_id = branch_id,
+                        branch_name = branch_name,
+                        candidate_name = cname,
+                        email_address = email,
+                        enquiry_date = enquiry_date,
+                        enquiry_fors = enquiry_fors,
+                        gender = gender,
+                        interested_topics = interested_topics,
+                        lead_sources = lead_sources,
+                        local_address = local_address,
+                        mobile_number = mob,
+                        qualification = qualification,
+                        status = status
+                    };
+                    lst.Add(e);
+                }
+                con.Close();
+            }
+            return lst;
+        }
         public async Task<List<EnquiryModel>> GetEnquiries(int branch_id)
         {
             List<EnquiryModel> lst = new List<EnquiryModel>();
@@ -73,7 +125,7 @@ namespace ERP_Services.Implementations
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblenquiries", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@branch_id", 0);
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -117,7 +169,59 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
+        public async Task<List<EnquiryModel>> GetEnquiriesByBranchName(string branch_name)
+        {
+            List<EnquiryModel> lst = new List<EnquiryModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_tblenquiries", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_name", branch_name);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int id = Convert.ToInt32(dr["enquiry_id"].ToString());
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    DateTime enquiry_date = Convert.ToDateTime(dr["enquiry_date"].ToString());
+                    string cname = dr["candidate_name"].ToString();
+                    string gender = dr["gender"].ToString();
+                    string local_address = dr["local_address"].ToString();
+                    string email = dr["email_address"].ToString();
+                    string mob = dr["mobile_number"].ToString();
 
+                    DateTime bdate = Convert.ToDateTime(dr["birth_date"].ToString());
+
+                    string qualification = dr["qualification"].ToString();
+                    string lead_sources = dr["lead_sources"].ToString();
+                    string enquiry_fors = dr["enquiry_fors"].ToString();
+                    string interested_topics = dr["interested_topics"].ToString();
+                    string status = dr["status"].ToString();
+                   // string branch_name = dr["branch_name"].ToString();
+                    EnquiryModel e = new EnquiryModel()
+                    {
+                        enquiry_id = id,
+                        birth_date = bdate,
+                        branch_id = branch_id,
+                        branch_name = branch_name,
+                        candidate_name = cname,
+                        email_address = email,
+                        enquiry_date = enquiry_date,
+                        enquiry_fors = enquiry_fors,
+                        gender = gender,
+                        interested_topics = interested_topics,
+                        lead_sources = lead_sources,
+                        local_address = local_address,
+                        mobile_number = mob,
+                        qualification = qualification,
+                        status = status
+                    };
+                    lst.Add(e);
+                }
+                con.Close();
+            }
+            return lst;
+        }
         public async Task<EnquiryModel> GetEnquiry(int enquiry_id)
         {
              EnquiryModel  st =new  EnquiryModel();

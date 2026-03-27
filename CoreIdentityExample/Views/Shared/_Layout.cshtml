@@ -188,6 +188,20 @@
                         <hr />
 
                     }
+
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Counsellor"))
+                    {
+
+                        <h6>Counsellor Section</h6>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="/Counsellor/Dashboard/Index">Dashboard</a></li>
+                            <li class="list-group-item"><a href="/Counsellor/Enquiry/Index">Enquiries</a></li>
+                        </ul>
+
+                        <hr />
+
+                    }
         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Developer"))
         {
 

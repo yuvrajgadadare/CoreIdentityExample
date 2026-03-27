@@ -1,0 +1,69 @@
+﻿@using ERP_Models
+@model IEnumerable<EnquiryModel>
+@{
+    ViewData["Title"] = "AllEnquiries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h5>Enquiries</h5>
+@using(Html.BeginForm())
+{
+    <table class="table table-borderless">
+        <tr>
+            <td>
+                <a href="/Counsellor/Enquiry/NewEnquiry" class="btn btn-warning">New Enquiry Form</a>
+            </td>
+            <td>
+                @Html.DropDownList("branch_name",ViewBag.branches as SelectList,"Select Branch",new{@class="form-control"})
+            </td>
+            <td>
+                <input type="submit" value="Filter" class="btn btn-primary" />
+                
+                </td>
+                <td>
+                <a href="/Counsellor/Enquiry/Index" class="btn btn-info">All Enquiries</a>
+
+            </td>
+        </tr>
+    </table>
+}
+<div class="container-fluid">
+    <div class="row">
+        @{
+            int i = 1;
+        }
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Candidate Name</th>
+                    <th>Enquiry Date</th>
+                    <th>Qualification</th>
+                    <th>Enquiry For</th>
+                    <th>Lead Source</th>
+                    <th>Interested Topics</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.candidate_name</td>
+                        <td style="width:120px;">@item.enquiry_date.ToShortDateString()</td>
+                        <td>@item.qualification</td>
+                        <td>@item.enquiry_fors</td>
+                        <td>@item.lead_sources</td>
+                        <td>@item.interested_topics</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="~/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="~/assets/vendor/tinymce/tinymce.min.js"></script>

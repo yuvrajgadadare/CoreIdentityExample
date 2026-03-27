@@ -1,0 +1,220 @@
+﻿@model ERP_Models.EnquiryModel
+@{
+    ViewData["Title"] = "Enquiry Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+<style>
+    .form-control {
+        font-size: 12px
+    }
+
+    label {
+        font-size: 12px
+    }
+
+    span {
+        font-size: 12px
+    }
+
+    input[type=text] {
+        font-size: 12px
+    }
+</style>
+<a href="/Counsellor/Enquiry/Index" style="text-decoration:none">All Enquiries</a>
+@using (Html.BeginForm())
+{
+
+
+
+    <div class="container" style="padding-top:1%;text-align:justify; font-size:16px; font-family:'Bookman Old Style'">
+        @if (ViewBag.msg != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>Success!</strong> @ViewBag.msg
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4>Enquiry Form</h4>
+                    </div>
+                    <div class="col-md-7">
+                        <h4>@ViewBag.msg</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="padding-top:1%">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+
+                            <label>Enquiry Date:</label>
+                            @Html.TextBoxFor(e => e.enquiry_date, new { @type = "date", @class = "form-control" })
+
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label>Branch Name:</label>
+                            @* @Html.DropDownListFor(e => e.branch_id, ViewBag.branches as SelectList, "Select Branch", new { @class = "form-control" }) *@
+                            @Html.DropDownListFor(e => e.branch_id, new SelectList((System.Collections.IEnumerable)ViewData["branches"], "branch_id", "branch_name"), "Select Branch", new { @class = "form-control" })
+
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label>Candidate Name:</label>
+                            @Html.TextBoxFor(e => e.candidate_name, new { @class = "form-control" })
+
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label>Gender:</label>
+
+                            @Html.RadioButtonFor(e => e.gender, "Male") <span>Male</span>
+                            @Html.RadioButtonFor(e => e.gender, "Female") <span>Female</span>
+
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Local Address:</label>
+                            @Html.TextBoxFor(e => e.local_address, new { @class = "form-control" })
+
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label>Email Address:</label>
+                            @Html.TextBoxFor(e => e.email_address, new { @class = "form-control" })
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Mobile Number:</label>
+                            @Html.TextBoxFor(e => e.mobile_number, new { @class = "form-control" })
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Birth Date:</label>
+                            @Html.TextBoxFor(e => e.birth_date, new { @type = "date", @class = "form-control" })
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Qualification:</label>
+                            @* @Html.DropDownListFor(e => e.qualification, ViewBag.qualifications as SelectList, "Select Qualification", new { @class = "form-control" }) *@
+                            @Html.DropDownListFor(e => e.qualification, new SelectList((System.Collections.IEnumerable)ViewData["qualifications"], "qualification", "qualification"), "Select Qualification", new { @class = "form-control" })
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <b class="text-center">Enquiry For</b>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @for (int i = 0; i < Model.enquiry_forList.Count(); i++)
+                                        {
+                                            <div class="col-md-3">
+                                                <div class="mb-1">
+                                                    @Html.CheckBoxFor(e => Model.enquiry_forList[i].is_selected) <span>@Model.enquiry_forList[i].enquiry_for</span>
+                                                    @Html.HiddenFor(e => Model.enquiry_forList[i].enquiry_for_id)
+                                                    @Html.HiddenFor(e => Model.enquiry_forList[i].enquiry_for)
+
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <b class="text-center">How did you come  to know about us?</b>
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+
+
+                                        @for (int i = 0; i < Model.lead_sourceList.Count(); i++)
+                                        {
+                                            <div class="col-md-3">
+                                                <div class="mb-1">
+                                                    @Html.CheckBoxFor(e => Model.lead_sourceList[i].is_selected) <span>@Model.lead_sourceList[i].source_name</span>
+                                                    @Html.HiddenFor(e => Model.lead_sourceList[i].source_id)
+                                                    @Html.HiddenFor(e => Model.lead_sourceList[i].source_name)
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <b class="text-center">Tick your Interesting Training</b>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="row" style="height:220px;overflow:scroll">
+
+                                        @for (int i = 0; i < Model.topicList.Count(); i++)
+                                        {
+                                            <div class="col-md-3">
+                                                <div class="mb-1">
+                                                    @Html.CheckBoxFor(e => Model.topicList[i].is_selected) <span>@Model.topicList[i].topic_name</span>
+                                                    @Html.HiddenFor(e => Model.topicList[i].topic_id)
+                                                    @Html.HiddenFor(e => Model.topicList[i].topic_name)
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+
+                            <div class="row" style="text-align:right">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+
+
