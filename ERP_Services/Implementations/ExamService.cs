@@ -806,7 +806,9 @@ namespace ERP_Services.Implementations
                     string topic_name = dr["topic_name"].ToString();
                     int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
                     string branch_name = dr["branch_name"].ToString();
+            
                     ExamModel st = null;
+                    
                     List<ExamQuestionModel> questions = await GetExamWiseQuestionResult(exam_id);
 
                     //  int total_questions = questions.Count;

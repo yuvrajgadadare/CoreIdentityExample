@@ -202,8 +202,22 @@ namespace CoreIdentityExample.Controllers
         //    return View(model);
         //}
         [HttpGet]
-        public IActionResult Login(string? ReturnUrl = null)
+        public async Task< IActionResult> Login(string? ReturnUrl = null)
         {
+            var user = await userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = User.Claims
+                   .Where(c => c.Type == ClaimTypes.Role)
+                   .Select(c => c.Value)
+                   .ToList();
+                if (roles != null && roles.Count > 0)
+                {
+                    string role = roles[0];
+                    return Redirect($"/{role}/Dashboard/Index");
+                }
+              //  return RedirectToAction("Login"); // User not found, redirect to login
+            }
             ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
@@ -266,7 +280,7 @@ namespace CoreIdentityExample.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("index", "home");
+            return RedirectToAction("Login", "Account");
         }
 
         public async Task<IActionResult> Profile()

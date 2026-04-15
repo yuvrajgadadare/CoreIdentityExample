@@ -42,34 +42,15 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             return View();
         }
         public async Task<IActionResult> ScheduleExam()
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             List<TopicModel> topics =await topicService.GetTrainingTopics();
-            //List<StudentModel> students = studentService.GetStudents();
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             EmployeeModel d = await employeeService.GetEmployeeByUserId(userId);
             int branch_id = d.branch_id;
-
             ViewBag.batches = new SelectList(await batchService.GetAllBatches(branch_id), "batch_id", "batch_name") ;
-            //ViewBag.students = GetStudents();
-            // ViewData["students"] = await studentService.GetAllStudents();
-
             List<StudentModel> studentlist = await GetAllStudents();
             IEnumerable<SelectListItem> items = studentlist.Select(e => new SelectListItem
             {
@@ -98,29 +79,14 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
             ExamModel em = new ExamModel();
             return View(em);
         }
-
-        public async Task<List<StudentModel>> GetAllStudents(){
-
+        public async Task<List<StudentModel>> GetAllStudents()
+        {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             EmployeeModel d = await employeeService.GetEmployeeByUserId(userId);
             int branch_id = d.branch_id;
-
             List<StudentModel> studentlist = await studentService.GetAllStudents(branch_id);
-            //foreach(var s in await studentService.GetAllStudents())
-            //{
-            //    studentlist.Add(new StudentModel { student_id = s.student_id, student_name = s.student_name + " " + s.last_name+"("+s.permanent_identification_number+")" });
-               
-            //}
             return studentlist;
         }
-
-        //[HttpPost]
-        //public string ScheduleExam(ExamModel em)
-        //{
-        //    int exam_id = masterService.ScheduleExamForStudent(em);
-        //    string msg = ShareExamLink(exam_id, em.student_id);
-        //    return "Exam Scheduled Successfully," + msg;
-        //}
         [HttpPost]
         public async Task<IActionResult> ScheduleExam(ExamModel em)
         {
@@ -234,20 +200,8 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
                 return "Unable to send exam link.send link again";
             }
         }
-
         public async  Task<IActionResult> Exams(int page = 0)
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
-            //int student_id = (int)HttpContext.Session.GetInt32("student_id");
-            //List<ExamModel> exams = masterService.GetStudentWiseExams(student_id);
-          //  List<ExamModel> exams =await examService.GetAllExams();
-          //  return View(exams);
             if (page == -1)
             {
                 page = currentPage - 1;
@@ -277,15 +231,9 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
             List<ExamModel> lst =  GetExamData(page, pageSize, out totalRecord, out totalPage,branch_id);
             ViewBag.dbCount = totalPage;
             return View(lst);
-
         }
-
-
         public  List<ExamModel>  GetExamData(int page, int pageSize, out int totalRecord, out int totalPage,int branch_id)
         {
-        
-
-
             List<ExamModel> query = new List<ExamModel>();
             List < ExamModel > data = examService.GetAllExams(branch_id).Result;
             totalRecord = data.Count();
@@ -293,50 +241,22 @@ namespace CIIT_ERPSystem.Areas.BatchManagement.Controllers
             query = data.OrderBy(a => a.exam_id).Skip(((page - 1) * pageSize)).Take(pageSize).ToList();
             return query;
         }
-
-
         public async Task< IActionResult> ViewExamDetails(int id)
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             ExamModel em =await examService.GetExam(id);
-          //  int student_id = (int)HttpContext.Session.GetInt32("student_id");
-          //  List<ExamModel> exams =await examService.GetStudentWiseExams(student_id);
             return View(em);
-
         }
         public async Task<IActionResult> ExamCertificate(int id)
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             ExamModel em =await examService.GetExam(id);
             return View(em);
-
         }
         public async Task<IActionResult> PrintCertificate(int id)
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             ExamModel em =await examService.GetExam(id);
             StudentModel sm =await studentService.GetStudent(em.student_id);
             ViewData["student"] = sm;
             return View(em);
-
         }
     }
 }

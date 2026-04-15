@@ -34,22 +34,20 @@
 @{
     List<BatchStudentModel> studentlist = (List<BatchStudentModel>)ViewData["students"];
 }
-<div class="col-md-12">
- 
-    <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="card-header">
-
-            <h5 style="text-align:center">Students</h5>
-
-        </div>
+<div class="mb-3 shadow-lg p-3 mb-3 bg-white rounded">
+    <div class="card">
         <div class="card-body">
-            <table class="table table-borderless">
+            <div class="mb-3">
+                <h6 style="text-align:center">Students</h6>
+            </div>
+            <table class="table table-bordered table-sm">
     
         <thead>
             <tr>
                 <th>Sr No</th>
                 <th>Student Name</th>
                 <th>Course Name</th>
+                <th>Attendance</th>
 
             </tr>
         </thead>
@@ -63,20 +61,17 @@
                     <td>@j</td>
                     <td>@item.student_name</td>
                     <td>@item.course_name</td>
- 
-                    <td><button onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-info btn-sm">View Attendance</button></td>
+                    <td>
+                        <button style="font-size:12px;" onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-sm text-primary">View</button>
+                    </td>
                 </tr>
                 j++;
             }
         </tbody>
     </table>
-
-
         </div>
     </div>
 </div>
-
-
 <div class="modal fade" id="attendancemodel" tabindex="-1" data-bs-backdrop="false">
     <div class="modal-dialog  modal-xl">
         <div class="modal-content">
@@ -91,7 +86,6 @@
                     </table>
                 </div>
                 <div class="row">
-
                     <table class="table table-bordered table-responsive">
                         <thead>
                             <tr>

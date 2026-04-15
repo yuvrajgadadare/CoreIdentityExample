@@ -45,18 +45,22 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <div class="container-fluid">
     <div class="card">
-        <div class="card-header">
-            <h4>Batch Details</h4>
-        </div>
+        
         <div class="card-body">
+            
+                <div class="row">
+                    <div class="col-md-3"><a href="/BatchManagement/Batch/Index" class="btn btn-primary btn-sm">Back</a></div>
+                <div class="col-md-8 mb-3"><h6>Batch Details</h6></div>
+                </div>
+            
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
 
                 @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchDetails.cshtml")
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchStudent_Attendance.cshtml")
 
                 </div>
@@ -68,60 +72,64 @@
                     @Html.Partial("~/Areas/BatchManagement/Views/Shared/BatchViews/BatchScheduleExams.cshtml")
 
                 </div>
-                </div>
-                <div class="row">
-                <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
-                    <div class="card-header">
 
-                        <h5 style="text-align:center">Batch Schedule </h5>
+                <div class="col-md-8">
+                    <div class="shadow-lg p-3 mb-3 bg-white rounded">
+                        <div class="card">
+                            <div class="card-header">
 
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Content Name</th>
-                                    <th>Expected Date</th>
-                                    <th>Expected Day</th>
-                                    <th>Actual Date</th>
-                                    <th>Actual Day</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int i = 1;
-                            }
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@i</td>
-                                    <td>@item.content_name</td>
-                                        <td>@item.expected_date.ToShortDateString()</td>
-                                        <td>@item.expected_date.DayOfWeek</td>
-                                    @if(item.actual_date!=null)
-                                    {
-                                            <td>@item.actual_date.Value.ToShortDateString()</td>
-                                            <td>@item.actual_date.Value.DayOfWeek</td>
-                                    }
-                                    else
-                                    {
-                                            <td></td>
-                                            @* <td>@item.actual_date.Value.DayOfWeek</td> *@
-                                    }
-                                        <td>@item.status</td>
-                                </tr>
-                                i++;
-                            }
-                        </tbody>
-                    </table>
+                                <h6 style="text-align:center">Batch Schedule </h6>
+
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Content Name</th>
+                                            <th>Expected Date</th>
+                                            <th>Expected Day</th>
+                                            <th>Actual Date</th>
+                                            <th>Actual Day</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 1;
+                                        }
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@item.content_name</td>
+                                                <td>@item.expected_date.ToShortDateString()</td>
+                                                <td>@item.expected_date.DayOfWeek</td>
+                                                @if (item.actual_date != null)
+                                                {
+                                                    <td>@item.actual_date.Value.ToShortDateString()</td>
+                                                    <td>@item.actual_date.Value.DayOfWeek</td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                    <td></td>
+                                                    @* <td>@item.actual_date.Value.DayOfWeek</td> *@
+                                                }
+                                                <td>@item.status</td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 </div>
-            </div>
-              
-            </div>
+               
         </div>
- 
+    </div>
+</div>
+
 

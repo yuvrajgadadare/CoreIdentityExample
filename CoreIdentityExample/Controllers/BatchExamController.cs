@@ -25,10 +25,10 @@ namespace CoreIdentityExample.Controllers
         }
         public async Task<IActionResult> Index(int id)
         {
-            int branch_id = (int)HttpContext.Session.GetInt32("branch_id");
+            //int branch_id = (int)HttpContext.Session.GetInt32("branch_id");
 
             BatchExamModel exam = await examService.GetBatchExamByExamId(id);
-            List<ExamModel> examlist = await examService.ViewAllScheduleExams(branch_id);
+           // List<ExamModel> examlist = await examService.ViewAllScheduleExams(branch_id);
             if (exam == null)
             {
                 ViewBag.msg = "Exam has expired. Please contact to the branch";

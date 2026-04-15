@@ -60,7 +60,7 @@ builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddTransient<IStudentService, StudentService>();
 builder.Services.AddTransient<ITrainerService, TrainerService>();
 builder.Services.AddTransient<IExamService, ExamService>();
-
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     // If the LoginPath isn't set, ASP.NET Core defaults the path to /Account/Login.

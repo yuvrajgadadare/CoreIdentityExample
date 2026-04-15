@@ -2,23 +2,23 @@
 @{
     List<BatchScheduleExamModel> exams = (List<BatchScheduleExamModel>)ViewData["exams"];
 }
-<div class="col-md-12">
 
-    <div class="card mb-3 shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="card-header">
 
-            <h5 style="text-align:center">Scheduled Exams</h5>
-
-        </div>
+<div class="mb-3 shadow-lg p-3 mb-3 bg-white rounded">
+    <div class="card">
+        
         <div class="card-body">
+            <div class="mb-2">
+                <h6 style="text-align:center">Scheduled Exams</h6>
+            </div>
+             
             <table class="table table-bordered">
 
                 <thead>
                     <tr>
-                        <th>Sr No</th>
-                        <th>Exam Date</th>
-                        <th>Topic Name</th>
-
+                        <th>#</th>
+                        <th>Topic</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,17 +29,14 @@
                     {
                         <tr>
                             <td>@j</td>
+                            <td> @item.topic_name</td>
                             <td>@item.exam_date.ToShortDateString()</td>
-                            <td>@item.topic_name</td>
-
-                            @* <td><button onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-info btn-sm">View Attendance</button></td> *@
                         </tr>
                         j++;
                     }
                 </tbody>
             </table>
-
-
+           
         </div>
     </div>
 </div>

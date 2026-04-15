@@ -35,13 +35,6 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             EmployeeModel employee = await employeeService.GetEmployeeByUserId(userId);
             branch_id = employee.branch_id;
@@ -96,29 +89,7 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             ViewData["deletedbatches"]  = await batchService.GetAllDeletedBatches(branch_id);
             return View(b);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Index(BatchModel batch)
-        //{
-        //    //if (HttpContext.Session.GetString("employee") == null)
-        //    //{
-        //    //    return Redirect("/Account/Login");
-        //    //}
-        //    //string employee = HttpContext.Session.GetString("employee");
-
-        //    //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-        //    //ViewData["employee"] = emp;
-        //    batchService.AddBatch(batch);
-        //    ModelState.Clear();
-        //    ViewBag.msg = "Batch Created Successfully";
-        //    BatchModel b = new BatchModel();
-
-        //    SelectList topics = new SelectList(await topicService.GetTrainingTopics(), "topic_id", "topic_name");
-        //    SelectList trainers = new SelectList(await batchService.GetAllTrainers(), "employee_id", "employee_name");
-        //    ViewBag.topics = topics;
-        //    ViewBag.trainers = trainers;
-        //    ViewData["batches"] = batchService.GetAllBatches().Result;
-        //    return View(b);
-        //}
+       
 
         [HttpPost]
         public async Task<string>  CreateNewBatch(BatchModel batch)
@@ -208,17 +179,7 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
         }
         public async Task<IActionResult> ViewBatchSchedule(int id)
         {
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
-            //string employee = HttpContext.Session.GetString("employee");
-            //EmployeeModel emp = (EmployeeModel)JsonConvert.DeserializeObject<EmployeeModel>(employee);
-            //ViewData["employee"] = emp;
-            //if (HttpContext.Session.GetString("employee") == null)
-            //{
-            //    return Redirect("/Account/Login");
-            //}
+           
             List<BatchScheduleModel>schedule=await batchService.GetBatchWiseSchedule(id);
             List<BatchStudentModel> students =await batchService.GetBatchWiseStudents(id);
             List<BatchScheduleExamModel> exams =await batchService.GetBatchWiseScheduledExams(id);

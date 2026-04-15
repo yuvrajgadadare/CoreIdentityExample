@@ -384,32 +384,6 @@ namespace ERP_Services.Implementations
                     int total_leactures = Convert.ToInt32(dr["total_leactures"].ToString());
                     int attended_leactures = Convert.ToInt32(dr["attended_leactures"].ToString());
                     List<BatchScheduleModel> schedule = await GetBatchWiseSchedule(batch_id);
-                    //bool status = false;
-                    //if (schedule.Count() > 0)
-                    //{
-                    //    status = true;
-                    //}
-                    //int remaining_leatures = total_leactures - attended_leactures;
-                    //float per = (attended_leactures * 100) / total_leactures;
-                    //int cnt = 0;
-                    //List<BatchStudentModel> students = await GetBatchWiseStudents(batch_id);
-                    //if (students.Count() > 0)
-                    //{
-                    //    cnt = students.Count();
-                    //}
-                    //string batch_status = "";
-                    //if (total_leactures == attended_leactures)
-                    //{
-                    //    batch_status = "completed";
-                    //}
-                    //else if (attended_leactures > 0 && attended_leactures < total_leactures)
-                    //{
-                    //    batch_status = attended_leactures + " Leactures Finished";
-                    //}
-                    //else
-                    //{
-                    //    batch_status = "Not Yet Started";
-                    //}
                     bool status = false;
                     if (schedule.Count() > 0)
                     {
@@ -420,7 +394,7 @@ namespace ERP_Services.Implementations
                     float per = 0;
                     if (total_leactures > 0)
                     {
-                        per = (remaining_leatures * 100) / total_leactures;
+                        per = ((float)attended_leactures * 100) /(float) total_leactures;
                     }
 
                     int cnt = 0;
