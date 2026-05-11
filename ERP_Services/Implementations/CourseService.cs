@@ -268,5 +268,18 @@ namespace ERP_Services.Implementations
             }
             return st;
         }
+
+        public async Task DeleteCourseTopic(int course_topic_id)
+        {
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_delete_course_topic", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@course_topic_id", course_topic_id);
+                int cnt = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
     }
 }

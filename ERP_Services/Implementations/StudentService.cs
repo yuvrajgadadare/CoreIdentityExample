@@ -1049,8 +1049,6 @@ namespace ERP_Services.Implementations
                         student_code = student_code,
                          branch_id = branch_id,
                           branch_name=branch_name
-
-
                     };
                     lst.Add(e);
 
@@ -1074,6 +1072,8 @@ namespace ERP_Services.Implementations
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    string permanent_identification_number = dr["permanent_identification_number"].ToString();
+                    string PIN = dr["permanent_identification_number"].ToString();
                     int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
                     string branch_name = dr["branch_name"].ToString();
                     string student_code = dr["student_code"].ToString();
@@ -1130,7 +1130,9 @@ namespace ERP_Services.Implementations
                             remaining_amount = remaining_amount,
                             fees_status = status,
                              branch_name=branch_name,
-                              branch_id = branch_id
+                              branch_id = branch_id,
+                               permanent_identification_number=permanent_identification_number
+                               
 
 
                         };

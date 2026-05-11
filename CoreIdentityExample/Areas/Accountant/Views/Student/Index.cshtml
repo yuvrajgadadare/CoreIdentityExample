@@ -38,7 +38,6 @@
         background: #ededed;
     }
  </style>
-
 @* @model ERPSystem_Models.StudentModel *@
     @* @{
         ViewData["Title"] = "RegistrationForm";
@@ -81,6 +80,32 @@
                  alert(resp);
              }
          })
+     }
+     var studentdata=[];
+     const fetchStudents=async()=>{
+        const response=await fetch("/Accountant/Student/GetAllStudents");
+        const students=await response.json();
+       studentdata=students;
+        console.log(students);
+        var data="";
+        students.forEach(function(d,k){
+        data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.email_address+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td>"+d.local_address+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
+            })
+            document.getElementById("tbldata").innerHTML=data;
+         }
+     fetchStudents();
+
+     const filterStudents=()=>{
+         var txt=document.getElementById("txtfilter").value;
+
+         var students=studentdata.filter(e=>e.student_name.toLowerCase().includes(txt.toLowerCase()));
+         if(student.length>0){
+        var data="";
+       students.forEach(function(d,k){
+       data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.email_address+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td>"+d.local_address+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
+           })
+           document.getElementById("tbldata").innerHTML=data;
+           }
      }
  </script>
   
@@ -125,27 +150,27 @@
     
  
         <div class="row">
-            <input type="text" class="form-control" id="txtfilter" onclick="filter" placeholder="search student by name,mobile,qualification,course,email address,etc" />
+            <input type="text" class="form-control" id="txtfilter"  onkeyup="filterStudents()" placeholder="search student by name,mobile,qualification,course,email address,etc" />
         </div>
         <div class="row">
             <table  class="table datatable" style="font-size:small">
                 <thead>
                     <tr>
-                        <th>Sr No</th>
-                        <th>Registration Date</th>
-                        <th>Student Name</th>
-                        <th>Gender</th>
-                      <th data-type="date" data-format="DD-MM-YYYY">Birth Date</th>
-                        <th>Mobile Number</th>
-                        <th>Email Address</th>
-                        <th>Qualification</th>
-                        <th>Student Code</th>
-                        <th>Photo</th>
-                        <td>Action</td>
+                        <th style="width:auto">Sr No</th>
+                <th style="width:auto">Registration Date</th>
+                <th style="width:auto">Student Name</th>
+                <th style="width:auto">Gender</th>
+                <th style="width:auto" data-type="date" data-format="DD-MM-YYYY">Birth Date</th>
+                <th style="width:auto">Mobile Number</th>
+                <th style="width:auto">Email Address</th>
+                <th style="width:auto">Branch</th>
+                <th style="width:auto">PIN</th>
+                <th style="width:auto">Local Address</th>
+                <th style="width:auto">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @{
+                <tbody id="tbldata">
+                   @*  @{
                         int i = 1;
                       //  List<StudentModel> lst = (List<StudentModel>)ViewData["students"];
                     }
@@ -175,11 +200,11 @@
                             <td><img src="~/Students/Profiles/@item.profile_photo" height="30" width="30" /></td>
                             <td>
                                 <a href="/Accountant/Student/GetStudentWisedetails/@item.student_id" class="btn btn-info btn-sm">View Details</a>
-                                <input type="button" value="Change Course" class="btn btn-warning btn-sm" onclick="ChangeCourse(@item.student_id)" />
+                                <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse(@item.student_id)' />
                             </td>
                         </tr>
                         i++;
-                    }
+                    } *@
                 </tbody>
             </table>
         </div>

@@ -15,6 +15,8 @@
         public DateTime exam_date { get; set; }
         public DateTime start_time { get; set; }
         public DateTime end_time { get; set; }
+        public string start_time_string { get; set; }
+        public string end_time_string { get; set; }
         public int topic_id { get; set; }
         public string topic_name { get; set; }
         public int total_questions {  get; set; }

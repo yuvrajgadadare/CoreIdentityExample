@@ -14,6 +14,7 @@ namespace ERP_Services.Interfaces
 
         Task AddCourseFees(CourseFeeModel fee);
         Task DeleteCourseFees(int fee_id);
+        Task DeleteCourseTopic(int course_topic_id);
         Task<List<CourseModel>> GetTrainingCourses();
         Task<List<CourseFeeModel>> GetCourseFees();
         Task<CourseFeeModel> GetCourseFee(int fee_id);

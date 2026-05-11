@@ -3,7 +3,11 @@
     ViewData["Title"] = "Assessment";
     Layout = "~/Views/Shared/ExamLayout.cshtml";
 }
-
+<script>
+        document.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
+</script>
 @if (ViewBag.msg!=null)
 {
     <h2 style="color:red;text-align:center">@ViewBag.msg</h2>

@@ -3,11 +3,10 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <script>
     var i = 1;
     $(document).ready(function () {
-        GetContents();
+       // GetContents();
         $("#btncount").click(function () {
             AddContentFields();
         })
@@ -104,7 +103,7 @@
     }
 </script>
 <div class="row" style="font-size:small">
-    <div class="col-6">
+    <div class="col-5">
 
         <div class="card">
             <div class="card-header">
@@ -141,7 +140,7 @@
         </div>
 
     </div>
-    <div class="col-6">
+    <div class="col-7">
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -156,4 +155,3 @@
         </table>
     </div>
 </div>
-

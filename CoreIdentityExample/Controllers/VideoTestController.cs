@@ -9,9 +9,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using ERP_Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoreIdentityExample.Controllers
 {
+    //[Authorize]
     public class VideoTestController : Controller
     {
         IWebHostEnvironment env;

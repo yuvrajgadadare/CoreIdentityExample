@@ -30,5 +30,7 @@ namespace ERP_Models
         public float gst { get; set; }
         public string fees_mode { get; set; }
         public CourseModel course { get; set; }
+        public string permanent_identification_number { get; set; }
+
     }
 }

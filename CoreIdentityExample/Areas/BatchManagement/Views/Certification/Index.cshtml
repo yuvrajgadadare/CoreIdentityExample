@@ -13,14 +13,14 @@
         console.log(students);
         var data="<option selected disabled>Select Student</option>";
         students.forEach(function(d,k){
-            data+="<option value="+d.student_id+">"+d.student_name+"</option>"
+            data+="<option value="+d.registration_id+">"+d.student_name+"</option>"
         })
-        document.getElementById("registration_id").innerHTML=data;
+        document.getElementById("ddregistration_id").innerHTML=data;
     }
      const getStudentWiseExams=async()=>{
-          document.getElementById("loading").setAttribute("hidden");
+      //    document.getElementById("loading").setAttribute("hidden","hidden");
           try {
-        const registration_id=document.getElementById("registration_id").value;
+        const registration_id=document.getElementById("ddregistration_id").value;
         //alert(branch_id);
         const response=await fetch("/BatchManagement/Certification/GetStudentExams/"+registration_id);
         const students=await response.json();
@@ -28,22 +28,25 @@
         var data="";
         students.forEach(function(d,k){
             if(d.status=="Submitted"){
-
-            data+="<tr><td>"+(k+1)+"</td><td>"+d.topic_name+"</td><td>"+d.exam_date+"</td><td>"+d.start_time+"</td><td>"+d.end_time+"</td><td>"+d.status+"</td><td>"+d.total_questions+"</td><td>"+d.total_correct_questions+"</td><td>"+d.total_wrong_questions+"</td><td>"+d.percentage+"</td></tr>"
+                data+="<tr><td>"+(k+1)+"</td><td>"+d.exam_date.toString().split('T')[0]+"</td><td>"+d.topic_name+"</td><td>"+d.start_time_string+"</td><td>"+d.end_time_string+"</td><td>"+d.status+"</td><td>"+d.total_questions+"</td><td>"+d.total_correct_questions+"</td><td>"+d.total_wrong_questions+"</td><td>"+d.percentage+"</td></tr>"
             }
-
         })
         document.getElementById("tbldata").innerHTML=data;
           } catch (error) {
       console.error("Fetch error:", error);
     } finally {
-      document.getElementById("loading").style.display = "none"; // Hide spinner regardless of success/fail
+    //  document.getElementById("loading").removeAttribute("")  // Hide spinner regardless of success/fail
     }
+    }
+    const ViewCertificate=()=>{
+        var  registration_id=document.getElementById("ddregistration_id").value;
+        window.location.href="/BatchManagement/Certification/ViewCertificate/"+registration_id;
+
     }
 </script>
 <div class="container-fluid">
     <div class="row mb-3">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                      <table class="table table-borderless">
@@ -54,20 +57,24 @@
                             </td>
                              <td>
                                 Select Student :
-                                <select class="form-control" id="registration_id" onchange="getStudentWiseExams()">
+                                <select class="form-control" id="ddregistration_id" onchange="getStudentWiseExams()">
                                     <option selected disabled>Select Student</option>
                                 </select>
+                             </td>
+                             <td>
+                                 <br />
+                                 <input type="button" value="View Certificate" class="btn btn-primary" onclick="ViewCertificate()" />
                              </td>
                          </tr>
                      </table>
                      
                 </div>
             </div>
-            <div class="d-flex justify-content-center">
+          @*   <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status">
                     <span class="sr-only" id="loading" hidden></span>
                 </div>
-            </div>
+            </div> *@
         </div>
         <div class="col-md-12">
             <hr />

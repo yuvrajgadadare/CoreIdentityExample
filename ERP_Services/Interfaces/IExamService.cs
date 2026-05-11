@@ -14,11 +14,13 @@ namespace ERP_Services.Interfaces
         Task<List<ExamModel>> GetAllExams(int branch_id);
         Task<List<ExamModel>> GetAllPracticeExams(int branch_id);
         Task<List<ExamModel>> GetStudentWiseExams(int student_id);
+        Task<List<ExamModel>> GetStudentRegistrationWiseSubmittedExams(int registration_id);
         Task<List<ExamModel>> GetStudentWisePracticeExams(int student_id);
 
         Task<List<ExamQuestionModel>> GetExamWiseQuestionResult(int exam_id);
         Task<List<ExamQuestionModel>> GetPracticeExamWiseQuestionResult(int exam_id);
         Task<ExamModel> GetExam(int exam_id);
+        Task<StudentCertificationModel> GetStudentCertificate(int registration_id);
         Task<ExamModel> GetPracticeExam(int exam_id);
 
 

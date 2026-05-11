@@ -353,6 +353,17 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //ViewData["courses"] =await masterService.GetTrainingCourses();
             return View(lst);
         }
+        public async Task<JsonResult> GetAllStudents()
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
+            List<StudentModel> lst = await studentService.GetStudents(emp.branch_id);
+            ViewBag.years = await extraService.GetYears();
+            //ViewData["courses"] =await masterService.GetTrainingCourses();
+            return Json(lst);
+        }
         [HttpPost]
         public async Task<IActionResult> Index(int year)
         {

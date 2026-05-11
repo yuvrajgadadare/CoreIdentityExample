@@ -46,6 +46,12 @@ namespace CoreIdentityExample.Areas.Developer.Controllers
             return "Course Added Successfully";
         }
         [HttpPost]
+        public async Task<string> DeleteCourseTopic(int id)
+        {
+            await courseService.DeleteCourseTopic(id);
+            return "Course Topic Deleted Successfully";
+        }
+        [HttpPost]
         public async Task<string> AddCourseTopics(CourseModel course)
         {
            await topicService.AddCourseTopics(course);

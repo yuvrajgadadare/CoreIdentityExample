@@ -468,11 +468,12 @@ namespace ERP_Services.Implementations
                 while (dr.Read())
                 {
                     int t_id = Convert.ToInt32(dr["topic_id"].ToString());
+                    int ct_id = Convert.ToInt32(dr["course_topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
                   //  List<ContentModel> contents = await contentService.GetAllTopicWiseContentQuestionAndInterviewQuestionsCounts(t_id);
                   //  int total_interview_questions = contents.Sum(e => e.total_interview_questions);
                   //  int total_program_questions = contents.Sum(e => e.total_program_questions);
-                    TopicModel e = new TopicModel() { topic_id = t_id, topic_name = topic_name };
+                    TopicModel e = new TopicModel() { topic_id = t_id, topic_name = topic_name, course_topic_id=ct_id };
                     lst.Add(e);
                 }
                 con.Close();

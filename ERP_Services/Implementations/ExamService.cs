@@ -14,10 +14,12 @@ namespace ERP_Services.Implementations
     {
         IBatchService batchService;
         IContentService contentService;
-        public ExamService( IBatchService batchService, IContentService contentService)
+        IStudentService studentService;
+        public ExamService( IBatchService batchService, IContentService contentService,IStudentService studentService)
         {
             this.batchService = batchService;
             this.contentService = contentService;
+            this.studentService = studentService;
         }
         public async Task<ExamModel> GetExam(int exam_id)
         {
@@ -82,12 +84,14 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
+                        end_time = end_time ,
+                        end_time_string = end_time.ToLongTimeString(),
                         exam_date = exam_date,
                         exam_id = eid,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
-                        start_time = start_time,
+                        start_time = start_time ,
+                        start_time_string = start_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -314,7 +318,9 @@ namespace ERP_Services.Implementations
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
-                        end_time = end_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time ,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         status = status,
@@ -363,6 +369,8 @@ namespace ERP_Services.Implementations
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                     
                         student_name = student_name,
                         topic_name = topic_name,
                         status = status,
@@ -411,6 +419,8 @@ namespace ERP_Services.Implementations
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        
                         student_name = student_name,
                         topic_name = topic_name,
                         status = status,
@@ -521,12 +531,15 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
+                      
                         exam_date = exam_date,
                         exam_id = exam_id,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -613,12 +626,15 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
+                         
                         exam_date = exam_date,
                         exam_id = exam_id,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -748,12 +764,15 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
+                         
                         exam_date = exam_date,
                         exam_id = eid,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -782,7 +801,7 @@ namespace ERP_Services.Implementations
         }
         public async Task<List<ExamModel>> GetStudentWiseExams(int student_id)
         {
-            List<ExamModel> lst = new List<ExamModel>();
+            List<ExamModel> exams = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -825,7 +844,7 @@ namespace ERP_Services.Implementations
                             total_wrong_questions++;
                         }
                     }
-                    float percentage = (total_correct_questions * 100 / total_questions);
+                    float percentage = ((float)total_correct_questions * 100 / (float)total_questions);
                     string grade = "";
                     if (percentage < 40)
                     {
@@ -834,7 +853,6 @@ namespace ERP_Services.Implementations
                     else if (percentage >= 40 && percentage < 60)
                     {
                         grade = "Average";
-
                     }
                     else if (percentage >= 60 && percentage < 80)
                     {
@@ -848,12 +866,14 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
                         exam_date = exam_date,
                         exam_id = exam_id,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -863,15 +883,164 @@ namespace ERP_Services.Implementations
                         percentage = percentage,
                         grade = grade,
                         status = status,
-                         branch_id = branch_id,
-                          branch_name=branch_name
-
+                        branch_id = branch_id,
+                        branch_name=branch_name
                     };
-                    lst.Add(st);
+                    exams.Add(st);
                 }
                 con.Close();
             }
+
+            List<ExamModel> lst = new List<ExamModel>();
+            foreach (ExamModel e in exams)
+            {
+                if (lst.Count > 0)
+                {
+                    ExamModel s = lst.FirstOrDefault(p => p.topic_name.Equals(e.topic_name));
+                    if (s != null)
+                    {
+                        if (s.total_correct_questions < e.total_correct_questions)
+                        {
+                            int p = lst.IndexOf(s);
+                            lst[p] = e;
+
+                        }
+                    }
+                    else
+                    {
+                        lst.Add(e);
+
+                    }
+                }
+                else
+                {
+                    lst.Add(e);
+                }
+            }
+                return lst;
+
+        }
+        public async Task<List<ExamModel>> GetStudentRegistrationWiseSubmittedExams(int registration_id)
+        {
+            List<ExamModel> exams = new List<ExamModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_student_registration_wise_exams", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@registration_id", registration_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int exam_id = Convert.ToInt32(dr["exam_id"].ToString());
+                    int student_id = Convert.ToInt32(dr["student_id"].ToString());
+                    string student_name = dr["student_name"].ToString();
+                    string email_address = dr["student_name"].ToString();
+                    string mobile_number = dr["student_name"].ToString();
+                    DateTime exam_date = Convert.ToDateTime(dr["exam_date"].ToString());
+                    DateTime start_time = Convert.ToDateTime(dr["start_time"].ToString());
+                    DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
+                    int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
+                    int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
+                    string status = dr["status"].ToString();
+
+                    string topic_name = dr["topic_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+
+                    ExamModel st = null;
+
+                    List<ExamQuestionModel> questions = await GetExamWiseQuestionResult(exam_id);
+
+                    //  int total_questions = questions.Count;
+                    int total_correct_questions = 0;
+                    int total_wrong_questions = 0;
+                    foreach (var q in questions)
+                    {
+                        if (q.submitted_option_number == q.correct_option_number)
+                        {
+                            total_correct_questions++;
+                        }
+                        else
+                        {
+                            total_wrong_questions++;
+                        }
+                    }
+                    float percentage = ((float)total_correct_questions * 100 / (float)total_questions);
+                    string grade = "";
+                    if (percentage < 40)
+                    {
+                        grade = "Poor";
+                    }
+                    else if (percentage >= 40 && percentage < 60)
+                    {
+                        grade = "Average";
+                    }
+                    else if (percentage >= 60 && percentage < 80)
+                    {
+                        grade = "Good";
+                    }
+                    else
+                    {
+                        grade = "Excellent";
+                    }
+                    st = new ExamModel()
+                    {
+                        student_id = student_id,
+                        email_address = email_address,
+                        exam_date = exam_date,
+                        exam_id = exam_id,
+                        mobile_number = mobile_number,
+                        topic_id = topic_id,
+                        start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
+                        student_name = student_name,
+                        topic_name = topic_name,
+                        examQuestions = questions,
+                        total_questions = total_questions,
+                        total_correct_questions = total_correct_questions,
+                        total_wrong_questions = total_wrong_questions,
+                        percentage = percentage,
+                        grade = grade,
+                        status = status,
+                        branch_id = branch_id,
+                        branch_name = branch_name
+                    };
+                    exams.Add(st);
+                }
+                con.Close();
+            }
+
+            List<ExamModel> lst = new List<ExamModel>();
+            foreach (ExamModel e in exams)
+            {
+                if (lst.Count > 0)
+                {
+                    ExamModel s = lst.FirstOrDefault(p => p.topic_name.Equals(e.topic_name));
+                    if (s != null)
+                    {
+                        if (s.total_correct_questions < e.total_correct_questions)
+                        {
+                            int p = lst.IndexOf(s);
+                            lst[p] = e;
+
+                        }
+                    }
+                    else
+                    {
+                        lst.Add(e);
+
+                    }
+                }
+                else
+                {
+                    lst.Add(e);
+                }
+            }
             return lst;
+
         }
         public async Task<List<ExamModel>> GetAllExams(int branch_id)
         {
@@ -970,12 +1139,15 @@ namespace ERP_Services.Implementations
                     {
                         student_id = student_id,
                         email_address = email_address,
-                        end_time = end_time,
+                        
                         exam_date = exam_date,
                         exam_id = exam_id,
                         mobile_number = mobile_number,
                         topic_id = topic_id,
                         start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
                         student_name = student_name,
                         topic_name = topic_name,
                         examQuestions = questions,
@@ -1433,6 +1605,163 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
             return lst;
+        }
+
+        public async  Task<StudentCertificationModel> GetStudentCertificate(int registration_id)
+        {
+            List<ExamModel> exams = new List<ExamModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_student_registration_wise_exams", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@registration_id", registration_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int exam_id = Convert.ToInt32(dr["exam_id"].ToString());
+                    int student_id = Convert.ToInt32(dr["student_id"].ToString());
+                    string student_name = dr["student_name"].ToString();
+                    string email_address = dr["email_address"].ToString();
+                    string mobile_number = dr["mobile_number"].ToString();
+                    DateTime exam_date = Convert.ToDateTime(dr["exam_date"].ToString());
+                    DateTime start_time = Convert.ToDateTime(dr["start_time"].ToString());
+                    DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
+                    int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
+                    int total_questions = Convert.ToInt32(dr["total_questions"].ToString());
+                    string status = dr["status"].ToString();
+
+                    string topic_name = dr["topic_name"].ToString();
+                    int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+
+                    ExamModel st = null;
+
+                    List<ExamQuestionModel> questions = await GetExamWiseQuestionResult(exam_id);
+
+                    //  int total_questions = questions.Count;
+                    int total_correct_questions = 0;
+                    int total_wrong_questions = 0;
+                    foreach (var q in questions)
+                    {
+                        if (q.submitted_option_number == q.correct_option_number)
+                        {
+                            total_correct_questions++;
+                        }
+                        else
+                        {
+                            total_wrong_questions++;
+                        }
+                    }
+                    float percentage = ((float)total_correct_questions * 100 / (float)total_questions);
+                    string grade = "";
+                    if (percentage < 40)
+                    {
+                        grade = "Poor";
+                    }
+                    else if (percentage >= 40 && percentage < 60)
+                    {
+                        grade = "Average";
+                    }
+                    else if (percentage >= 60 && percentage < 80)
+                    {
+                        grade = "Good";
+                    }
+                    else
+                    {
+                        grade = "Excellent";
+                    }
+                    st = new ExamModel()
+                    {
+                        student_id = student_id,
+                        email_address = email_address,
+                        exam_date = exam_date,
+                        exam_id = exam_id,
+                        mobile_number = mobile_number,
+                        topic_id = topic_id,
+                        start_time = start_time,
+                        start_time_string = start_time.ToLongTimeString(),
+                        end_time = end_time,
+                        end_time_string = end_time.ToLongTimeString(),
+                        student_name = student_name,
+                        topic_name = topic_name,
+                        examQuestions = questions,
+                        total_questions = total_questions,
+                        total_correct_questions = total_correct_questions,
+                        total_wrong_questions = total_wrong_questions,
+                        percentage = percentage,
+                        grade = grade,
+                        status = status,
+                        branch_id = branch_id,
+                        branch_name = branch_name
+                    };
+                    exams.Add(st);
+                }
+                con.Close();
+            }
+
+            List<ExamModel> lst = new List<ExamModel>();
+            foreach (ExamModel e in exams)
+            {
+                if (lst.Count > 0)
+                {
+                    ExamModel s = lst.FirstOrDefault(p => p.topic_name.Equals(e.topic_name));
+                    if (s != null)
+                    {
+                        if (s.total_correct_questions < e.total_correct_questions)
+                        {
+                            int p = lst.IndexOf(s);
+                            lst[p] = e;
+
+                        }
+                    }
+                    else
+                    {
+                        lst.Add(e);
+
+                    }
+                }
+                else
+                {
+                    lst.Add(e);
+                }
+            }
+            float average_percentage = lst.Average(e => e.percentage);
+            string grade2 = "";
+            if (average_percentage < 40)
+            {
+                grade2 = "Poor";
+            }
+            else if (average_percentage >= 40 && average_percentage < 60)
+            {
+                grade2 = "Average";
+            }
+            else if (average_percentage >= 60 && average_percentage < 80)
+            {
+                grade2 = "Good";
+            }
+            else
+            {
+                grade2 = "Excellent";
+            }
+            RegistrationModel r =await studentService.GetRegistration(registration_id);
+
+            StudentCertificationModel sc = new StudentCertificationModel()
+            {
+                registration_id = r.registration_id,
+                permanent_identification_number = r.permanent_identification_number,
+                average_percentage = average_percentage,
+                branch_id = r.branch_id,
+                branch_name = r.branch_name,
+                CertificationCode = "",
+                course_name = r.course_name,
+                grade = grade2,
+                status = "",
+                student_id = r.student_id,
+                student_name = r.student_name,
+                total_exams = lst.Count()
+            };
+            return sc;
         }
     }
 }

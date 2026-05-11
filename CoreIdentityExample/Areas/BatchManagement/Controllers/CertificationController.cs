@@ -52,8 +52,15 @@ namespace CoreIdentityExample.Areas.BatchManagement.Controllers
         }
         public async Task<JsonResult> GetStudentExams(int id)
         {
-            List<ExamModel> lst = await examService.GetStudentWiseExams(id);
+            List<ExamModel> lst = await examService.GetStudentRegistrationWiseSubmittedExams(id);
             return Json(lst);
+        }
+        public async Task<IActionResult> ViewCertificate(int id)
+        {
+           StudentCertificationModel s=await examService.GetStudentCertificate(id);
+            List<ExamModel> lst = await examService.GetStudentRegistrationWiseSubmittedExams(id);
+            ViewData["exams"] = lst;
+            return View(s);
         }
         //public async Task<JsonResult> GetBranchWiseStudents(int id)
         //{

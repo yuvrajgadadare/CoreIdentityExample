@@ -27,6 +27,7 @@
     var fees=[];
     var topics = [];
     var topicData = [];
+    var selectedtopics = [];
     var courseId=0;
     $(document).ready(function() {
       //  GetCourses();
@@ -42,41 +43,67 @@
         })
 
     })
-    function GetTopics() {
-        $.ajax({
-            url: '/Developer/Topic/GetTopics',
-            method: 'get',
-            success: function (resp) {
-                console.log(resp);
-                topicData = resp;
-                $.each(resp,function(i,d){
-                    $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value="+d.topic_id+"  onchange='AddTopic("+d.topic_id+")'/> "+d.topic_name+"</div>")
-                })
-            }
-        })
+    const  GetTopics=async()=> {
+        // $.ajax({
+        //     url: '/Developer/Topic/GetTopics',
+        //     method: 'get',
+        //     success: function (resp) {
+        //         console.log(resp);
+        //         topicData = resp;
+        //         $.each(resp,function(i,d){
+        //             $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value="+d.topic_id+"  onchange='AddTopic("+d.topic_id+")'/> "+d.topic_name+"</div>")
+        //         })
+        //     }
+        // })
+           const response=await fetch("/Developer/Topic/GetTopics");
+            const topics=await response.json();
+            topicData=topics;
+            var data="";
+            topics.forEach(function(d,k){
+                data+="<div class='col-md-4 mb-3'><input type='checkbox' value="+d.topic_id+"  onclick='AddTopic("+d.topic_id+")'/> "+d.topic_name+"</div>"
+
+            })
+            document.getElementById("dvtopics").innerHTML=data;
     }
 
     function FilterTopics() {
-        var tp = $("#txtfilter").val();
-        console.log(topics);
-        if (tp != null) {
-            $("#dvtopics").empty();
-            $.each(topicData, function (i, d) {
-                if (d.topic_name.toLowerCase().includes(tp.toLowerCase())) {
-                    if (topics.indexOf(d.topic_name) != -1) {
-                        $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + " checked  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
-                    }
-                     else{
-                        $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
-                    }
+        // var tp = $("#txtfilter").val();
+        // console.log(topics);
+        // if (tp != null) {
+        //     $("#dvtopics").empty();
+        //     $.each(topicData, function (i, d) {
+        //         if (d.topic_name.toLowerCase().includes(tp.toLowerCase())) {
+        //             if (topics.indexOf(d.topic_name) != -1) {
+        //                 $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + " checked  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+        //             }
+        //              else{
+        //                 $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+        //             }
+        //         }
+        //     })
+        // }
+        // else {
+        //     $.each(topicData, function (i, d) {
+        //             $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
+        //     })
+        // }
+        console.log("topicData");
+        console.log(topicData);
+         txt=document.getElementById("txtfilter").value;
+            var topics=topicData.filter(e=>e.topic_name.toLowerCase().includes(txt.toLowerCase()))
+            console.log(topics);
+            var data="";
+            topics.forEach(function(d,k){
+            var sd=selectedtopics.filter(e=>e.topic_id==(d.topic_id));
+                if(sd.length>0){
+                data+="<div class='col-md-4 mb-3'><input type='checkbox' value='"+d.topic_id+"' onclick='AddTopic("+d.topic_id+")' checked/> <span>"+d.topic_name+"</span></div>"
+                }
+                else{
+                data+="<div class='col-md-4 mb-3'><input type='checkbox' value='"+d.topic_id+"' onclick='AddTopic("+d.topic_id+")' /> <span>"+d.topic_name+"</span></div>"
+
                 }
             })
-        }
-        else {
-            $.each(topicData, function (i, d) {
-                    $("#dvtopics").append("<div class='col-md-4 mb-3'><input type='checkbox' value=" + d.topic_id + "  onchange='AddTopic(" + d.topic_id + ")'/> " + d.topic_name + "</div>");
-            })
-        }
+            document.getElementById("dvtopics").innerHTML=data;
     }
     function GetCourseWiseTopics(cid) {
 
@@ -108,13 +135,20 @@
         })
     }
 
-    function AddTopic(tid){
-        if (topics.indexOf(tid) == -1) {
-            topics.push(tid);
-        }
-        else {
-            topics.splice(topics.indexOf(tid), 1);
-        }
+    const AddTopic=(d)=>{
+      var sd=selectedtopics.filter(e=>e.topic_id==(d));
+            console.log(sd);
+
+            if(sd.length==0){
+                var st={"topic_id":d,"checked":true}
+                selectedtopics.push(st);
+            }
+            else{
+
+                 selectedtopics.splice(selectedtopics.indexOf(sd[0]),1);
+            }
+            console.log(selectedtopics);
+
     }
     function AddCourseTopic(cid) {
         $("#txtcourseid").val(cid)
@@ -124,11 +158,12 @@
 
     function AddTopicData() {
         var cid = $("#txtcourseid").val();
-        var data=[];
-        $.each(topics, function (i, d) {
-            data.push({ "topic_id": d });
-        })
-        var st = { "course_id": cid, "topics": data };
+        // var data=[];
+        // $.each(topics, function (i, d) {
+        //     data.push({ "topic_id": d });
+        // })
+        var st = { "course_id": cid, "topics": selectedtopics };
+        console.log(st);
         $.ajax({
             url: '/Developer/Course/AddCourseTopics',
             method:'post',
@@ -200,10 +235,7 @@
                 $("#updatedFeesAmount").val("");
                 $("#updatedGst").val("");
                 $("#updatedfees_change_date").val("");
-             $("#feeModal").modal("hide");
-
-                
-
+                $("#feeModal").modal("hide");
             }
         })
     }
@@ -221,6 +253,18 @@
 
             }
         })
+    }
+
+    const deleteCourseTopic=async(ctid)=>{
+       const response=await fetch("/Developer/Course/DeleteCourseTopic/"+ctid,{
+           method:'post',
+           headers:{
+               "cotent-type":"application/json"
+           }
+       });
+       const msg=await response.text();
+       alert(msg);
+       window.location.reload();
     }
     function ClearData() {
         $("#FeeMode").val("");
@@ -357,7 +401,10 @@
                                         <div class="row">
                                             @foreach (var topic in item.topics)
                                             {
-                                                <div class="col-md-4">@topic.topic_name</div>
+                                                <div class="col-md-4">
+                                                    @topic.topic_name
+                                                <a href="#" onclick="deleteCourseTopic(@topic.course_topic_id)">X</a>
+                                                </div>
                                             }
 
                                         </div>
@@ -386,7 +433,7 @@
 
 </div>
 <div id="myModal" class="modal fade">
-    <div class="modal-dialog" style="width:70%">
+    <div class="modal-dialog" style="width:90%">
         <div class="modal-content" style="width:700px;">
             <div class="modal-header">
                 <h5 class="modal-title">Add Course Topic</h5>
@@ -395,10 +442,10 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label>Course Id</label>
-                    <input type="text" id="txtcourseid" class="form-control" />
+                    <input type="text" id="txtcourseid" class="form-control" disabled />
                 </div>
                 <div class="mb-3">
-                 <input type="text" id="txtfilter" placeholder="filter topic by name" onkeyup="FilterTopics()" />
+                 <input type="text" id="txtfilter" class="form-control" placeholder="filter topic by name" onkeyup="FilterTopics()" />
 
                 </div>
                 <div class="mb-3">
