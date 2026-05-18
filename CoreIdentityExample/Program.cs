@@ -12,7 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+var connectionString = builder.Configuration.GetConnectionString("SQLServerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'SQLServerIdentityConnection' not found.");
+
 builder.Services.AddTransient<IExtraService, ExtraService>();
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddScoped<IPlaylistService, PlayListService>();
 //builder.Services.AddIdentityCore<ApplicationUser>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
@@ -21,7 +25,6 @@ builder.Services.AddTransient<IExtraService, ExtraService>();
 //builder.Services.AddTransient<IContentService, ContentService>();
 //builder.Services.AddTransient<ICourseService, CourseService>();
 //builder.Services.AddTransient<IContentQuestionService, ContentQuestionService>();
-var connectionString = builder.Configuration.GetConnectionString("SQLServerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'SQLServerIdentityConnection' not found.");
 //builder.Services.AddDbContext<CiitExamPortalContext>(options =>
 //    options.UseSqlServer(connectionString));
 builder.Services.AddSession(options =>

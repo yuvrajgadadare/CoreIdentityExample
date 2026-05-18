@@ -1,0 +1,23 @@
+﻿@using ERP_Models
+@model IEnumerable<PlaylistModel>
+@{
+    ViewData["Title"] = "ChannelVideo";
+}
+
+<h1>PlayLists</h1>
+<div  class="row">
+    <div class="col-md-2">
+        <ul class="list-group">
+            @foreach(var item in Model)
+            {
+                <li class="list-group-item">
+                    <a href="/PlayList/ViewPlayList/@item.PlayListId" class="nav-link text-primary">@item.PlayListTitle</a>
+                    </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-10">
+        
+    </div>
+</div>
+

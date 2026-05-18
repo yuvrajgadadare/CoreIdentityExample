@@ -22,7 +22,10 @@
         public string? batch_status { get; set; }
         public float completed_percentage { get; set; }
         public bool is_schedule_exams_generated {  get; set; }
+        public string PlayListKey { get; set; }
+        public string PlayListTitle { get; set; }
         public List<ExamModel> exams { get; set; }
+        public List<VideoModel> Videos { get; set; } = new List<VideoModel>();
 
     }
 }

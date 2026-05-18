@@ -1,0 +1,34 @@
+﻿@using ERP_Models
+@model PlaylistModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<div class="row">
+    <div class="col-md-4">
+        <h4>@ViewBag.msg</h4>
+       @using(Html.BeginForm())
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h4>PlayList Form</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>PlayList Title</label>
+                        @Html.TextBoxFor(e=>e.PlayListTitle,new{@class="form-control"})
+                    </div>
+                    <div class="mb-3">
+                        <label>PlayList Key</label>
+                        @Html.TextBoxFor(e => e.PlayListKey, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
