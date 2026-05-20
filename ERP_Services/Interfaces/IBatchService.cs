@@ -30,5 +30,7 @@ namespace ERP_Services.Interfaces
 
         Task MarkStudentScheduleAttendance(ScheduleAttendanceModel s);
         Task<List<StudentMarkAttendance>> GetBatchWiseStudentAttendance(int batch_id, int registration_id);
+
+        Task SetPlayListTitle(BatchPlayListModel b);
     }
 }

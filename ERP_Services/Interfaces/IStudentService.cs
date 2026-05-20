@@ -42,6 +42,6 @@ namespace ERP_Services.Interfaces
         Task<StudentModel> GetStudentByEmailAddress(string email_address);
         //Task<List<StudentPaymentModel>> GetStudentsWiseRemainingPayments(int registration_id);
      Task<RegistrationCourseScheduleModel> GetStudentRegistrationWiseCourseSchedule(int registration_id);
-
+        Task<string> AddGuestStudentRegistration(GuestRegistrationModel sm);
     }
 }

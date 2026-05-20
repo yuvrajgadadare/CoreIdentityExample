@@ -20,10 +20,13 @@
         public string student_name{ get; set; }
         public string course_name{ get; set; }
         public string status { get; set; }
+        public string PlayListKey { get; set; }
+        public string PlayListTitle { get; set; }
         public int total_leactures { get; set; }
         public int attended_leactures { get; set; }
         public int remaining_leactures { get; set; }
         public List<BatchScheduleModel> schedule { get; set; }
         public List<StudentMarkAttendance> attendance { get; set; }
+      //  public List<VideoModel> Videos { get; set; }
     }
 }

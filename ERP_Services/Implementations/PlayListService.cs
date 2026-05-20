@@ -26,6 +26,16 @@ namespace ERP_Services.Implementations
             }
         }
 
+        public async Task<BatchPlayListModel> GetBatchWisePlayList(int batch_id)
+        {
+            var query = $"SELECT batch_id,batch_name,playlist_title,playlist_key FROM tblbatches where batch_id={batch_id}";
+            using (var connection = _context.CreateConnection())
+            {
+                var channels = await connection.QueryFirstAsync<BatchPlayListModel>(query);
+                return channels;
+            }
+        }
+
         public async Task<PlaylistModel> GetPlayList(int Id)
         {
             var query = $"SELECT * FROM tblplaylists where PlayListId={Id}";

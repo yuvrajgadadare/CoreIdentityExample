@@ -11,6 +11,7 @@ namespace ERP_Services.Interfaces
     {
         Task AddPlayList(PlaylistModel model);
         Task<List<PlaylistModel>> GetPlayLists();
+        Task<BatchPlayListModel>  GetBatchWisePlayList(int batch_id);
         Task<PlaylistModel> GetPlayList(int Id);
     }
 }

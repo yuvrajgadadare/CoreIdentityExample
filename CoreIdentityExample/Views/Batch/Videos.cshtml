@@ -1,0 +1,58 @@
+﻿@using ERP_Models
+@model BatchPlayListModel
+@{
+    List<BatchStudentModel> lst = (List<BatchStudentModel>)ViewData["playlists"];
+    ViewData["Title"] = "Videos";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-2 pt-5">
+        <h6>PlayLists</h6>
+        <div  class="list-group bg-primary">
+            @foreach (var item in lst)
+            {
+                <a href="/Batch/Videos/@item.batch_id" class="list-group-item list-group-item-action">
+                    <i class="bi-camera-fill"></i> @item.PlayListTitle
+                   @*  <span class="badge rounded-pill bg-primary float-end">@item.</span> *@
+                </a>
+               
+             
+            }
+        </div>
+    </div>
+    <div class="col-md-9 pt-5">
+
+        <h6 style="text-align:center" class="text-primary">@Model.playlist_title</h6>
+        <div class="row">
+
+            @foreach (var video in Model.Videos)
+            {
+                var videoUrl = $"https://youtube.com/watch?v={video.VideoId}";
+
+                <div class="col-md-4 mb-3">
+                    
+                          @*   <a href="@videoUrl" target="_blank" rel="noopener noreferrer">
+                                <img src="@video.ThumbnailUrl" class="card-img-top rounded shadow-sm" alt="@video.Title">
+                            </a> *@
+                            <!-- Wrap the title in the same 'a' tag -->
+                            <a href="@videoUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            <div class="card-body bg-info">
+                                <b class="card-title">@video.Title</b>
+                            </div>
+                        </div>
+                            </a>
+                     
+                </div>
+            }
+             
+        </div>
+
+    </div>
+</div>
+
+
+
+

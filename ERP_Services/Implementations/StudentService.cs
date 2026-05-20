@@ -62,7 +62,78 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
+        public async Task<string> AddGuestStudentRegistration(GuestRegistrationModel sm)
+        {
+            string msg = "";
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_register_guest_student", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", sm.branch_id);
+                cmd.Parameters.AddWithValue("@student_name", sm.student_name);
+                cmd.Parameters.AddWithValue("@last_name", sm.last_name);
+                cmd.Parameters.AddWithValue("@gender", sm.gender);
+                cmd.Parameters.AddWithValue("@mobile_number", sm.mobile_number);
+                cmd.Parameters.AddWithValue("@whatsapp_number", sm.whatsapp_number);
+                cmd.Parameters.AddWithValue("@email_address", sm.email_address);
+                cmd.Parameters.AddWithValue("@local_address", sm.local_address);
+                cmd.Parameters.AddWithValue("@password", sm.password);
+                cmd.Parameters.AddWithValue("@birth_date", sm.birth_date);
+                //  cmd.Parameters.AddWithValue("@qualification", sm.qualification);
+                cmd.Parameters.AddWithValue("@student_code", sm.student_code);
+                cmd.Parameters.AddWithValue("@permanent_identification_number", sm.permanent_identification_number);
+                cmd.Parameters.AddWithValue("@id", 0);
 
+                DataTable dt = new DataTable();
+                dt.Columns.Add("registration_date", typeof(DateTime));
+                dt.Columns.Add("discount", typeof(float));
+                dt.Columns.Add("fee_id", typeof(int));
+                
+                    dt.Rows.Add(sm.registration_date, sm.discount, sm.fee_id);
+                 
+                cmd.Parameters.AddWithValue("@registration", dt);
+
+                //DataTable qdt = new DataTable();
+                //qdt.Columns.Add("qualification", typeof(string));
+                //qdt.Columns.Add("passing_year", typeof(int));
+                //qdt.Columns.Add("university", typeof(string));
+                //qdt.Columns.Add("medium", typeof(string));
+                //qdt.Columns.Add("percentage", typeof(float));
+                //foreach (StudentQualificationModel q in sm.qualifications)
+                //{
+                //    qdt.Rows.Add(q.qualification, q.passing_year, q.university, q.medium, q.percentage);
+                //}
+                //cmd.Parameters.AddWithValue("@qualification", qdt);
+
+                //DataTable pdt = new DataTable();
+                //pdt.Columns.Add("payment_date", typeof(DateTime));
+                //pdt.Columns.Add("payment_amount", typeof(float));
+                //pdt.Columns.Add("payment_mode", typeof(string));
+                //pdt.Columns.Add("payment_description", typeof(string));
+                //pdt.Columns.Add("is_paid", typeof(int));
+                //foreach (StudentPaymentModel q in sm.payments)
+                //{
+                //    pdt.Rows.Add(q.payment_date, q.payment_amount, q.payment_mode, q.payment_description, 1);
+                //}
+
+                //cmd.Parameters.AddWithValue("@payment", pdt);
+                try
+                {
+                    int cnt = cmd.ExecuteNonQuery();
+                    if (cnt > 0)
+                    {
+                        msg = "1";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    msg = "Exception=>" + ex.Message;
+                }
+                con.Close();
+                return msg;
+            }
+        }
         public async Task<string> AddStudentRegistration(StudentModel sm)
         {
             string msg = "";

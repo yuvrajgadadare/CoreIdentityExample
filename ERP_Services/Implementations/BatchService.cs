@@ -88,6 +88,8 @@ namespace ERP_Services.Implementations
                     DateTime start_date = Convert.ToDateTime(dr["start_date"].ToString());
                     DateTime end_date = Convert.ToDateTime(dr["end_date"].ToString());
                     string batch_time = dr["batch_time"].ToString();
+                    string playlist_title = dr["playlist_title"].ToString();
+                    string playlist_key = dr["playlist_key"].ToString();
                     //int total_students = Convert.ToInt32(dr["total_students"].ToString());
                     int total_leactures = Convert.ToInt32(dr["total_leactures"].ToString());
                     int attended_leactures = Convert.ToInt32(dr["attended_leactures"].ToString());
@@ -144,7 +146,9 @@ namespace ERP_Services.Implementations
                         completed_percentage = per,
                          branch_id = branch_id,
                           branch_name = branch_name,
-                           batch_status=batch_status
+                           batch_status=batch_status,
+                            PlayListKey=playlist_key,
+                             PlayListTitle=playlist_title
                             
 
                     };
@@ -889,6 +893,8 @@ namespace ERP_Services.Implementations
                     int s_id = Convert.ToInt32(dr["student_id"].ToString());
                     int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
                     string student_name = dr["student_name"].ToString();
+                    string playlist_title = dr["playlist_title"].ToString();
+                    string playlist_key = dr["playlist_key"].ToString();
                     List<BatchScheduleModel> schedule = await GetBatchWiseSchedule(batch_id);
                     int total_leactures = schedule.Count();
                     int attended_leactures = schedule.Where(e => e.status.ToLower().Equals("conducted")).Count();
@@ -915,7 +921,9 @@ namespace ERP_Services.Implementations
                         attendance = attendane,
                         total_leactures = total_leactures,
                         attended_leactures = attended_leactures,
-                        remaining_leactures = remaining_leactures
+                        remaining_leactures = remaining_leactures,
+                        PlayListKey = playlist_key,
+                        PlayListTitle = playlist_title
                     };
                     lst.Add(bm);
                 }
@@ -1170,6 +1178,22 @@ namespace ERP_Services.Implementations
             }
             return lst;
 
+        }
+
+        public async Task SetPlayListTitle(BatchPlayListModel b)
+        {
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_set_batchplaylist_key", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+               
+                cmd.Parameters.AddWithValue("@batch_id", b.batch_id);
+                cmd.Parameters.AddWithValue("@playlist_title",b.playlist_title);
+                cmd.Parameters.AddWithValue("@playlist_key", b.playlist_key);
+                int cnt = cmd.ExecuteNonQuery();
+                con.Close();
+            }
         }
     }
 }

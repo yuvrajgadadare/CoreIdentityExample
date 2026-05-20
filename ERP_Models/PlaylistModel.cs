@@ -10,6 +10,8 @@ namespace ERP_Models
     {
 
         public int PlayListId { get; set; }
+        public int BatchId { get; set; }
+        public string BatchName { get; set; }
         public string PlayListKey { get; set; }
         public string PlayListTitle { get; set; }
         public List<VideoModel> Videos { get; set; } = new List<VideoModel>();

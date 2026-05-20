@@ -224,5 +224,12 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
                 return "Batch Exams generated successfully";
             }
         }
+
+        [HttpPost]
+        public async Task<string> SetPlayListKey([FromBody]BatchPlayListModel b)
+        {
+            await batchService.SetPlayListTitle(b);
+            return "Play list key set successfully"; 
+        }
     }
 }

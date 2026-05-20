@@ -136,6 +136,40 @@
         })
     }
 </script>
+
+<script>
+    var batch_id=0;
+    const SetPlayListKey =async (bid)=>{
+        batch_id=bid;
+        $("#playlistmodal").modal("show");
+       // alert(bid);
+        // var st={
+        //     "batch_id":bid,
+        //     "playlist_title":
+        // }
+    }
+
+    const SubmitPlayListKey=async()=>{
+        var st={
+            "batch_id":batch_id,
+            "playlist_title":document.getElementById("txtplaylist_title").value,
+            "playlist_key":document.getElementById("txtplaylist_key").value
+        };
+        const response=await fetch("/BatchManagement/Batch/SetPlayListKey",{
+            method:"post",
+            body:JSON.stringify(st),
+            headers:{
+                "content-type":"application/json"
+            }
+        });
+        const msg=await response.text();
+        alert(msg);
+        document.getElementById("txtplaylist_title").value="";
+        document.getElementById("txtplaylist_key").value="";
+
+    }
+</script>
+
 <div class="container-fluid">
     <nav class="nav nav-pills nav-fill">
         <a href="#activebatches" class="nav-item nav-link active" data-bs-toggle="tab">Active Batches</a>
@@ -246,13 +280,20 @@
                                                     @if (!item.is_schedule_exams_generated)
                                                     {
                                                         <input type="button" id="btngenerateexams" value="Generate Exams" onclick="GenerateBatchExams(@item.batch_id)" style="font-size:12px;" class="btn btn-sm btn-info" />
-
                                                     }
                                                     @*   else
                                             {
                                                 <span>Generated Scheduled Exams</span>
                                             } *@
                                                     <input type="button" class="btn btn-danger btn-sm" onclick="DeleteBatch(@item.batch_id)" value="Remove" />
+                                                    @if (item.PlayListKey == "")
+                                                    {
+                                                        <input type="button" class="btn btn-primary btn-sm" onclick="SetPlayListKey(@item.batch_id)"  value="Set Playlist"/>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Added Key-> @item.PlayListKey</span>
+                                                    }
                                                 </td>
                                             </tr>
                                             i++;
@@ -341,6 +382,33 @@
   
  
 
+</div>
+
+<div class="modal fade" id="playlistmodal" tabindex="-1" data-bs-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Set Playlist Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Playlist Title</label>
+                    <input type="text" id="txtplaylist_title" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label>Playlist Key</label>
+                    <input type="text" id="txtplaylist_key" class="form-control" />
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SubmitPlayListKey()">Submit</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="studentmodel" tabindex="-1" data-bs-backdrop="false">
     <div class="modal-dialog  modal-xl">

@@ -17,6 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString("SQLServerIdent
 builder.Services.AddTransient<IExtraService, ExtraService>();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<IPlaylistService, PlayListService>();
+
 //builder.Services.AddIdentityCore<ApplicationUser>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
