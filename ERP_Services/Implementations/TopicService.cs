@@ -15,11 +15,12 @@ namespace ERP_Services.Implementations
 {
     public class TopicService:ITopicService
     {
-       // IContentService contentService;
+      //  IContentService contentService;
         ICourseService courseService;
-        public TopicService(ICourseService courseService)
+        public TopicService(ICourseService courseService )
         {
             this.courseService = courseService;
+        //    this.contentService = contentService;
         }
         public async Task<List<TopicModel>> GetAllYoutubeTopicVideos(List<TopicModel> topics)
         {
@@ -470,10 +471,18 @@ namespace ERP_Services.Implementations
                     int t_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int ct_id = Convert.ToInt32(dr["course_topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
-                  //  List<ContentModel> contents = await contentService.GetAllTopicWiseContentQuestionAndInterviewQuestionsCounts(t_id);
-                  //  int total_interview_questions = contents.Sum(e => e.total_interview_questions);
-                  //  int total_program_questions = contents.Sum(e => e.total_program_questions);
-                    TopicModel e = new TopicModel() { topic_id = t_id, topic_name = topic_name, course_topic_id=ct_id };
+                 // List<ContentModel> contents = await contentService.GetAllTopicWiseContentQuestionAndInterviewQuestionsCounts(t_id);
+               //    int total_interview_questions = contents.Sum(e => e.total_interview_questions);
+              //   int total_program_questions = contents.Sum(e => e.total_program_questions);
+                    TopicModel e = new TopicModel()
+                    {
+                        topic_id = t_id,
+                        topic_name = topic_name,
+                        course_topic_id = ct_id,
+                         total_content_question_count = 0,
+                      //    total_interview_question_count= total_interview_questions,
+                      //     total_program_count=total_program_questions
+                    };
                     lst.Add(e);
                 }
                 con.Close();

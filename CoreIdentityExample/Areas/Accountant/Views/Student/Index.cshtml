@@ -89,35 +89,33 @@
         console.log(students);
         var data="";
         students.forEach(function(d,k){
-        data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.email_address+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td>"+d.local_address+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
+        data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
             })
             document.getElementById("tbldata").innerHTML=data;
          }
-     fetchStudents();
+    // fetchStudents();
 
      const filterStudents=()=>{
          var txt=document.getElementById("txtfilter").value;
 
          var students=studentdata.filter(e=>e.student_name.toLowerCase().includes(txt.toLowerCase()));
-         if(student.length>0){
+        if(students.length>0){
         var data="";
        students.forEach(function(d,k){
-       data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.email_address+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td>"+d.local_address+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
+       data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
            })
            document.getElementById("tbldata").innerHTML=data;
            }
      }
  </script>
-  
- 
- 
-
-         <div class="row">
-            <div class="col-md-3">
-                @* <input type="button" value="Add Student" class="btn btn-primary" id="btnadd" /> *@
-        <a href="/Accountant/Student/StudentRegistrationForm" class="btn btn-primary">New Registration</a>
+         <div class="row mb-3">
+            <div class="col-md-2">
+                <a href="/Accountant/Student/StudentRegistrationForm" class="btn btn-primary btn-sm">New Registration</a>
             </div>
-            <div class="col-md-3">
+    <div class="col-md-4">
+        <input type="text" class="form-control" id="txtfilter" onkeyup="filterStudents()" placeholder="search student by name,mobile,qualification,course,email address,etc" />
+    </div>
+            <div class="col-md-4">
                <form method="post">
                     <div class="row">
                       <div class="col-md-8">
@@ -128,9 +126,13 @@
                                 }
                             </select>
                     </div>
-                      <div class="col-md-4">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                      <div class="col-md-2">
+                <input type="submit" value="Submit" class="btn btn-primary btn-sm" />
             </div>
+                <div class="col-md-2">
+                    <a href="/Accountant/Student/Index" class="btn btn-info btn-sm">Refresh</a>
+
+                </div>
             </div>
             <div class="row">
                  <div class="col-md-12">
@@ -149,9 +151,7 @@
 
     
  
-        <div class="row">
-            <input type="text" class="form-control" id="txtfilter"  onkeyup="filterStudents()" placeholder="search student by name,mobile,qualification,course,email address,etc" />
-        </div>
+       
         <div class="row">
             <table  class="table datatable" style="font-size:small">
                 <thead>
@@ -162,18 +162,20 @@
                 <th style="width:auto">Gender</th>
                 <th style="width:auto" data-type="date" data-format="DD-MM-YYYY">Birth Date</th>
                 <th style="width:auto">Mobile Number</th>
-                <th style="width:auto">Email Address</th>
                 <th style="width:auto">Branch</th>
+                <th style="width:auto">Course</th>
                 <th style="width:auto">PIN</th>
-                <th style="width:auto">Local Address</th>
                 <th style="width:auto">Action</th>
                     </tr>
                 </thead>
+                @if(Model.Count()>0)
+                {
                 <tbody id="tbldata">
-                   @*  @{
+                  @{
                         int i = 1;
                       //  List<StudentModel> lst = (List<StudentModel>)ViewData["students"];
                     }
+                     
                     @foreach (var item in Model)
                     {
 
@@ -181,12 +183,11 @@
                         <tr>
                             <td>@i</td>
                             <td>@item.registration_date.ToShortDateString()</td>
-                            <td>@item.student_name</td>
+                            <td>@item.student_name @item.last_name</td>
                             <td>@item.gender</td>
                             <td>@item.birth_date.ToShortDateString()</td>
                             <td>@item.mobile_number</td>
-                            <td>@item.email_address</td>
-                            <td>@item.qualification</td>
+                            <td>@item.branch_name</td>
 
                             @if (item.registrations.Count() > 0)
                             {
@@ -197,16 +198,28 @@
                             {
                                 <td></td>
                             }
-                            <td><img src="~/Students/Profiles/@item.profile_photo" height="30" width="30" /></td>
+                            <td>@item.permanent_identification_number</td>
                             <td>
                                 <a href="/Accountant/Student/GetStudentWisedetails/@item.student_id" class="btn btn-info btn-sm">View Details</a>
                                 <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse(@item.student_id)' />
                             </td>
                         </tr>
                         i++;
-                    } *@
-                </tbody>
-            </table>
+                    } 
+            </tbody>
+
+        }
+        else
+        {
+            <tbody>
+                <tr>
+                    <td colspan="10">
+                        <h4 style="color:red;text-align:center">No students found</h4>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
         </div>
     
      

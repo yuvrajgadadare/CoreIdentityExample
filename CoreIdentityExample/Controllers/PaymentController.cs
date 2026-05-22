@@ -48,8 +48,8 @@ namespace CoreIdentityExample.Controllers
             StudentPaymentModel p =await studentService.GetStudentPayment(payment_id);
             RegistrationModel r =await studentService.GetRegistration(registration_id);
             ViewData["registration"] = r;
-            ViewData["payments"] = studentService.GetStudentWisePreviousPayments(registration_id, payment_id);
-            ViewData["student"] = studentService.GetStudent(r.student_id);
+            ViewData["payments"] =await studentService.GetStudentWisePreviousPayments(registration_id, payment_id);
+            ViewData["student"] =await  studentService.GetStudent(r.student_id);
             return View(p);
         }
     }

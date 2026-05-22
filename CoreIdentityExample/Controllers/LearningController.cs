@@ -34,8 +34,6 @@ namespace CoreIdentityExample.Controllers
 
             string reg = HttpContext.Session.GetString("registration");
             RegistrationModel r =(RegistrationModel)JsonConvert.DeserializeObject<RegistrationModel>(reg);
-
-
             List<TopicModel> topics =await topicService.GetCourseWiseTopics(r.course_id);
             return View(topics);
         }

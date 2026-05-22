@@ -51,37 +51,49 @@ namespace CoreIdentityExample.Controllers
             List<BatchStudentModel> batches = await batchService.GetStudentWiseBatches(student_id);
             return View(batches);
         }
-
+        public async Task<IActionResult> AllBatchVideos()
+        {
+            if (HttpContext.Session.GetInt32("student_id") == null)
+            {
+                return RedirectToAction("Login");
+            }
+            int student_id = (int)HttpContext.Session.GetInt32("student_id");
+            List<BatchStudentModel> batches = await batchService.GetStudentWiseBatches(student_id);
+            return View(batches);
+        }
         public async Task<IActionResult> Videos(int id)
         {
-
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
-            {
-                ApiKey = _apiKey,
-                ApplicationName = "MyYoutubeProject"
-            });
-            // List<PlaylistModel> lst = new List<PlaylistModel>();
-            BatchPlayListModel p = await playlistService.GetBatchWisePlayList(id);
-            var playlist = new BatchPlayListModel { playlist_key = p.playlist_key, playlist_title = p.playlist_title };
-            // 2. Get Videos for each Playlist (simplified loop)
-            string nextToken = "";
-            while (nextToken != null)
-            {
-                var vRequest = youtubeService.PlaylistItems.List("snippet");
-                vRequest.PlaylistId = playlist.playlist_key;
-                vRequest.PageToken = nextToken;
-                var vResponse = await vRequest.ExecuteAsync();
-
-                playlist.Videos.AddRange(vResponse.Items.Select(v => new VideoModel
+            BatchPlayListModel playlist = null;
+            
+                var youtubeService = new YouTubeService(new BaseClientService.Initializer()
                 {
-                    VideoId = v.Snippet.ResourceId.VideoId,
-                    Title = v.Snippet.Title,
-                    ThumbnailUrl = v.Snippet.Thumbnails.Medium?.Url
-                }));
-                nextToken = vResponse.NextPageToken;
+                    ApiKey = _apiKey,
+                    ApplicationName = "MyYoutubeProject"
+                });
+                // List<PlaylistModel> lst = new List<PlaylistModel>();
+                BatchPlayListModel p = await playlistService.GetBatchWisePlayList(id);
+                  playlist = new BatchPlayListModel { playlist_key = p.playlist_key, playlist_title = p.playlist_title };
+                // 2. Get Videos for each Playlist (simplified loop)
+                string nextToken = "";
+                while (nextToken != null)
+                {
+                    var vRequest = youtubeService.PlaylistItems.List("snippet");
+                    vRequest.PlaylistId = playlist.playlist_key;
+                    vRequest.PageToken = nextToken;
+                    var vResponse = await vRequest.ExecuteAsync();
 
-                //playlist.Videos.Add(playlist);
-            }
+                    playlist.Videos.AddRange(vResponse.Items.Select(v => new VideoModel
+                    {
+                        VideoId = v.Snippet.ResourceId.VideoId,
+                        Title = v.Snippet.Title,
+                        ThumbnailUrl = v.Snippet.Thumbnails.Medium?.Url
+                    }));
+                    nextToken = vResponse.NextPageToken;
+
+                    //playlist.Videos.Add(playlist);
+                }
+            
+
 
 
             if (HttpContext.Session.GetInt32("student_id") == null)

@@ -353,6 +353,22 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             //ViewData["courses"] =await masterService.GetTrainingCourses();
             return View(lst);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Index(int year)
+        //{
+        //    //if (HttpContext.Session.GetString("employee") == null)
+        //    //{
+        //    //    return Redirect("/Account/Login");
+        //    //}
+        //    var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        //    EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
+
+
+        //    List<StudentModel> lst = await studentService.GetStudents(emp.branch_id);
+        //    ViewBag.years = await extraService.GetYears();
+        //    //ViewData["courses"] =await masterService.GetTrainingCourses();
+        //    return View(lst);
+        //}
         public async Task<JsonResult> GetAllStudents()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -375,7 +391,7 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             EmployeeModel emp = await employeeService.GetEmployeeByUserId(userId);
 
 
-            List<StudentModel> lst = await studentService.GetYearWiseStudents(year,emp.branch_id);
+            List<StudentModel> lst = await studentService.GetYearAndBranchWiseStudents(emp.branch_id, year);
             ViewBag.years = await extraService.GetYears();
             //ViewData["courses"] =await masterService.GetTrainingCourses();
             ViewBag.result =  year;

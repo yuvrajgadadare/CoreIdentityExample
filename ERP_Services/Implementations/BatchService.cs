@@ -736,7 +736,7 @@ namespace ERP_Services.Implementations
                     float per = 0;
                     if (total_leactures > 0)
                     {
-                        per = (remaining_leatures * 100) / total_leactures;
+                        per = (attended_leactures * 100) / total_leactures;
                     }
 
                     int cnt = 0;

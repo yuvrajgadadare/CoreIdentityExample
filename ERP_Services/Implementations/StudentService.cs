@@ -639,7 +639,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<StudentModel>> GetStudents(int branch_id)
         {
             List<StudentModel> lst = new List<StudentModel>();
@@ -649,6 +648,74 @@ namespace ERP_Services.Implementations
                 SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_details", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@branch_id", branch_id);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int student_id = Convert.ToInt32(dr["student_id"].ToString());
+                    string student_name = dr["student_name"].ToString();
+                    string last_name = dr["last_name"].ToString();
+                    string gender = dr["gender"].ToString();
+                    string email_address = dr["email_address"].ToString();
+                    string local_address = dr["local_address"].ToString();
+                    string permanent_address = dr["permanent_address"].ToString();
+                    string mobile_number = dr["mobile_number"].ToString();
+                    string whatsapp_number = dr["whatsapp_number"].ToString();
+                    DateTime birth_date = Convert.ToDateTime(dr["birth_date"].ToString());
+                    string profile_photo = dr["profile_photo"].ToString();
+                    string qualification = dr["qualification"].ToString();
+                    string parent_name = dr["parent_name"].ToString();
+                    string parent_number = dr["parent_number"].ToString();
+                    string student_code = dr["student_code"].ToString();
+                    string permanent_identification_number = dr["permanent_identification_number"].ToString();
+                    string aadhar_card_photo = dr["aadhar_card_photo"].ToString();
+                    string aadhar_card_number = dr["aadhar_card_number"].ToString();
+                    int registration_id = Convert.ToInt32(dr["registration_id"].ToString());
+                    //  int branch_id = Convert.ToInt32(dr["branch_id"].ToString());
+                    string branch_name = dr["branch_name"].ToString();
+
+                    DateTime registration_date = Convert.ToDateTime(dr["registration_date"].ToString()); List<RegistrationModel> registrations = await GetStudentWiseRegistrations(student_id);
+                    StudentModel e = new StudentModel()
+                    {
+                        student_id = student_id,
+                        email_address = email_address,
+                        birth_date = birth_date,
+                        gender = gender,
+                        mobile_number = mobile_number,
+                        student_name = student_name,
+                        profile_photo = profile_photo,
+                        qualification = qualification,
+                        parent_name = parent_name,
+                        parent_number = parent_number,
+                        student_code = student_code,
+                        registrations = registrations,
+                        aadhar_card_number = aadhar_card_number,
+                        aadhar_card_photo = aadhar_card_photo,
+                        last_name = last_name,
+                        local_address = local_address,
+                        permanent_address = permanent_address,
+                        permanent_identification_number = permanent_identification_number,
+                        whatsapp_number = whatsapp_number,
+                        registration_date = registration_date,
+                        registration_id = registration_id,
+                        branch_id = branch_id,
+                        branch_name = branch_name
+                    };
+                    lst.Add(e);
+                }
+                con.Close();
+            }
+            return lst;
+        }
+        public async Task<List<StudentModel>> GetYearAndBranchWiseStudents(int branch_id,int year)
+        {
+            List<StudentModel> lst = new List<StudentModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_tblstudent_details", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@branch_id", branch_id);
+                cmd.Parameters.AddWithValue("@year", year);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {

@@ -11,6 +11,7 @@ namespace ERP_Services.Interfaces
         Task UpdateStudentDetails(StudentModel sm);
         Task<bool> IsEmailExist(string email_address);
         Task<bool> IsMobileExist(string mobile_number);
+        Task<List<StudentModel>> GetYearAndBranchWiseStudents(int branch_id,int year);
         Task<List<StudentModel>>  GetStudents(int branch_id);
         Task<List<StudentModel>> GetYearWiseStudents(int year, int branch_id);
         Task<List<StudentModel>>  GetAllStudents(int branch_id);

@@ -1,0 +1,37 @@
+﻿@using ERP_Models
+@model IEnumerable<BatchStudentModel>
+ 
+@{
+ 
+    ViewData["Title"] = "Videos";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-2 pt-5">
+        <h6>Batches</h6>
+        <div  class="list-group bg-primary">
+            @foreach (var item in Model)
+            {
+                <a href="/Batch/Videos/@item.batch_id" class="list-group-item list-group-item-action">
+                    <i class="bi-camera-fill"></i> @item.PlayListTitle
+                   @*  <span class="badge rounded-pill bg-primary float-end">@item.</span> *@
+                </a>
+               
+             
+            }
+        </div>
+    </div>
+    <div class="col-md-9 pt-5">
+
+      
+        
+
+    </div>
+</div>
+
+
+
+
+
