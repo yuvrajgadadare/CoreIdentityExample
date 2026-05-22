@@ -1,6 +1,7 @@
 ﻿using ERP_Models;
 using ERP_Services.Interfaces;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Data;
 
@@ -12,13 +13,14 @@ namespace ERP_Services.Implementations
         IContentService contentService;
         ITopicService topicService;
         IBatchService batchService;
-
-        public StudentService(ITopicService topicService, IContentService contentService, IBatchService batchService)
+        private readonly ICacheService _cacheService;
+        public StudentService(ITopicService topicService, IContentService contentService, IBatchService batchService, ICacheService cacheService)
         {
 
             this.topicService = topicService;
             this.contentService = contentService;
             this.batchService = batchService;
+            _cacheService = cacheService;
 
 
         }
@@ -259,6 +261,8 @@ namespace ERP_Services.Implementations
 
         public async Task<List<StudentPaymentModel>> GetRegistrationWisePayments(int registration_id)
         {
+
+             
             List<StudentPaymentModel> lst = new List<StudentPaymentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -817,6 +821,11 @@ namespace ERP_Services.Implementations
         }
         public async Task<List<StudentModel>> GetAllStudents(int branch_id)
         {
+            var cacheData = await  _cacheService.GetData<List<StudentModel>>("students");
+            if (cacheData != null)
+            {
+                return  cacheData;
+            }
             List<StudentModel> lst = new List<StudentModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -880,6 +889,9 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<StudentModel>>("students", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<StudentModel>> GetGuestStudents(int branch_id)

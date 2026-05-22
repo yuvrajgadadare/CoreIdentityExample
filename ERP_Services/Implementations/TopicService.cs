@@ -199,7 +199,6 @@ namespace ERP_Services.Implementations
                 SqlCommand cmd = new SqlCommand("sp_fetch_topic_wise_content_questions", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@topic_id", topic_id);
-
                 SqlDataReader dr = cmd.ExecuteReader();
                 int i = 1;
                 while (dr.Read())
@@ -471,15 +470,17 @@ namespace ERP_Services.Implementations
                     int t_id = Convert.ToInt32(dr["topic_id"].ToString());
                     int ct_id = Convert.ToInt32(dr["course_topic_id"].ToString());
                     string topic_name = dr["topic_name"].ToString();
-                 // List<ContentModel> contents = await contentService.GetAllTopicWiseContentQuestionAndInterviewQuestionsCounts(t_id);
-               //    int total_interview_questions = contents.Sum(e => e.total_interview_questions);
-              //   int total_program_questions = contents.Sum(e => e.total_program_questions);
+                    // List<ContentModel> contents = await contentService.GetAllTopicWiseContentQuestionAndInterviewQuestionsCounts(t_id);
+                    //    int total_interview_questions = contents.Sum(e => e.total_interview_questions);
+                    //   int total_program_questions = contents.Sum(e => e.total_program_questions);
+
+                    List<ContentQuestionModel> questions = await GetTopicWiseQuestions(t_id);
                     TopicModel e = new TopicModel()
                     {
                         topic_id = t_id,
                         topic_name = topic_name,
                         course_topic_id = ct_id,
-                         total_content_question_count = 0,
+                         total_content_question_count = questions.Count()
                       //    total_interview_question_count= total_interview_questions,
                       //     total_program_count=total_program_questions
                     };

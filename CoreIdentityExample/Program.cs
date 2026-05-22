@@ -72,15 +72,20 @@ builder.Services.ConfigureApplicationCookie(options =>
     // If the AccessDenied isn't set, ASP.NET Core defaults the path to /Account/AccessDenied
     options.AccessDeniedPath = "/Account/AccessDenied"; // Set your access denied path here
 });
+builder.Services.AddMemoryCache();
+builder.Services.AddMemoryCache(options =>
+{
+    options.SizeLimit = 1024; // Developer-defined units
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+ if (!app.Environment.IsDevelopment())
+ {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
+ }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

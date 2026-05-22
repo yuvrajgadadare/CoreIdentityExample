@@ -14,7 +14,7 @@ namespace ERP_Services.Interfaces
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        T GetData<T>(string key);
+       Task<T>  GetData<T>(string key);
 
         /// <summary>
         /// Set Data with Value and Expiration Time of Key

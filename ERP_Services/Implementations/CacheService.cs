@@ -12,7 +12,7 @@ namespace ERP_Services.Implementations
     public class CacheService : ICacheService
     {
         ObjectCache _memoryCache = System.Runtime.Caching.MemoryCache.Default;
-        public T GetData<T>(string key)
+        public async  Task<T> GetData<T>(string key)
         {
             try
             {
