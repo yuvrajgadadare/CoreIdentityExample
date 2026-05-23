@@ -17,8 +17,16 @@ namespace ERP_Services.Implementations
         //{
         //    this.topicService = topicService;
         //}
+        private readonly ICacheService _cacheService;
+ 
+        public CourseService(ICacheService cacheService)
+        {
+            _cacheService = cacheService;
+        }
+        
         public async Task AddTrainingCourse(CourseModel course)
         {
+
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
@@ -64,6 +72,11 @@ namespace ERP_Services.Implementations
         }
         public async Task<List<CourseFeeModel>> GetCourseWiseFees(int course_id)
         {
+            var cacheData = await _cacheService.GetData<List<CourseFeeModel>>("CourseFeeModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<CourseFeeModel> lst = new List<CourseFeeModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -95,10 +108,23 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<CourseFeeModel>>("CourseFeeModel", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<CourseFeeModel>> GetCourseFees()
         {
+
+            var cacheData = await _cacheService.GetData<List<CourseFeeModel>>("CourseFeeModels");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
+
+
+
             List<CourseFeeModel> lst = new List<CourseFeeModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -130,10 +156,18 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<CourseFeeModel>>("CourseFeeModels", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<CourseModel>> GetTrainingCourses()
         {
+            var cacheData = await _cacheService.GetData<List<CourseModel>>("CourseModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<CourseModel> lst = new List<CourseModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -159,10 +193,20 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<CourseModel>>("CourseModel", cacheData, expirationTime);
             return lst;
+        
         }
         public async Task<CourseModel> GetTrainingCourse(int course_id)
         {
+
+            var cacheData = await _cacheService.GetData<CourseModel>("CourseModels");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             CourseModel st = new CourseModel();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -188,6 +232,11 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData =  st;
+            _cacheService.SetData<CourseModel>("CourseModels", cacheData, expirationTime);
+          
             return st;
         }
       
@@ -280,6 +329,44 @@ namespace ERP_Services.Implementations
                 int cnt = cmd.ExecuteNonQuery();
                 con.Close();
             }
+        }
+
+        public async Task<List<CourseFeeModel>> GetCoursesWithMinimumSalaries()
+        {
+            var cacheData = await _cacheService.GetData<List<CourseFeeModel>>("Courses");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
+            List<CourseFeeModel> lst = new List<CourseFeeModel>();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_fetch_courseswithminimumsalary", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int course_id = Convert.ToInt32(dr["course_id"].ToString());
+                    string course_name = dr["course_name"].ToString(); 
+                    int fee_id = Convert.ToInt32(dr["fee_id"].ToString());
+                    float fees_amount = (float)Convert.ToDouble(dr["fees_amount"].ToString());
+                    CourseFeeModel e = new CourseFeeModel()
+                    {
+                        course_id = course_id,
+                        course_name = course_name,
+                        fees_amount = fees_amount,
+                        fee_id = fee_id,
+                    };
+                    lst.Add(e);
+                }
+                con.Close();
+            }
+
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<CourseFeeModel>>("Courses", cacheData, expirationTime);
+            return lst;
         }
     }
 }

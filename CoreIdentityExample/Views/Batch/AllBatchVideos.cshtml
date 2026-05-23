@@ -6,30 +6,39 @@
     ViewData["Title"] = "Videos";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
-
-
-<div class="row">
-    <div class="col-md-2 pt-5">
-        <h6>Batches</h6>
-        <div  class="list-group bg-primary">
-            @foreach (var item in Model)
-            {
-                <a href="/Batch/Videos/@item.batch_id" class="list-group-item list-group-item-action">
-                    <i class="bi-camera-fill"></i> @item.PlayListTitle
-                   @*  <span class="badge rounded-pill bg-primary float-end">@item.</span> *@
+<style>
+    .bg-color {
+        background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+    }
+</style>
+<div class="col-md-12">
+    <div class="row" style="margin-left:0px;">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-color" >
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-primary min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-primary text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Batches</span>
                 </a>
-               
-             
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    @foreach (var item in Model)
+            {
+                    <li class="nav-item">
+                            <a href="/Batch/Videos/@item.batch_id" class="nav-link align-middle px-0 text-primary">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">@item.PlayListTitle</span>
+                        </a>
+                    </li>
+                    
             }
+                </ul>
+                <hr>
+                
+            </div>
+        </div>
+        <div class="col py-3">
+            
         </div>
     </div>
-    <div class="col-md-9 pt-5">
-
-      
-        
-
-    </div>
 </div>
+ 
 
 
 

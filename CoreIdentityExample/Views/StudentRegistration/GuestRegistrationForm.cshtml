@@ -125,7 +125,7 @@
                                             </div>
                                             <div class="col-md-4">
                                         <label>Select Course</label> <span class="text-danger">@Html.ValidationMessageFor(e => e.fee_id)</span>
-                                                @Html.DropDownListFor(e => e.fee_id, ViewBag.courses as List<SelectListItem>, "Select Course", new { @class = "form-control" })
+                                                @Html.DropDownListFor(e => e.fee_id, ViewBag.courses as SelectList , "Select Course", new { @class = "form-control" })
                                             </div>
 
                                             <div class="col-md-4">

@@ -12,7 +12,11 @@ namespace ERP_Services.Implementations
 {
     public class QuestionService : IQuestionService
     {
-
+        private readonly ICacheService _cacheService;
+        public QuestionService(ICacheService cacheService)
+        {
+            _cacheService = cacheService;
+        }
         public async Task AddInterviewQuestions(int content_id, List<InterviewQuestionModel> interviewQuestions)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -33,7 +37,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task AddProgramAnswer(ProgramAnswerModel answer)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -50,7 +53,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task AddProgramQuestion(ProgramQuestionModel program)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -93,7 +95,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task DeleteProgramAnswer(int program_answer_id)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -110,7 +111,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task DeleteProgramQuestion(int program_question_id)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -127,9 +127,13 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task<List<InterviewQuestionModel>> GetAllInterviewQuestions()
         {
+            var cacheData = await _cacheService.GetData<List<InterviewQuestionModel>>("InterviewQuestionModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<InterviewQuestionModel> lst = new List<InterviewQuestionModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -161,11 +165,19 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<InterviewQuestionModel>>("InterviewQuestionModel", cacheData, expirationTime);
             return lst;
+           
         }
-
         public async Task<List<ProgramAnswerModel>> GetAllProgramAnswers()
         {
+            var cacheData = await _cacheService.GetData<List<ProgramAnswerModel>>("ProgramAnswerModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<ProgramAnswerModel> lst = new List<ProgramAnswerModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -203,11 +215,18 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<ProgramAnswerModel>>("ProgramAnswerModel", cacheData, expirationTime);
             return lst;
         }
-
         public async Task<List<ProgramQuestionModel>> GetAllProgramQuestions()
         {
+            var cacheData = await _cacheService.GetData<List<ProgramQuestionModel>>("ProgramQuestionModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<ProgramQuestionModel> lst = new List<ProgramQuestionModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -241,11 +260,14 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<ProgramQuestionModel>>("ProgramQuestionModel", cacheData, expirationTime);
             return lst;
         }
-
         public async Task<List<InterviewQuestionModel>> GetContentWiseInterviewQuestions(int content_id)
         {
+
             List<InterviewQuestionModel> lst = new List<InterviewQuestionModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -278,7 +300,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<ProgramAnswerModel>> GetContentWiseProgramAnswers(int content_id)
         {
             List<ProgramAnswerModel> lst = new List<ProgramAnswerModel>();
@@ -320,7 +341,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<ProgramQuestionModel>> GetContentWiseProgramQuestions(int content_id)
         {
             List<ProgramQuestionModel> lst = new List<ProgramQuestionModel>();
@@ -359,7 +379,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<ProgramAnswerModel>> GetQuestionWiseProgramAnswers(int program_question_id)
         {
             List<ProgramAnswerModel> lst = new List<ProgramAnswerModel>();
@@ -400,7 +419,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<InterviewQuestionModel>> GetTopicWiseInterviewQuestions(int topic_id)
         {
             List<InterviewQuestionModel> lst = new List<InterviewQuestionModel>();
@@ -435,7 +453,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<ProgramAnswerModel>> GetTopicWiseProgramAnswers(int topic_id)
         {
             List<ProgramAnswerModel> lst = new List<ProgramAnswerModel>();
@@ -477,7 +494,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<ProgramQuestionModel>> GetTopicWiseProgramQuestions(int topic_id)
         {
             List<ProgramQuestionModel> lst = new List<ProgramQuestionModel>();
@@ -516,7 +532,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task RestoreProgramAnswer(int program_answer_id)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -533,7 +548,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task RestoreProgramQuestion(int program_question_id)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -550,7 +564,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task UpdateProgramAnswer(ProgramAnswerModel answer)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -567,7 +580,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task UpdateProgramQuestion(ProgramQuestionModel program)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))

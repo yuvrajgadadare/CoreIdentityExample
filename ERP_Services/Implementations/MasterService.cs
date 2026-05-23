@@ -1,16 +1,16 @@
-﻿ 
+﻿
 using ERP_Models;
 using ERP_Services.Interfaces;
 using Microsoft.Data.SqlClient;
-using System.Collections.Generic;
-using System.Data;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 namespace ERP_Services.Implementations
 {
     public class MasterService : IMasterService
     {
-    
+        private readonly ICacheService _cacheService;
+        public  MasterService(ICacheService cacheService)
+        {
+            _cacheService = cacheService;
+        }
         public async Task<StudentModel> CheckStudentLogin(string email_address, string password)
         {
             StudentModel student = null;
@@ -53,43 +53,14 @@ namespace ERP_Services.Implementations
             }
             return  student;
         }
-        //public async Task<List<CourseFeeModel>> GetCourseFees()
-        //{
-        //    List<CourseFeeModel> lst = new List<CourseFeeModel>();
-        //    using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
-        //    {
-        //        con.Open();
-        //        SqlCommand cmd = new SqlCommand("sp_fetch_tbltraining_course_fees", con);
-        //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-        //        cmd.Parameters.AddWithValue("@fee_id", 0);
-        //        SqlDataReader dr = cmd.ExecuteReader();
-        //        while (dr.Read())
-        //        {
-        //            int course_id = Convert.ToInt32(dr["course_id"].ToString());
-        //            int fee_id = Convert.ToInt32(dr["fee_id"].ToString());
-        //            string course_name = dr["course_name"].ToString();
-        //            float fees_amount = (float)Convert.ToDouble(dr["fees_amount"].ToString());
-        //            float gst = (float)Convert.ToDouble(dr["gst"].ToString());
-        //            string fee_mode = dr["fee_mode"].ToString();
-        //            DateTime fees_change_date = Convert.ToDateTime(dr["fees_change_date"].ToString());
-        //            CourseFeeModel e = new CourseFeeModel()
-        //            {
-        //                course_id = course_id,
-        //                course_name = course_name,
-        //                fees_amount = fees_amount,
-        //                fee_id = fee_id,
-        //                fee_mode = fee_mode,
-        //                gst = gst,
-        //                 fees_change_date=fees_change_date,
-        //            };
-        //            lst.Add(e);
-        //        }
-        //        con.Close();
-        //    }
-        //    return lst;
-        //}
+       
         public async Task<List<EnquiryForModel>> GetEnquiryFors()
         {
+            var cacheData = await _cacheService.GetData<List<EnquiryForModel>>("EnquiryForModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List <EnquiryForModel> lst=new List<EnquiryForModel>();
             using (SqlConnection con=new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -106,10 +77,19 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<EnquiryForModel>>("EnquiryForModel", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<LeadSourceModel>> GetLeadSources()
         {
+            var cacheData = await _cacheService.GetData<List<LeadSourceModel>>("LeadSourceModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
+
             List<LeadSourceModel> lst = new List<LeadSourceModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -126,10 +106,18 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<LeadSourceModel>>("LeadSourceModel", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<PromotionalMessageModel>> GetPromotionalMessages()
         {
+            var cacheData = await _cacheService.GetData<List<PromotionalMessageModel>>("PromotionalMessageModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<PromotionalMessageModel> lst = new List<PromotionalMessageModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -148,10 +136,18 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<PromotionalMessageModel>>("PromotionalMessageModel", cacheData, expirationTime);
             return lst;
         }
         public async Task< List<QualificationModel>>  GetQualifications()
         {
+            var cacheData = await _cacheService.GetData<List<QualificationModel>>("QualificationModel");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<QualificationModel> lst = new List<QualificationModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -168,6 +164,9 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<QualificationModel>>("QualificationModel", cacheData, expirationTime);
             return lst;
         }
         public async Task<List<RoleModel>> GetAllRoles()

@@ -57,7 +57,7 @@ namespace CoreIdentityExample.Controllers
         [Route("guest-registration-form")]
         public async Task<IActionResult> GuestRegistrationForm()
         {
-            ViewBag.courses = await GetFees();
+            ViewBag.courses = new SelectList(await courseService.GetCoursesWithMinimumSalaries(),"fee_id","course_name");
             //  ViewBag.qualifications = await GetQualifications();
             ViewBag.branches = new SelectList(await branchService.GetAllBranches(), "branch_id", "branch_name");
             //ViewData["qualifications"] = await courseService.GetTrainingCourses();

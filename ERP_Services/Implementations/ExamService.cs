@@ -15,11 +15,13 @@ namespace ERP_Services.Implementations
         IBatchService batchService;
         IContentService contentService;
         IStudentService studentService;
-        public ExamService( IBatchService batchService, IContentService contentService,IStudentService studentService)
+        private readonly ICacheService _cacheService;
+        public ExamService( IBatchService batchService, IContentService contentService,IStudentService studentService,ICacheService cacheService)
         {
             this.batchService = batchService;
             this.contentService = contentService;
             this.studentService = studentService;
+            this._cacheService = cacheService;
         }
         public async Task<ExamModel> GetExam(int exam_id)
         {
@@ -110,7 +112,6 @@ namespace ERP_Services.Implementations
             }
             return st;
         }
-
         public async Task<List<ExamQuestionModel>> GetExamWiseQuestionResult(int exam_id)
         {
             List<ExamQuestionModel> lst = new List<ExamQuestionModel>();
@@ -186,9 +187,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
-
-
         public async Task SubmitBatchScheduledExam(BatchExamModel exam)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -219,8 +217,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
-
         public async Task<int> ScheduleExamForStudent(ExamModel exam)
         {
             int exam_id = 0;
@@ -243,7 +239,6 @@ namespace ERP_Services.Implementations
             }
             return exam_id;
         }
-
         public async Task SubmitScheduledExam(ExamModel exam)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -268,7 +263,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
         public async Task RejectScheduledExam(int exam_id)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -1044,6 +1038,11 @@ namespace ERP_Services.Implementations
         }
         public async Task<List<ExamModel>> GetAllExams(int branch_id)
         {
+            var cacheData = await _cacheService.GetData<List<ExamModel>>("ExamModels");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<ExamModel> lst = new List<ExamModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -1054,35 +1053,7 @@ namespace ERP_Services.Implementations
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    //int student_id = Convert.ToInt32(dr["student_id"].ToString());
-                    //int eid = Convert.ToInt32(dr["exam_id"].ToString());
-                    //string student_name = dr["student_name"].ToString();
-                    //string email_address = dr["email_address"].ToString();
-                    //string mobile_number = dr["mobile_number"].ToString();
-                    //DateTime exam_date = Convert.ToDateTime(dr["exam_date"].ToString());
-                    //DateTime start_time = Convert.ToDateTime(dr["start_time"].ToString());
-                    //DateTime end_time = Convert.ToDateTime(dr["end_time"].ToString());
-                    //int topic_id = Convert.ToInt32(dr["topic_id"].ToString());
-                    //int total_Questions = Convert.ToInt32(dr["total_Questions"].ToString());
-                    //string topic_name = dr["topic_name"].ToString();
-                    //string status = dr["status"].ToString();
-
-                    //ExamModel e = new ExamModel()
-                    //{
-                    //    student_id = student_id,
-                    //    email_address = email_address,
-                    //    end_time = end_time,
-                    //    exam_date = exam_date,
-                    //    exam_id = eid,
-                    //    mobile_number = mobile_number,
-                    //    topic_id = topic_id,
-                    //    start_time = start_time,
-                    //    student_name = student_name,
-                    //    topic_name = topic_name,
-                    //     total_questions=total_Questions,
-                    //    status= status
-                    //};
-                    //lst.Add(e);
+                     
                     int student_id = Convert.ToInt32(dr["student_id"].ToString());
 
                     int exam_id = Convert.ToInt32(dr["exam_id"].ToString());
@@ -1164,46 +1135,13 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<ExamModel>>("ExamModels", cacheData, expirationTime);
             return lst;
         }
-        //public async Task  GetRegistrationAndBatchWiseScheduledExams(int batch_id, int registration_id)
-        //{
-        //    RegistrationModel r=await studentService.GetRegistration(registration_id);
-        //        BatchModel b=await batchService.GetBatch(batch_id);
-        //        if (b != null)
-        //        {
-        //            DateTime next_date = b.start_date;
-        //            int total_leactures = b.total_leactures;
-        //            int total_exams = total_leactures / 5;
-        //            for (int i = 1; i <= total_exams; i++)
-        //            {
-        //                next_date = next_date.AddDays(5);
-        //                if (next_date.DayOfWeek.ToString().ToLower().Equals("saturday"))
-        //                {
-        //                    next_date=next_date.AddDays(2);
-        //                }
-        //                else if (next_date.DayOfWeek.ToString().ToLower().Equals("sunday"))
-        //                {
-        //                    next_date = next_date.AddDays(1);
-        //                }
-        //            List<ContentModel> contents =await contentService.GetTopicWiseContents(b.topic_id);
-
-        //            ExamModel exam = new ExamModel()
-        //            {
-        //                registration_id = r.registration_id,
-        //                exam_date = next_date,
-        //                topic_id = b.topic_id,
-        //                topic_name = b.topic_name,
-        //                start_time = Convert.ToDateTime(next_date.ToShortDateString() + " " + "2:00 PM"),
-        //                status = "Not Attended",
-        //                is_attended=0
-        //            };
-        //           await GenerateBatchExams(exam, batch_id);
-
-        //            }
-        //        }
-
-        //}
+         
         public async Task<List<ExamQuestionModel>> GetContentWiseQuestions(List<ContentModel> contents)
         {
             List<ExamQuestionModel> lst = new List<ExamQuestionModel>();
@@ -1332,7 +1270,6 @@ namespace ERP_Services.Implementations
 
             }
         }
-
         public async Task<List<BatchExamModel>> GetStudentWiseScheduledBatchExams(int registration_id )
         {
             List<BatchExamModel> lst = new List<BatchExamModel>();
@@ -1380,7 +1317,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<BatchExamModel>> GetBatchWiseScheduledStudentExams(int batch_id)
         {
             List<BatchExamModel> lst = new List<BatchExamModel>();
@@ -1426,7 +1362,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<BatchExamModel>  GetBatchExamByExamId(int exam_id)
         {
            BatchExamModel t = new  BatchExamModel();
@@ -1475,7 +1410,6 @@ namespace ERP_Services.Implementations
             }
             return t;
         }
-
         public async Task<BatchExamModel> GetBatchExam(int exam_id)
         {
             BatchExamModel st = null;
@@ -1606,7 +1540,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async  Task<StudentCertificationModel> GetStudentCertificate(int registration_id)
         {
             List<ExamModel> exams = new List<ExamModel>();

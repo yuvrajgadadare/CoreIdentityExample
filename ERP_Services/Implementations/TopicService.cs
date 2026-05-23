@@ -17,10 +17,12 @@ namespace ERP_Services.Implementations
     {
       //  IContentService contentService;
         ICourseService courseService;
-        public TopicService(ICourseService courseService )
+        private readonly ICacheService _cacheService;
+        public TopicService(ICourseService courseService, ICacheService cacheService )
         {
             this.courseService = courseService;
-        //    this.contentService = contentService;
+            //    this.contentService = contentService;
+          _cacheService = cacheService;
         }
         public async Task<List<TopicModel>> GetAllYoutubeTopicVideos(List<TopicModel> topics)
         {
@@ -42,7 +44,6 @@ namespace ERP_Services.Implementations
 
             return lst;
         }
-
         public async Task<List<VideoModel>> GetVideos(string publicFolderId, int topic_id)
         {
             List<VideoModel> lst = new List<VideoModel>();
@@ -236,7 +237,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task<List<TopicVideoModel>> GetTopicWiseVideos(int topic_id)
         {
             List<TopicVideoModel> lst = new List<TopicVideoModel>();
@@ -269,10 +269,13 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
-
         public async Task<List<TopicModel>> GetTrainingTopics()
         {
+            var cacheData = await _cacheService.GetData<List<TopicModel>>("TopicModels");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<TopicModel> lst = new List<TopicModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -301,6 +304,9 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<TopicModel>>("TopicModels", cacheData, expirationTime);
             return lst;
         }
         public async Task AddTopic(TopicModel topic)
@@ -345,9 +351,6 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-
-
-
         public async Task AddCourseTopics(CourseModel course)
         {
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
@@ -490,7 +493,6 @@ namespace ERP_Services.Implementations
             }
             return lst;
         }
-
         public async Task AddBulkTopics(DataTable dt)
         {
             List<string> names = new List<string>();
@@ -501,9 +503,13 @@ namespace ERP_Services.Implementations
              await   AddTopic(t);
             }
         }
-
         public async Task<List<CourseModel>> GetTrainingCoursesWithTopics()
         {
+            var cacheData = await _cacheService.GetData<List<CourseModel>>("TrainingCourses");
+            if (cacheData != null)
+            {
+                return cacheData;
+            }
             List<CourseModel> lst = new List<CourseModel>();
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
@@ -529,12 +535,11 @@ namespace ERP_Services.Implementations
                 }
                 con.Close();
             }
+            var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            cacheData = lst;
+            _cacheService.SetData<IEnumerable<CourseModel>>("TrainingCourses", cacheData, expirationTime);
             return lst;
         }
-
-
-
-
         public async Task<CourseModel> GetTrainingCourse(int course_id)
         {
             CourseModel st = new CourseModel();

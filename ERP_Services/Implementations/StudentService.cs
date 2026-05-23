@@ -16,13 +16,10 @@ namespace ERP_Services.Implementations
         private readonly ICacheService _cacheService;
         public StudentService(ITopicService topicService, IContentService contentService, IBatchService batchService, ICacheService cacheService)
         {
-
             this.topicService = topicService;
             this.contentService = contentService;
             this.batchService = batchService;
             _cacheService = cacheService;
-
-
         }
         public async Task AddPayment(StudentPaymentModel p)
         {
