@@ -14,15 +14,15 @@
 <div class="col-md-12">
     <div class="row" style="margin-left:0px;">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-color" >
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-primary min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-primary text-decoration-none">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-dark min-vh-100">
+                <a href="/" style="color:#055a6b;font-weight:bold" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Batches</span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     @foreach (var item in Model)
             {
                     <li class="nav-item">
-                            <a href="/Batch/Videos/@item.batch_id" class="nav-link align-middle px-0 text-primary">
+                            <a href="/Batch/Videos/@item.batch_id" class="nav-link align-middle px-0" style="color:#055a6b;font-weight:bold">
                                 <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">@item.PlayListTitle</span>
                         </a>
                     </li>
