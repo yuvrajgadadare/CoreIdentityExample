@@ -110,12 +110,13 @@ namespace CoreIdentityExample.Controllers
                 }
             }
              
-                ViewBag.courses = await GetFees();
+           
+
+            ViewBag.courses = new SelectList(await courseService.GetCoursesWithMinimumSalaries(), "fee_id", "course_name");
             //  ViewBag.qualifications = await GetQualifications();
             ViewBag.branches = new SelectList(await branchService.GetAllBranches(), "branch_id", "branch_name");
             //ViewData["qualifications"] = await courseService.GetTrainingCourses();
-           
-                GuestRegistrationFormModel sm = new GuestRegistrationFormModel() { };
+            GuestRegistrationFormModel sm = new GuestRegistrationFormModel() { };
             return View(sm);
         }
         [HttpPost]

@@ -93,12 +93,14 @@
             })
             document.getElementById("tbldata").innerHTML=data;
          }
-    // fetchStudents();
+     fetchStudents();
 
      const filterStudents=()=>{
          var txt=document.getElementById("txtfilter").value;
 
          var students=studentdata.filter(e=>e.student_name.toLowerCase().includes(txt.toLowerCase()));
+         console.log(studentdata);
+         console.log(students);
         if(students.length>0){
         var data="";
        students.forEach(function(d,k){

@@ -10,7 +10,7 @@ namespace ERP_Services.Interfaces
         Task AddBatchSchedule(BatchScheduleModel schedule);
         Task DeleteBatch(int batch_id);
         Task RestoreBatch(int batch_id);
-        Task DeleteBatchStudent(int student_id);
+        Task DeleteBatchStudent(BatchStudentModel b);
         Task< List<BatchModel>> GetAllBatches(int branch_id);
         Task< List<BatchModel>> GetAllDeletedBatches(int branch_id);
         Task<List<EmployeeModel>> GetAllTrainers(int branch_id);

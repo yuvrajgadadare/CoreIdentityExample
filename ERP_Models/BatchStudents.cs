@@ -4,5 +4,6 @@
     {
         public int batch_id {  get; set; }
         public string registration_ids {  get; set; }
+        public int registration_id {  get; set; }
     }
 }

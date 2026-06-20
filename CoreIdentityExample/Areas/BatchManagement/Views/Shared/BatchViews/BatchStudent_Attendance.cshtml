@@ -30,6 +30,20 @@
         })
         $("#attendancemodel").modal("show");
     }
+
+    const RemoveStudent=async(bid, rid)=> {
+        var st={"batch_id":bid,"registration_id":rid}
+            const response=await fetch("/BatchManagement/Batch/RemoveBatchStudent",{
+                method:"post",
+                body:JSON.stringify(st),
+                headers:{
+                    "content-type":"application/json"
+                }
+            });
+            const msg=await response.text();
+            alert(msg)
+    
+    }
 </script>
 @{
     List<BatchStudentModel> studentlist = (List<BatchStudentModel>)ViewData["students"];
@@ -47,7 +61,7 @@
                 <th>Sr No</th>
                 <th>Student Name</th>
                 <th>Course Name</th>
-                <th>Attendance</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -62,7 +76,11 @@
                     <td>@item.student_name</td>
                     <td>@item.course_name</td>
                     <td>
-                        <button style="font-size:12px;" onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-sm text-primary">View</button>
+                        <button style="font-size:12px;" onclick="ViewAttendance(@item.batch_id,@item.registration_id)" class="btn btn-sm text-primary">Attendance</button>
+                    </td>
+                    <td>
+                                <button style="font-size:12px;" onclick="RemoveStudent(@item.batch_id,@item.registration_id)" class="btn btn-sm text-danger">Remoe</button>
+
                     </td>
                 </tr>
                 j++;

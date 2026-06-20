@@ -200,14 +200,27 @@ namespace ERP_Services.Areas.BatchManagement.Controllers
             string[] data = registrations.Split(",");
             foreach(string s in data) { 
             int reg_id=Convert.ToInt32(s);
-                BatchStudentModel bsmodel = new BatchStudentModel() 
+                BatchStudentModel bsmodel = new BatchStudentModel()
                 {
                  batch_id=b.batch_id,
                   registration_id=reg_id
                 };
               await  batchService.AddBatchStudent(bsmodel);
-
             }
+            return "Students Added Successfully";
+        }
+        [HttpPost]
+        public async Task<string> RemoveBatchStudent([FromBody]BatchStudents b)
+        {
+            
+                BatchStudentModel bsmodel = new BatchStudentModel()
+                {
+                    batch_id = b.batch_id,
+                    registration_id = b.registration_id
+                };
+                await batchService.DeleteBatchStudent(bsmodel);
+
+            
             return "Students Added Successfully";
         }
         [HttpPost]

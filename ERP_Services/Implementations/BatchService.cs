@@ -1137,9 +1137,20 @@ namespace ERP_Services.Implementations
                 con.Close();
             }
         }
-        public async Task DeleteBatchStudent(int student_id)
+        public async Task DeleteBatchStudent(BatchStudentModel b)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("sp_tblbatch_student", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@type", "Delete");
+                cmd.Parameters.AddWithValue("@batch_id", b.batch_id);
+                cmd.Parameters.AddWithValue("@registration_id", b.registration_id);
+                cmd.Parameters.AddWithValue("@batch_student_id", b.batch_student_id);
+                int cnt = cmd.ExecuteNonQuery();
+                con.Close();
+            }
         }
 
         public async Task<List<BatchScheduleExamModel>> GetBatchWiseScheduledExams(int batch_id)
