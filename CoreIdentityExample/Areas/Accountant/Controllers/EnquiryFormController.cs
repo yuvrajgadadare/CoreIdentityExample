@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
+    [Area("Accountant")]
     [Authorize]
     public class EnquiryFormController : Controller
     {

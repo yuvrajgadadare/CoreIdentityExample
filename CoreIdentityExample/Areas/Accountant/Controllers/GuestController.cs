@@ -1,13 +1,15 @@
 ﻿using ERP_Models;
 using ERP_Services.Implementations;
 using ERP_Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
-    [Area(areaName: "Accountant")]
+    [Area("Accountant")]
+    [Authorize]
 
     public class GuestController : Controller
     {

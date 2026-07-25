@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 var connectionString = builder.Configuration.GetConnectionString("SQLServerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'SQLServerIdentityConnection' not found.");
-
+ 
 builder.Services.AddTransient<IExtraService, ExtraService>();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<IPlaylistService, PlayListService>();
@@ -44,9 +44,11 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(
                    options.Password.RequiredUniqueChars = 4;
                    // Other settings can be configured here
                })
-               .AddEntityFrameworkStores<ApplicationDbContext>();
+               .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts =>
+    opts.TokenLifespan = TimeSpan.FromHours(3));
 builder.Services.AddTransient<IMasterService, MasterService>();
 builder.Services.AddTransient<ICourseService, CourseService>();
 builder.Services.AddTransient<ITopicService, TopicService>();

@@ -1,12 +1,13 @@
 ﻿using ERP_Models;
 using ERP_Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
     [Area("Accountant")]
-
+    [Authorize]
     public class ProfileController : Controller
     {
         IEmployeeService employeeService;

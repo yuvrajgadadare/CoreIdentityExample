@@ -5,6 +5,7 @@ using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Options;
 
 namespace CoreIdentityExample.Controllers
@@ -60,6 +61,23 @@ namespace CoreIdentityExample.Controllers
             int student_id = (int)HttpContext.Session.GetInt32("student_id");
             List<BatchStudentModel> batches = await batchService.GetStudentWiseBatches(student_id);
             return View(batches);
+        }
+        public async Task<IActionResult> ViewBatch(int id)
+        {
+            //int student_id = (int)HttpContext.Session.GetInt32("student_id");
+            //List<BatchStudentModel> batches = await batchService.GetStudentWiseBatches(student_id);
+            //return View(batches.FirstOrDefault(e=>e.batch_id.Equals(id)));
+
+            List<BatchScheduleModel> schedule = await batchService.GetBatchWiseSchedule(id);
+            List<BatchStudentModel> students = await batchService.GetBatchWiseStudents(id);
+            List<BatchScheduleExamModel> exams = await batchService.GetBatchWiseScheduledExams(id);
+            BatchModel b = await batchService.GetBatch(id);
+
+            ViewData["batch"] = b;
+
+            ViewData["students"] = students;
+            ViewData["exams"] = exams;
+            return View(schedule);
         }
         public async Task<IActionResult> Videos(int id)
         {

@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
-    [Area(areaName:"Accountant")]
+    [Area("Accountant")]
+    [Authorize]
     public class DashboardController : Controller
     {
         public IActionResult Index()
         {
-            string data = "";
-            data = data.Substring(data.Length - 1);
+             
             return View();
         }
     }

@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace CoreIdentityExample.Areas.Accountant.Controllers
 {
-    [Area(areaName: "Accountant")]
+    [Area("Accountant")]
     [Authorize]
     public class StudentController : Controller
     {

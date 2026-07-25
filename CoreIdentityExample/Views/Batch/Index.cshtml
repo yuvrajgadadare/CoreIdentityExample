@@ -2,9 +2,10 @@
 @{
     ViewData["Title"] = "Batches";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
+ 
+    int i = 1;
 }
-
-<h5>Batch Details</h5>
+ 
 @if(Model.Count()==0)
 {
     <div class="toast  bg-warning text-white fade show " style="width:50%">
@@ -18,136 +19,50 @@
         </div>
     </div>
 }
-@{
-    int i = 1;
-}
-@foreach (var item in Model)
+else
 {
-    <div class="card" style="padding:2%;font-size:small">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label>Batch Name:</label>
-                        <b>@item.batch_name</b>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label>Topic Name:</label>
-                        <b>@item.topic_name</b>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label>Trainer Name:</label>
-                        <b>@item.employee_name</b>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label>Start Date:</label>
-                        <b>@item.start_date.ToShortDateString()</b>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label>Batch Time:</label>
-                        <b>@item.batch_time</b>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                         
-                         <a href="/Batch/Videos/@item.batch_id" class="btn btn-info btn-sm">Batch Videos</a>
-                    </div>
-                </div>
-            </div>
+    <table class="table" style="padding:2%;font-size:small" >
+    <thead>
+        <tr>
+            <th>Sr No</th>
+                <th>Batch </th>
+                <th>Topic </th>
+                <th>Start Date</th>
+                <th>Timing</th>
+                <th>Trainer </th>
+                <th>#Leactured</th>
+                <th>Attendance</th>
+                <th>Action</th>
 
-
-
-
-
-        </div>
-        <table class="table table-bordered" style="font-size:small">
-            <thead>
+                
+                
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var item in Model)
+            {
+                float per = item.attended_leactures * 100 / item.total_leactures;
                 <tr>
-                    <th>#</th>
-                    <th>Content Name</th>
-                    <th>Expected Date</th>
-                    <th>Actual Date</th>
-                    <th>Status</th>
-                   
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int j = 1;
-                    int totalleactures = 0;
-                    int totalpresent = 0;
-                    int totalabsent = 0;
-                    if (item.attendance.Count() > 0)
-                    {
-                        foreach (var s in item.attendance)
-                        {
-                            totalleactures++;
-                            string color = "";
-                            if (s.is_present == 1)
-                            {
-                                color = "green";
-                                totalpresent = totalpresent + 1;
-                            }
-                            else
-                            {
-                                color = "red";
-                                totalabsent = totalabsent + 1;
-                            }
-                            <tr>
-                                <td>@i</td>
-                                <td>@s.content_name</td>
-                                <td>@s.expected_date</td>
-                                <td>@s.actual_date</td>
-                                <td style="color:@color">@s.attendance</td>
-                               
-                            </tr>
-                            i++;
-                        }
-                    }
-                }
-            </tbody>
-            <tfoot>
-                <tr style="background-color:aquamarine">
-                    <td colspan="5">
-                        @if (totalleactures > 0)
-                        {
+                    <td>@i</td>
+                    <td>@item.batch_name</td>
+                    <td>@item.topic_name</td>
+                    <td>@item.batch_time</td>
 
-                            float per = totalpresent * 100 / totalleactures;
+                    <td>@item.start_date.ToShortDateString()</td>
+                    <td>@item.employee_name</td>
+                    <td>@item.attended_leactures/@item.total_leactures</td>
+                    <td> 
+                        <span>@String.Format("{0:0.00}", @per) %</span>
+                    </td>
+                    <td>
+                        <a href="/Batch/ViewBatch/@item.batch_id" style="background-color:#055a6b;color:white" class="btn btn-sm">View</a>
+                        <a href="/Batch/Videos/@item.batch_id" style="background-color:#055a6b;color:white" class="btn btn-sm"> Videos</a>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    Attendance : <b>@per</b>
-                                </div>
-                                <div class="col-md-3">
-                                    Total Leactures : <b>@totalleactures</b>
-                                </div>
-                                <div class="col-md-3">
-                                    Present Days : <b>@totalpresent</b>
-                                </div>
-                                <div class="col-md-3">
-                                    Absent Days : <b>@totalabsent</b>
-                                </div>
-                            </div>
-                        }
                     </td>
                 </tr>
-            </tfoot>
-
-        </table>
-
-    </div>
-    i++;
-    <hr />
+                i++;
+            }
+        </tbody>
+</table>    
 }
-
-
 

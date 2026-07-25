@@ -4,62 +4,57 @@
 }
 
 
-<div class="mb-3 shadow-lg p-3 mb-3 bg-white rounded">
-    <div class="card">
-    <div class="card-body">
-        <div class="mb-2">
-            <h6 style="text-align:center">Batch Detail</h6>
-        </div>
-        
-            <table class="table table-bordered">
- 
-            <tr>
-                <td style="text-align:right">Batch Name :</td>
-                <td> <b>@batch.batch_name</b></td>
-             
-                <td style="text-align:right">Topic :</td>
-                <td> <b>@batch.topic_name</b></td>
-            </tr>
-            <tr>
-                <td style="text-align:right">Trainer : </td>
-                <td><b>@batch.employee_name</b></td>
-            
-                <td style="text-align:right">Start Date :</td>
-                <td> <b>@batch.start_date.ToShortDateString()</b></td>
-            </tr>
-            <tr>
-                <td style ="text-align:right">Timing : </td>
-                <td><b>@batch.batch_time</b></td>
-            
-                <td style="text-align:right">#Students : </td>
-                <td><b>@batch.total_students</b></td>
-            </tr>
-                <tr>
-                    <td style="text-align:right">#Leactures : </td>
-                    <td><b>@batch.total_leactures</b></td>
-               
-                    <td style="text-align:right">#Attended : </td>
-                    <td><b>@batch.attended_leatures</b></td>
-                </tr>
-                <tr>
-                    <td style="text-align:right">#Remaining : </td>
-                    <td><b>@batch.remaining_leatures</b></td>
-                </tr>
-                 
-        </table>
-        </div>
-        <div class="card-footer">
-        <div class="mb-2">
-            <b>@String.Format("{0:0.00}", batch.completed_percentage)% Completed</b>
-        </div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
 
-        <div class="progress">
-            <div class="progress-bar bg-success" style="width:@batch.completed_percentage%">
-                @batch.completed_percentage%
-            </div>
-        </div>
-        </div>
-    </div>
+                    <div class="mb-2">
+                        <h5 style="text-align:center">Batch Detail</h5>
+                    </div>
+
+                    <table class="table table-borderless">
+
+                        <tr>
+                            <td style="text-align:right">Batch Name :</td>
+                            <td> <b>@batch.batch_name</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Topic :</td>
+                            <td> <b>@batch.topic_name</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Trainer : </td>
+                            <td><b>@batch.employee_name</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Start Date :</td>
+                            <td> <b>@batch.start_date.ToShortDateString()</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Timing : </td>
+                            <td><b>@batch.batch_time</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">#Students : </td>
+                            <td><b>@batch.total_students</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">#Leactures : </td>
+                            <td><b>@batch.attended_leatures / @batch.total_leactures</b></td>
+                        </tr>
+                    </table>
+              
+                    <div class="mb-2">
+                        <b>@String.Format("{0:0.00}", batch.completed_percentage)% Completed</b>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width:@batch.completed_percentage%">
+                            @batch.completed_percentage%
+                        </div>
+                    </div>
+                </div>
 </div>
+
  
  
