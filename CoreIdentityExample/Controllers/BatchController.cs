@@ -1,4 +1,5 @@
 ﻿using ERP_Models;
+using ERP_Services.Implementations;
 using ERP_Services.Interfaces;
 using ERPSystem_Models;
 using Google.Apis.Services;
@@ -81,36 +82,87 @@ namespace CoreIdentityExample.Controllers
         }
         public async Task<IActionResult> Videos(int id)
         {
-            BatchPlayListModel playlist = null;
-            
-                var youtubeService = new YouTubeService(new BaseClientService.Initializer()
-                {
-                    ApiKey = _apiKey,
-                    ApplicationName = "MyYoutubeProject"
-                });
-                // List<PlaylistModel> lst = new List<PlaylistModel>();
-                BatchPlayListModel p = await playlistService.GetBatchWisePlayList(id);
-                  playlist = new BatchPlayListModel { playlist_key = p.playlist_key, playlist_title = p.playlist_title };
-                // 2. Get Videos for each Playlist (simplified loop)
-                string nextToken = "";
-                while (nextToken != null)
-                {
-                    var vRequest = youtubeService.PlaylistItems.List("snippet");
-                    vRequest.PlaylistId = playlist.playlist_key;
-                    vRequest.PageToken = nextToken;
-                    var vResponse = await vRequest.ExecuteAsync();
+            //BatchPlayListModel playlist = null;
 
+            //    var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            //    {
+            //        ApiKey = _apiKey,
+            //        ApplicationName = "MyYoutubeProject"
+            //    });
+            //    // List<PlaylistModel> lst = new List<PlaylistModel>();
+            //    BatchPlayListModel p = await playlistService.GetBatchWisePlayList(id);
+            //      playlist = new BatchPlayListModel { playlist_key = p.playlist_key, playlist_title = p.playlist_title };
+            //    // 2. Get Videos for each Playlist (simplified loop)
+            //    string nextToken = "";
+            //    while (nextToken != null)
+            //    {
+            //        var vRequest = youtubeService.PlaylistItems.List("snippet");
+            //        vRequest.PlaylistId = playlist.playlist_key;
+            //        vRequest.PageToken = nextToken;
+            //    vRequest.MaxResults = 10;
+            //        var vResponse = await vRequest.ExecuteAsync();
+
+            //        playlist.Videos.AddRange(vResponse.Items.Select(v => new VideoModel
+            //        {
+            //            VideoId = v.Snippet.ResourceId.VideoId,
+            //            Title = v.Snippet.Title,
+            //            ThumbnailUrl = v.Snippet.Thumbnails.Medium?.Url
+            //        }));
+            //        nextToken = vResponse.NextPageToken;
+
+            //        //playlist.Videos.Add(playlist);
+            //    }
+
+            // 1. Initialize the service instance inside the request scope for thread safety
+            //using var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            //{
+            //    ApiKey = _apiKey,
+            //    ApplicationName = "MyYoutubeProject"
+            //});
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                ApiKey = _apiKey,
+                ApplicationName = "MyYoutubeProject"
+            });
+
+            BatchPlayListModel p = await playlistService.GetBatchWisePlayList(id);;
+            if (p == null) return null;
+
+            var playlist = new BatchPlayListModel
+            {
+                playlist_key = p.playlist_key,
+                playlist_title = p.playlist_title,
+                Videos = new List<VideoModel>()
+            };
+
+            string nextToken = "";
+
+            // 2. Loop through pages asynchronously without blocking other system threads
+            while (nextToken != null)
+            {
+                var vRequest = youtubeService.PlaylistItems.List("snippet");
+                vRequest.PlaylistId = playlist.playlist_key;
+                vRequest.PageToken = string.IsNullOrEmpty(nextToken) ? null : nextToken;
+                vRequest.MaxResults = 50; // Optimized for high load by reducing network hops
+
+                // Await ensures this thread is freed back to the pool while waiting for YouTube
+                var vResponse = await vRequest.ExecuteAsync();
+
+                if (vResponse?.Items != null)
+                {
                     playlist.Videos.AddRange(vResponse.Items.Select(v => new VideoModel
                     {
-                        VideoId = v.Snippet.ResourceId.VideoId,
+                        VideoId = v.Snippet.ResourceId?.VideoId,
                         Title = v.Snippet.Title,
-                        ThumbnailUrl = v.Snippet.Thumbnails.Medium?.Url
+                        ThumbnailUrl = v.Snippet.Thumbnails?.Medium?.Url
                     }));
-                    nextToken = vResponse.NextPageToken;
-
-                    //playlist.Videos.Add(playlist);
                 }
-            
+
+                nextToken = vResponse?.NextPageToken;
+            }
+
+         
+
 
 
 

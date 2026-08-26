@@ -81,6 +81,7 @@
              }
          })
      }
+   
      var studentdata=[];
      const fetchStudents=async()=>{
         const response=await fetch("/Accountant/Student/GetAllStudents");
@@ -89,7 +90,7 @@
         console.log(students);
         var data="";
         students.forEach(function(d,k){
-        data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
+        data+="<tr><td>"+(k+1)+"</td><td>"+d.registration_date.split("T")[0]+"</td><td>"+d.student_name+" "+d.last_name+"</td><td>"+d.gender+"</td><td>"+d.birth_date.split("T")[0]+"</td><td>"+d.mobile_number+"</td><td>"+d.branch_name+"</td><td>"+d.permanent_identification_number+"</td><td><a href='/Accountant/Student/GetStudentWisedetails/"+d.student_id+"' class='btn btn-info btn-sm'>View Details</a> <input type='button' value='Change Course' class='btn btn-warning btn-sm' onclick='ChangeCourse("+d.student_id+")' /></td></tr>";
             })
             document.getElementById("tbldata").innerHTML=data;
          }

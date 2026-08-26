@@ -1,4 +1,5 @@
 //using CoreIdentityExample.Services;
+using CoreIdentityExample.Middlewares;
 using ERP_Models;
 using ERP_Services.Implementations;
 using ERP_Services.Interfaces;
@@ -13,7 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 var connectionString = builder.Configuration.GetConnectionString("SQLServerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'SQLServerIdentityConnection' not found.");
- 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+//builder.Services.AddAutoMapper(e =>
+//{
+
+//}, typeof(Program));
 builder.Services.AddTransient<IExtraService, ExtraService>();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<IPlaylistService, PlayListService>();
@@ -88,6 +94,7 @@ var app = builder.Build();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
  }
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

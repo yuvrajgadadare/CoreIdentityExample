@@ -331,7 +331,7 @@ namespace ERP_Services.Implementations
             }
         }
 
-        public async Task<List<CourseFeeModel>> GetCoursesWithMinimumSalaries()
+        public async Task<List<CourseFeeModel>> GetCoursesWithMinimumFees()
         {
             var cacheData = await _cacheService.GetData<List<CourseFeeModel>>("Courses");
             if (cacheData != null)
@@ -342,7 +342,7 @@ namespace ERP_Services.Implementations
             using (SqlConnection con = new SqlConnection(DatabaseOperations.ConnectionString))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("sp_fetch_courseswithminimumsalary", con);
+                SqlCommand cmd = new SqlCommand("sp_fetch_courseswithminimumfees", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())

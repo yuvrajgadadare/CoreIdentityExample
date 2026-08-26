@@ -6,16 +6,21 @@
 }
 <script>
     var registration_id=0;
-    function ViewChangeCourseModal(rid){
+    var courseName="";
+    function ViewChangeCourseModal(rid,cname,cid){
         registration_id=rid;
+          alert(rid+" "+cname+" " +cid);
+        courseName=cname;
+        document.getElementById("ddcourses").value=cid;
         $("#changecoursemodal").modal("show");
     }
 
     function ChangeCourse(){
+       
         var st={
             "registration_id":registration_id,
-            "discount":Number($("#txtdiscount").val()),
-            "fee_id":$("#ddcourse").val()
+            "discount":Number(document.getElementById("txtdiscount").value),
+            "fee_id":document.getElementById("ddcourses").value
         };
         $.ajax({
             url:'/Accountant/Student/ChangeStudentCourse',
@@ -27,6 +32,19 @@
             }
         })
     }
+
+      const getCourses=async()=>{
+        const response = await fetch("/Accountant/Student/GetAllCourses");
+        const courses=await response.json();
+        var data="<option value='' selected disabled>Select Course</option>";
+        courses.forEach(function(d,k){
+            data+="<option value="+d.fee_id+">"+d.course_name+"</option>";
+        })
+        document.getElementById("ddcourses").innerHTML=data;;
+
+     }
+
+       getCourses();
 </script>
 @{
     List<BatchStudentModel> batches = (List<BatchStudentModel>)(ViewData["batches"]);
@@ -54,7 +72,7 @@
     </div> 
 </div>*@
 <div class="card" id="dvshow">
-    <div class="card-body" style="font-size:smaller">
+    <div class="card-body">
         <div class="row">
             <div class="col-md-6" style="padding:2%">
                <div class="card">
@@ -120,7 +138,7 @@
                         </tr>
                         <tr>
                             <td>Course Name:</td>
-                            <td>@item.course_name <input type="button" value="Change Course" id="btnchangecourse" onclick="ViewChangeCourseModal(@item.registration_id)" class="btn btn-primary btn-sm" /></td>
+                            <td>@item.course_name <input type="button" value="Change Course" id="btnchangecourse" onclick="ViewChangeCourseModal(@item.registration_id,'@item.course_name',@item.fee_id)" class="btn btn-primary btn-sm" /></td>
                         </tr>
                         <tr>
                             <td>Fees Amount:</td>
@@ -162,19 +180,19 @@
 
                                     <div class="modal-body">
                                      <div class="mb-3">
-                                         <label>Course Name</label>
-                                            @* @Html.DropDownList("ddcourse",ViewBag.courses as List<SelectListItem>,"Select Course",new{@class="form-control"}) *@
-                                            @* @Html.DropDownList("ddcourse", new SelectList((System.Collections.IEnumerable)ViewData["courses"], "fee_id", "course_name"), "Select Course", new { @class = "form-control" }) *@
-
+                                         <label style="font-size:medium">Course Name</label>
+                                                <select id="ddcourses" class="form-control">
+                                                 <option selected disabled> Select Course</option>
+                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label>Discount</label>
+                                            <label style="font-size:medium">Discount</label>
                                            <input type="text" id="txtdiscount" class="form-control" />
                                         </div>
 
                                     </div>
                                     <div class="modal-footer">
-                                        <input type="button" value="Change Course" onclick="ChangeCourse()" />
+                                        <input type="button" value="Change Course" onclick="ChangeCourse()" class="btn btn-primary"/>
                                     </div>
                                 </div>
                             </div>

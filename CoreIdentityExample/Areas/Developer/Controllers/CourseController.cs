@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ERP_Models;
 using ERP_Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace CoreIdentityExample.Areas.Developer.Controllers
 {
     [Area("Developer")]
@@ -35,9 +36,15 @@ namespace CoreIdentityExample.Areas.Developer.Controllers
         {
             return Json(await topicService.GetCourseWiseTopics(id));
         }
+
         public async Task<JsonResult> GetCourses()
         {
             return Json(await courseService.GetTrainingCourses());
+        }
+        public async Task<JsonResult> GetCoursesForDropdown()
+        {
+            SelectList s = new SelectList(await courseService.GetTrainingCourses(),"course_id","course_name");
+            return Json(s);
         }
         [HttpPost]
         public async Task<string> AddCourseDetails(CourseModel cm)

@@ -70,7 +70,10 @@ namespace CoreIdentityExample.Areas.Accountant.Controllers
             }
             return lst;
         }
-
+        public async Task<JsonResult> GetAllCourses()
+        {
+            return Json(await courseService.GetCoursesWithMinimumFees());
+        }
         public async Task<CourseFeeModel> GetCourseFee(int id)
         {
             CourseFeeModel f = await courseService.GetCourseFee(id);

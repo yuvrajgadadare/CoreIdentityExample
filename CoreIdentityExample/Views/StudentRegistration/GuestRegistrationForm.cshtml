@@ -195,4 +195,21 @@
         font-size: small
     }
 </style>
+<script>
+    const setLastDate=()=>{
+         const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+
+        // Format as YYYY-MM-DD
+        const maxDate = `${yyyy}-${mm}-${dd}`;
+
+        // Apply to the input field
+        document.getElementById('registration_date').setAttribute('max', maxDate);
+        document.getElementById('birth_date').setAttribute('max', maxDate);
+    }
+    setLastDate();
+
+</script>
 
